@@ -40,7 +40,7 @@ class PagCatedralesIglesias extends StatelessWidget {
                 left: 20, bottom: 20,
                 child: GestureDetector(
                   onTap: () => Navigator.pop(context),
-                  child: const Icon(Icons.arrow_back, color: Colors.white, size: 24),
+                  child: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
                 ),
               ),
               const Positioned(

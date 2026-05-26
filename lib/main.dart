@@ -11,6 +11,8 @@ import 'package:prueba/screens/pag_ubi_interes.dart';
 import 'package:prueba/widgets/m_superior.dart';
 import '../screens/pag_principal.dart';
 
+final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
+
 void main() {
   runApp(const MyApp());
 }
@@ -20,9 +22,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: PagCategorias(),
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeNotifier,
+      builder: (_, mode, __) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          themeMode: mode,
+          theme: ThemeData(
+            useMaterial3: true,
+            brightness: Brightness.light,
+            colorSchemeSeed: const Color(0xFF8B7355),
+          ),
+          darkTheme: ThemeData(
+            useMaterial3: true,
+            brightness: Brightness.dark,
+            scaffoldBackgroundColor: const Color(0xFF1B1811), // Marrón muy oscuro
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xFF8B7355),
+              brightness: Brightness.dark,
+              surface: const Color(0xFF26221A), // Superficie marrón oscuro
+              onSurface: Colors.white,
+            ),
+          ),
+          home: const PagCategorias(),
+        );
+      },
     );
   }
 }

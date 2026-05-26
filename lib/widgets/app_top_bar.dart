@@ -8,8 +8,9 @@ import 'm_superior.dart';
 class AppTopBar extends StatefulWidget {
   final bool onDarkBackground;
   final bool wifiOnly;
+  final String? currentTitle;
 
-  const AppTopBar({super.key, this.onDarkBackground = false, this.wifiOnly = false});
+  const AppTopBar({super.key, this.onDarkBackground = false, this.wifiOnly = false, this.currentTitle});
 
   @override
   State<AppTopBar> createState() => _AppTopBarState();
@@ -47,8 +48,8 @@ class _AppTopBarState extends State<AppTopBar> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onTap: () => MenuFlotante.mostrar(context),
-            child: const Icon(Icons.menu, color: Colors.white, size: 26),
+            onTap: () => MenuFlotante.mostrar(context, currentTitle: widget.currentTitle),
+            child: const Icon(Icons.menu, color: Colors.white, size: 32),
           ),
           _WifiIcon(connected: connected, onDark: true),
         ],
@@ -59,15 +60,15 @@ class _AppTopBarState extends State<AppTopBar> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
-          onTap: () => MenuFlotante.mostrar(context),
+          onTap: () => MenuFlotante.mostrar(context, currentTitle: widget.currentTitle),
           child: Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(12),
               boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 6)],
             ),
-            child: const Icon(Icons.menu, size: 22),
+            child: const Icon(Icons.menu, size: 28),
           ),
         ),
         _WifiIcon(connected: connected, onDark: false),
@@ -88,18 +89,18 @@ class _WifiIcon extends StatelessWidget {
       return Icon(
         connected ? Icons.wifi : Icons.wifi_off,
         color: connected ? const Color(0xFF80E8C0) : Colors.white70,
-        size: 24,
+        size: 30,
       );
     }
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: connected ? const Color(0xFFD4EDD4) : const Color(0xFFD4C9B0),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Icon(
         connected ? Icons.wifi : Icons.wifi_off,
-        size: 20,
+        size: 26,
         color: connected ? const Color(0xFF2E7D52) : const Color(0xFF6B5B45),
       ),
     );

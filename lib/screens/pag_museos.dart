@@ -9,55 +9,56 @@ class PagMuseos extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE6E0D6),
-      body: Stack(
+      body: Column(
         children: [
-          SizedBox(
-            height: 220, width: double.infinity,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.asset('assets/images/museo.jpg', fit: BoxFit.cover),
-                Container(color: Colors.black.withOpacity(0.3)),
-                SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () => MenuFlotante.mostrar(context),
-                          child: const Icon(Icons.menu, color: Colors.white, size: 26),
-                        ),
-                        const AppTopBar(onDarkBackground: true, wifiOnly: true),
-                      ],
-                    ),
-                  ),
+          Stack(
+            children: [
+              Container(
+                height: 220,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(image: AssetImage('assets/images/museo.jpg'), fit: BoxFit.cover),
                 ),
-                Positioned(
-                  left: 20, bottom: 20,
-                  child: GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.arrow_back, color: Colors.white, size: 24),
-                  ),
-                ),
-                const Positioned(
-                  left: 50, bottom: 40,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              Container(height: 220, color: Colors.black.withOpacity(0.3)),
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Museums', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w500)),
-                      SizedBox(height: 5),
-                      Text('Cultural institutions and exhibitions', style: TextStyle(color: Colors.white70, fontSize: 14)),
+                      GestureDetector(
+                        onTap: () => MenuFlotante.mostrar(context),
+                        child: const Icon(Icons.menu, color: Colors.white, size: 26),
+                      ),
+                      const AppTopBar(onDarkBackground: true, wifiOnly: true),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              Positioned(
+                left: 20, bottom: 20,
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
+                ),
+              ),
+              const Positioned(
+                left: 50, bottom: 40,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Museums', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500)),
+                    SizedBox(height: 5),
+                    Text('Cultural institutions and exhibitions', style: TextStyle(color: Colors.white70, fontSize: 14)),
+                  ],
+                ),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 180),
+          Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.all(20),
               itemCount: 4,
               itemBuilder: (context, index) => _cardPunto(index + 1),
             ),

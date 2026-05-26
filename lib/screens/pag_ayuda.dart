@@ -15,7 +15,7 @@ class PagAyuda extends StatelessWidget {
             // ── TOP BAR ──
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: const AppTopBar(),
+              child: const AppTopBar(currentTitle: 'Help'),
             ),
 
             // ── BACK + TITLE ──
@@ -25,7 +25,7 @@ class PagAyuda extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.arrow_back, size: 22),
+                    child: const Icon(Icons.arrow_back, size: 28),
                   ),
                 ],
               ),

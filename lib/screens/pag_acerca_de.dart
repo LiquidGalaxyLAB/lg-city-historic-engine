@@ -14,45 +14,45 @@ class PagAcercaDe extends StatelessWidget {
           children: [
             // ── TOP BAR ──
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: const AppTopBar(),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
+              child: const AppTopBar(currentTitle: 'About Us'),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.arrow_back, size: 22),
+                    child: const Icon(Icons.arrow_back, size: 28),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 6),
-            const Text('About Us', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 30),
+            const SizedBox(height: 8),
+            const Text('About Us', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 10),
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Column(
                   children: [
                     const Text(
                       'Nombre del autor - Yasmina Ramadan\n'
-                      'Nombre del mentor\n'
+                      'Nombre del mentor - Claudia \n'
                       'Nombre del administrador de la organización - Andreu Ibáñez\n\n'
-                      'Información de contacto del autor -\n'
+                      'Información de contacto del autor - \n'
                       'yasiramadan@gmail.com\n'
-                      'Soporte Lleida Liquid Galaxy LAB',
+                      'Soporte - Lleida Liquid Galaxy LAB',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 15, height: 1.6, color: Colors.black87),
                     ),
                     const SizedBox(height: 30),
                     Image.asset('assets/images/lg.jpg', height: 80),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 35),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Image.asset('assets/images/tic.jpg', height: 60),
+                        Image.asset('assets/images/tic.jpg', height: 70),
                         Image.asset('assets/images/verano.jpg', height: 60),
                       ],
                     ),

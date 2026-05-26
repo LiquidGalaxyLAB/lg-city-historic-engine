@@ -17,22 +17,22 @@ class PagCategorias extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: const AppTopBar(),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
+              child: const AppTopBar(currentTitle: 'Categories'),
             ),
 
-            // ── LOGO CHE (sin fondo blanco) ──
+            // ── LOGO CHE  ──
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Image.asset('assets/images/che.png', height: 110),
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Image.asset('assets/images/che.png', height: 118),
             ),
 
-            const SizedBox(height: 14),
+            const SizedBox(height: 18),
 
             // ── CATEGORY CARDS ──
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 18),
                 children: [
                   _CategoryCard(
                     color: const Color(0xFFFFF8EE),
@@ -77,7 +77,7 @@ class PagCategorias extends StatelessWidget {
                     onTap: () => Navigator.push(context,
                         MaterialPageRoute(builder: (_) => const PagHechosHistoricos())),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 40),
                   GestureDetector(
                     onTap: () => Navigator.push(context,
                         MaterialPageRoute(builder: (_) => const PagConectar())),
@@ -92,14 +92,14 @@ class PagCategorias extends StatelessWidget {
                         'Connect to Liquid Galaxy',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 18,
                           fontWeight: FontWeight.w600,
                           color: Colors.black87,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                 ],
               ),
             ),
@@ -138,20 +138,20 @@ class _CategoryCard extends StatelessWidget {
             Container(
               width: 50, height: 50,
               decoration: BoxDecoration(color: iconBgColor, borderRadius: BorderRadius.circular(12)),
-              child: Icon(icon, color: iconColor, size: 26),
+              child: Icon(icon, color: iconColor, size: 28),
             ),
-            const SizedBox(width: 14),
+            const SizedBox(width: 18),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Colors.black87)),
+                  Text(title, style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: Colors.black87)),
                   const SizedBox(height: 4),
-                  Text(subtitle, style: const TextStyle(fontSize: 12.5, color: Colors.black54, height: 1.4)),
+                  Text(subtitle, style: const TextStyle(fontSize: 13, color: Colors.black54, height: 1.4)),
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios, size: 15, color: Colors.black38),
+            const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black38),
           ],
         ),
       ),
