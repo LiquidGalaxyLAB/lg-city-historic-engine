@@ -12,11 +12,13 @@ class PagConectar extends StatefulWidget {
 class _PagConectarState extends State<PagConectar> {
   final _conn = LGConnectionState();
   final _userController = TextEditingController(text: 'lg');
-  final _passController = TextEditingController(text: '••••••••••');
+  final _passController = TextEditingController(text: 'lg');
   final _ipController = TextEditingController(text: '192.168.1.229');
   final _portController = TextEditingController(text: '22');
-  final _passAdminController = TextEditingController(text: '••');
+  final _passAdminController = TextEditingController(text: '');
   final _screensController = TextEditingController(text: '5');
+
+  bool _isLoading = false;
 
   bool get _conectado => _conn.conectado;
 
@@ -29,12 +31,43 @@ class _PagConectarState extends State<PagConectar> {
   @override
   void dispose() {
     _conn.removeListener(_refresh);
+    _userController.dispose();
+    _passController.dispose();
+    _ipController.dispose();
+    _portController.dispose();
+    _passAdminController.dispose();
+    _screensController.dispose();
     super.dispose();
   }
 
   void _refresh() => setState(() {});
 
-  void _conectar() => _conn.conectar(_ipController.text.isNotEmpty ? _ipController.text : '192.168.1.229');
+  Future<void> _conectar() async {
+    setState(() => _isLoading = true);
+    
+    bool success = await _conn.conectar(
+      ip: _ipController.text,
+      user: _userController.text,
+      password: _passController.text,
+      port: int.tryParse(_portController.text) ?? 22,
+      screens: int.tryParse(_screensController.text) ?? 5,
+    );
+
+    setState(() => _isLoading = false);
+
+    if (!mounted) return;
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Connected successfully!'), backgroundColor: Colors.green),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Connection failed. Check your settings.'), backgroundColor: Colors.red),
+      );
+    }
+  }
+
   void _desconectar() => _conn.desconectar();
 
   @override
@@ -46,9 +79,9 @@ class _PagConectarState extends State<PagConectar> {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: const AppTopBar(currentTitle: 'Connection'),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: AppTopBar(currentTitle: 'Connection'),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -107,13 +140,18 @@ class _PagConectarState extends State<PagConectar> {
                         suffix: const Icon(Icons.monitor, size: 18, color: Colors.black45)),
                     const SizedBox(height: 24),
                     GestureDetector(
-                      onTap: _conectar,
+                      onTap: _isLoading ? null : _conectar,
                       child: Container(
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 15),
-                        decoration: BoxDecoration(color: const Color(0xFF8B7355), borderRadius: BorderRadius.circular(14)),
-                        child: const Text('Connect to Liquid Galaxy', textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
+                        decoration: BoxDecoration(
+                          color: _isLoading ? Colors.grey : const Color(0xFF8B7355), 
+                          borderRadius: BorderRadius.circular(14)
+                        ),
+                        child: _isLoading 
+                          ? const Center(child: SizedBox(height: 22, width: 22, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)))
+                          : const Text('Connect to Liquid Galaxy', textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
                       ),
                     ),
                     const SizedBox(height: 30),

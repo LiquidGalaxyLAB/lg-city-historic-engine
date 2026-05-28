@@ -10,8 +10,6 @@ class PagSettings extends StatefulWidget {
 }
 
 class _PagSettingsState extends State<PagSettings> {
-  String _lang = 'en';
-
   final List<Map<String, String>> _languages = [
     {'code': 'en', 'flag': 'GB', 'name': 'English'},
     {'code': 'es', 'flag': 'ES', 'name': 'Español'},
@@ -23,108 +21,113 @@ class _PagSettingsState extends State<PagSettings> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // ── TOP BAR ──
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: const AppTopBar(currentTitle: 'Settings'),
-            ),
-
-            // ── BACK + TITLE ──
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Icon(Icons.arrow_back, size: 28, color: isDark ? Colors.white : Colors.black87),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'Settings',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: isDark ? Colors.white : Colors.black87),
-            ),
-
-            const SizedBox(height: 24),
-
-            // ── CONTENT ──
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    // ── THEME CARD ──
-                    _SectionCard(
-                      icon: Icons.wb_sunny_outlined,
-                      iconBg: const Color(0xFFE8EFFF),
-                      iconColor: const Color(0xFFD4913A),
-                      title: 'Theme',
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: _ThemeOption(
-                              label: 'Light',
-                              icon: Icons.wb_sunny_outlined,
-                              selected: themeNotifier.value == ThemeMode.light,
-                              onTap: () {
-                                setState(() {
-                                  themeNotifier.value = ThemeMode.light;
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: _ThemeOption(
-                              label: 'Dark',
-                              icon: Icons.dark_mode_outlined,
-                              selected: themeNotifier.value == ThemeMode.dark,
-                              onTap: () {
-                                setState(() {
-                                  themeNotifier.value = ThemeMode.dark;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // ── LANGUAGE CARD ──
-                    _SectionCard(
-                      icon: Icons.language,
-                      iconBg: const Color(0xFFE8F9F1),
-                      iconColor: const Color(0xFF1CB17F),
-                      title: 'Language',
-                      child: Column(
-                        children: _languages.map((l) {
-                          final isSelected = _lang == l['code'];
-                          return _LanguageOption(
-                            code: l['flag']!,
-                            name: l['name']!,
-                            selected: isSelected,
-                            onTap: () => setState(() => _lang = l['code']!),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    const SizedBox(height: 40),
-                  ],
+    return ValueListenableBuilder<String>(
+      valueListenable: languageNotifier,
+      builder: (context, currentLang, _) {
+        return Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          body: SafeArea(
+            child: Column(
+              children: [
+                // ── TOP BAR ──
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: AppTopBar(currentTitle: T.s('settings')),
                 ),
-              ),
+
+                // ── BACK + TITLE ──
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Icon(Icons.arrow_back, size: 28, color: isDark ? Colors.white : Colors.black87),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  T.s('settings'),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: isDark ? Colors.white : Colors.black87),
+                ),
+
+                const SizedBox(height: 24),
+
+                // ── CONTENT ──
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      children: [
+                        // ── THEME CARD ──
+                        _SectionCard(
+                          icon: Icons.wb_sunny_outlined,
+                          iconBg: const Color(0xFFE8EFFF),
+                          iconColor: const Color(0xFFD4913A),
+                          title: T.s('theme'),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: _ThemeOption(
+                                  label: T.s('light'),
+                                  icon: Icons.wb_sunny_outlined,
+                                  selected: themeNotifier.value == ThemeMode.light,
+                                  onTap: () {
+                                    themeNotifier.value = ThemeMode.light;
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _ThemeOption(
+                                  label: T.s('dark'),
+                                  icon: Icons.dark_mode_outlined,
+                                  selected: themeNotifier.value == ThemeMode.dark,
+                                  onTap: () {
+                                    themeNotifier.value = ThemeMode.dark;
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // ── LANGUAGE CARD ──
+                        _SectionCard(
+                          icon: Icons.language,
+                          iconBg: const Color(0xFFE8F9F1),
+                          iconColor: const Color(0xFF1CB17F),
+                          title: T.s('language'),
+                          child: Column(
+                            children: _languages.map((l) {
+                              final isSelected = currentLang == l['code'];
+                              return _LanguageOption(
+                                code: l['flag']!,
+                                name: l['name']!,
+                                selected: isSelected,
+                                onTap: () {
+                                  languageNotifier.value = l['code']!;
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      }
     );
   }
 }
