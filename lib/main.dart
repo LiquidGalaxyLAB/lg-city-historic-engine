@@ -9,7 +9,6 @@ import 'package:prueba/screens/pag_museos.dart';
 import 'package:prueba/screens/pag_tools.dart';
 import 'package:prueba/screens/pag_ubi_interes.dart';
 import 'package:prueba/widgets/m_superior.dart';
-import '../screens/pag_principal.dart';
 
 final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 final ValueNotifier<String> languageNotifier = ValueNotifier('en');
@@ -66,11 +65,11 @@ class T {
       'light': 'Light',
       'dark': 'Dark',
       'poi': 'Points of Interest',
-      'poi_subtitle': 'Historic landmarks and monuments',
+      'poi_subtitle': 'Discover historic landmarks and monuments across Lleida',
       'cathedrals': 'Cathedrals & Churches',
-      'cathedrals_subtitle': 'Sacred architecture and religious sites',
+      'cathedrals_subtitle': 'Explore sacred architecture and religious heritage',
       'museums': 'Museums',
-      'museums_subtitle': 'Cultural institutions and exhibitions',
+      'museums_subtitle': 'Visit cultural institutions and exhibition spaces',
       'events': 'Historical Events',
       'events_subtitle': 'Significant moments in Lleida history',
       'categories': 'Categories',
@@ -87,6 +86,7 @@ class T {
       'connect': 'Connect',
       'tools': 'Tools',
       'home': 'Home',
+      'no_results_found': 'No results found',
     },
     'es': {
       'settings': 'Ajustes',
@@ -95,11 +95,11 @@ class T {
       'light': 'Claro',
       'dark': 'Oscuro',
       'poi': 'Puntos de Interés',
-      'poi_subtitle': 'Monumentos y lugares históricos',
+      'poi_subtitle': 'Descubre monumentos y lugares históricos en Lleida',
       'cathedrals': 'Catedrales e Iglesias',
-      'cathedrals_subtitle': 'Arquitectura sagrada y sitios religiosos',
+      'cathedrals_subtitle': 'Explora la arquitectura sagrada y el patrimonio religioso',
       'museums': 'Museos',
-      'museums_subtitle': 'Instituciones culturales y exposiciones',
+      'museums_subtitle': 'Visita instituciones culturales y espacios de exposición',
       'events': 'Eventos Históricos',
       'events_subtitle': 'Momentos significativos de la historia de Lleida',
       'categories': 'Categorías',
@@ -116,6 +116,7 @@ class T {
       'connect': 'Conectar',
       'tools': 'Herramientas',
       'home': 'Inicio',
+      'no_results_found': 'No se encontraron resultados',
     },
     'ca': {
       'settings': 'Ajustos',
@@ -124,11 +125,11 @@ class T {
       'light': 'Clar',
       'dark': 'Fosc',
       'poi': 'Punts d\'Interès',
-      'poi_subtitle': 'Monuments i llocs històrics',
+      'poi_subtitle': 'Descobreix monuments i llocs històrics a Lleida',
       'cathedrals': 'Catedrals i Esglésies',
-      'cathedrals_subtitle': 'Arquitectura sagrada i llocs religiosos',
+      'cathedrals_subtitle': 'Explora l\'arquitectura sagrada i el patrimoni religiós',
       'museums': 'Museus',
-      'museums_subtitle': 'Institucions culturals i exposicions',
+      'museums_subtitle': 'Visita institucions culturals i espais d\'exposició',
       'events': 'Esdeveniments Històrics',
       'events_subtitle': 'Moments significatius de la història de Lleida',
       'categories': 'Categories',
@@ -145,6 +146,7 @@ class T {
       'connect': 'Connectar',
       'tools': 'Eines',
       'home': 'Inici',
+      'no_results_found': 'No s\'han trobat resultats',
     },
     'tr': {
       'settings': 'Ayarlar',
@@ -153,11 +155,11 @@ class T {
       'light': 'Aydınlık',
       'dark': 'Karanlık',
       'poi': 'İlgi Çekici Yerler',
-      'poi_subtitle': 'Tarihi yapılar ve anıtlar',
+      'poi_subtitle': 'Lleida\'daki tarihi yapıları ve anıtları keşfedin',
       'cathedrals': 'Katedraller ve Kiliseler',
-      'cathedrals_subtitle': 'Kutsal mimari ve dini yerler',
+      'cathedrals_subtitle': 'Kutsal mimariyi ve dini mirası keşfedin',
       'museums': 'Müzeler',
-      'museums_subtitle': 'Kültürel kurumlar ve sergiler',
+      'museums_subtitle': 'Kültürel kurumları ve sergi alanlarını ziyaret edin',
       'events': 'Tarihi Olaylar',
       'events_subtitle': 'Lleida tarihindeki önemli anlar',
       'categories': 'Kategoriler',
@@ -174,6 +176,7 @@ class T {
       'connect': 'Bağlan',
       'tools': 'Araçlar',
       'home': 'Ana Sayfa',
+      'no_results_found': 'Sonuç bulunamadı',
     },
   };
 

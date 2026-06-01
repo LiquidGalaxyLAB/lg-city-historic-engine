@@ -5,36 +5,25 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.10.7
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
   dartssh2: ^2.2.0
+  shared_preferences: ^2.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
+  flutter_lints: ^3.0.0
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/La_Seu.jpg
-    - assets/images/Castillo_L.jpg
-    - assets/images/denoche.jpg
-    - assets/images/museo.jpg
-    - assets/images/museonoche.jpg
-    - assets/images/museoturismo.jpg
-    - assets/images/catedral.jpg
-    - assets/images/lerida.jpg
-    - assets/images/lg.jpg
-    - assets/images/lglab.jpg
-    - assets/images/tic.jpg
-    - assets/images/verano.jpg
-    - assets/images/Parc-Agrobiotech.jpg
-    - assets/images/LGEU.jpg
-    - assets/images/che.png
-    - "assets/images/2026-05-17 09_25_11-NVIDIA GeForce Overlay.png"
+    - assets/images/
+    - assets/images_points_of_interest/
+    - assets/images_churches_cathedrals/
+    - assets/images_museums/

@@ -7,7 +7,7 @@ class POI {
   final String name;
   final String location;
   final String image;
-  POI({required this.name, required this.location, this.image = 'assets/images/catedral.jpg'});
+  POI({required this.name, required this.location, required this.image});
 }
 
 class PagCatedralesIglesias extends StatefulWidget {
@@ -19,23 +19,89 @@ class PagCatedralesIglesias extends StatefulWidget {
 
 class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
   String _selectedCategory = 'All';
+  String _searchQuery = '';
+  final TextEditingController _searchController = TextEditingController();
 
   final Map<String, List<POI>> _data = {
     'Cathedrals': [
-      POI(name: 'Seu Vella Cathedral', location: '41.6141°N, 0.6258°E'),
-      POI(name: 'New Cathedral', location: '41.6141°N, 0.6258°E'),
+      POI(
+        name: 'Seu Vella Cathedral', 
+        location: '41.6176° N, 0.6267° E', 
+        image: 'assets/images_churches_cathedrals/img.png'
+      ),
+      POI(
+        name: 'New Cathedral', 
+        location: '41.6141° N, 0.6258° E', 
+        image: 'assets/images_churches_cathedrals/catedral.jpg'
+      ),
     ],
-    'Churches': List.generate(7, (i) => POI(name: 'Church ${i + 1}', location: '41.61°N, 0.62°E')),
+    'Churches': [
+      POI(
+        name: 'Iglesia de Sant Llorenç', 
+        location: '41.6151° N, 0.6225° E', 
+        image: 'assets/images_churches_cathedrals/Iglesia de Sant Llorenç.jpg'
+      ),
+      POI(
+        name: 'Iglesia de San Juan', 
+        location: '41.6166° N, 0.6289° E', 
+        image: 'assets/images_churches_cathedrals/Iglesia de San Juan.jpg'
+      ),
+      POI(
+        name: 'Sant Pere', 
+        location: '41.6135° N, 0.6272° E', 
+        image: 'assets/images_churches_cathedrals/Sant_pere.jpg'
+      ),
+      POI(
+        name: 'Acadèmia Mariana', 
+        location: '41.6171° N, 0.6261° E', 
+        image: 'assets/images_churches_cathedrals/academia_mariana.jpg'
+      ),
+      POI(
+        name: 'Capella de la Sang', 
+        location: '41.6158° N, 0.6275° E', 
+        image: 'assets/images_churches_cathedrals/Capella_sang.png'
+      ),
+      POI(
+        name: 'Convent del Roser', 
+        location: '41.6155° N, 0.6241° E', 
+        image: 'assets/images_churches_cathedrals/Convent del Roser.jpg'
+      ),
+      POI(
+        name: 'Ermita de Granyena', 
+        location: '41.6322° N, 0.6611° E', 
+        image: 'assets/images_churches_cathedrals/Ermita de Granyena.jpg'
+      ),
+      POI(
+        name: 'Capella de Sant Jaume', 
+        location: '41.6148° N, 0.6264° E', 
+        image: 'assets/images_churches_cathedrals/Capella de Sant Jaume.jpg'
+      ),
+      POI(
+        name: 'Iglesia antigua de Sant Martí', 
+        location: '41.6183° N, 0.6239° E', 
+        image: 'assets/images_churches_cathedrals/Iglesia antigua de Sant Martí.jpg'
+      ),
+    ],
   };
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<String>(
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
-        final List<POI> pois = _selectedCategory == 'All' 
+        final List<POI> allPois = _selectedCategory == 'All' 
             ? _data.values.expand((x) => x).toList() 
             : (_data[_selectedCategory] ?? []);
+
+        final List<POI> pois = allPois.where((poi) {
+          return poi.name.toLowerCase().contains(_searchQuery.toLowerCase());
+        }).toList();
 
         return Scaffold(
           backgroundColor: const Color(0xFFF8F7F2),
@@ -49,7 +115,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                     width: double.infinity,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/images/catedral.jpg'),
+                        image: AssetImage('assets/images_churches_cathedrals/catedral.jpg'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -150,7 +216,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                           const Icon(Icons.location_on_outlined, color: Colors.white, size: 16),
                           const SizedBox(width: 8),
                           Text(
-                            '9 ${T.s('available')}',
+                            '${pois.length} ${T.s('available')}',
                             style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                           ),
                         ],
@@ -169,12 +235,30 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
               const SizedBox(height: 45),
 
               Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: pois.length,
-                  itemBuilder: (context, index) => _cardPunto(pois[index]),
-                ),
+                child: pois.isEmpty 
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.search_off_rounded, size: 80, color: Colors.grey[300]),
+                          const SizedBox(height: 16),
+                          Text(
+                            T.s('no_results') ?? 'No results found',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: pois.length,
+                      itemBuilder: (context, index) => _cardPunto(pois[index]),
+                    ),
               ),
             ],
           ),
@@ -203,16 +287,42 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
           const Icon(Icons.search_rounded, color: Color(0xFF8E8E93), size: 22),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(
-              T.s('search'),
+            child: TextField(
+              controller: _searchController,
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+              decoration: InputDecoration(
+                hintText: T.s('search'),
+                hintStyle: const TextStyle(
+                  color: Color(0xFF8E8E93), 
+                  fontSize: 16, 
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: -0.2,
+                ),
+                border: InputBorder.none,
+                isDense: true,
+                contentPadding: EdgeInsets.zero,
+              ),
               style: const TextStyle(
-                color: Color(0xFF8E8E93), 
-                fontSize: 16, 
-                fontWeight: FontWeight.w400,
-                letterSpacing: -0.2,
+                fontSize: 16,
+                color: Color(0xFF1C1C1E),
               ),
             ),
           ),
+          if (_searchQuery.isNotEmpty)
+            GestureDetector(
+              onTap: () {
+                _searchController.clear();
+                setState(() {
+                  _searchQuery = '';
+                });
+              },
+              child: const Icon(Icons.close_rounded, color: Color(0xFF8E8E93), size: 20),
+            ),
+          const SizedBox(width: 10),
           _buildCategoryDropdown(),
           const SizedBox(width: 8),
         ],
@@ -294,6 +404,13 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
               height: 180,
               width: double.infinity,
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  height: 180,
+                  color: Colors.grey[300],
+                  child: const Icon(Icons.image_not_supported, size: 50, color: Colors.grey),
+                );
+              },
             ),
           ),
           Padding(

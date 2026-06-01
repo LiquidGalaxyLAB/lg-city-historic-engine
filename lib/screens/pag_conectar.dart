@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/connection_state.dart';
 import '../widgets/app_top_bar.dart';
 
@@ -11,12 +12,12 @@ class PagConectar extends StatefulWidget {
 
 class _PagConectarState extends State<PagConectar> {
   final _conn = LGConnectionState();
-  final _userController = TextEditingController(text: 'lg');
-  final _passController = TextEditingController(text: 'lg');
-  final _ipController = TextEditingController(text: '192.168.1.229');
-  final _portController = TextEditingController(text: '22');
-  final _passAdminController = TextEditingController(text: '');
-  final _screensController = TextEditingController(text: '5');
+  final _userController = TextEditingController();
+  final _passController = TextEditingController();
+  final _ipController = TextEditingController();
+  final _portController = TextEditingController();
+  final _passAdminController = TextEditingController();
+  final _screensController = TextEditingController();
 
   bool _isLoading = false;
 
@@ -26,6 +27,7 @@ class _PagConectarState extends State<PagConectar> {
   void initState() {
     super.initState();
     _conn.addListener(_refresh);
+    _loadSettings();
   }
 
   @override
@@ -41,6 +43,28 @@ class _PagConectarState extends State<PagConectar> {
   }
 
   void _refresh() => setState(() {});
+
+  Future<void> _loadSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _userController.text = prefs.getString('lg_user') ?? 'lg';
+      _passController.text = prefs.getString('lg_pass') ?? 'lg';
+      _ipController.text = prefs.getString('lg_ip') ?? '192.168.1.229';
+      _portController.text = prefs.getString('lg_port') ?? '22';
+      _passAdminController.text = prefs.getString('lg_pass_admin') ?? '';
+      _screensController.text = prefs.getString('lg_screens') ?? '5';
+    });
+  }
+
+  Future<void> _saveSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('lg_user', _userController.text);
+    await prefs.setString('lg_pass', _passController.text);
+    await prefs.setString('lg_ip', _ipController.text);
+    await prefs.setString('lg_port', _portController.text);
+    await prefs.setString('lg_pass_admin', _passAdminController.text);
+    await prefs.setString('lg_screens', _screensController.text);
+  }
 
   Future<void> _conectar() async {
     setState(() => _isLoading = true);
@@ -58,8 +82,9 @@ class _PagConectarState extends State<PagConectar> {
     if (!mounted) return;
 
     if (success) {
+      await _saveSettings();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Connected successfully!'), backgroundColor: Colors.green),
+        const SnackBar(content: Text('Connected successfully! Saved settings.'), backgroundColor: Colors.green),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

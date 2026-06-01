@@ -7,7 +7,7 @@ class POI {
   final String name;
   final String location;
   final String image;
-  POI({required this.name, required this.location, this.image = 'assets/images/museo.jpg'});
+  POI({required this.name, required this.location, required this.image});
 }
 
 class PagMuseos extends StatefulWidget {
@@ -19,30 +19,58 @@ class PagMuseos extends StatefulWidget {
 
 class _PagMuseosState extends State<PagMuseos> {
   String _selectedCategory = 'All';
+  String _searchQuery = '';
+  final TextEditingController _searchController = TextEditingController();
 
   final Map<String, List<POI>> _data = {
     'Arte': [
-      POI(name: 'Museum of Art', location: '41.6141°N, 0.6258°E'),
+      POI(
+        name: 'Museu d’Art Modern i Contemporani de Lleida', 
+        location: '41.6141° N, 0.6258° E', 
+        image: 'assets/images_museums/Museu d’Art Modern i Contemporani de Lleida.jpg'
+      ),
     ],
     'Historia/Patrimonio': [
-      POI(name: 'Historical Heritage Museum', location: '41.6141°N, 0.6258°E'),
+      POI(
+        name: 'Museu Diocesà', 
+        location: '41.6146° N, 0.6257° E', 
+        image: 'assets/images_museums/museonoche.jpg'
+      ),
     ],
     'Ciencia/Tecnología': [
-      POI(name: 'Science & Technology Center', location: '41.6141°N, 0.6258°E'),
+      POI(
+        name: 'Museu de l’Aigua', 
+        location: '41.6111° N, 0.6212° E', 
+        image: 'assets/images_museums/Museu de l’Aigua.jpg'
+      ),
     ],
     'Automoción': [
-      POI(name: 'Automotive History Museum', location: '41.6141°N, 0.6258°E'),
+      POI(
+        name: 'Museu de l’Automoció', 
+        location: '41.6125° N, 0.6302° E', 
+        image: 'assets/images_museums/Museu de l’Automoció.jpg'
+      ),
     ],
   };
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<String>(
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
-        final List<POI> pois = _selectedCategory == 'All' 
+        final List<POI> allPois = _selectedCategory == 'All' 
             ? _data.values.expand((x) => x).toList() 
             : (_data[_selectedCategory] ?? []);
+
+        final List<POI> pois = allPois.where((poi) {
+          return poi.name.toLowerCase().contains(_searchQuery.toLowerCase());
+        }).toList();
 
         return Scaffold(
           backgroundColor: const Color(0xFFF8F7F2), 
@@ -56,7 +84,7 @@ class _PagMuseosState extends State<PagMuseos> {
                     width: double.infinity,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/images/museo.jpg'),
+                        image: AssetImage('assets/images_museums/museonoche.jpg'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -107,87 +135,105 @@ class _PagMuseosState extends State<PagMuseos> {
                         decoration: BoxDecoration(
                           color: Colors.black.withValues(alpha: 0.15),
                           shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 20,
-                bottom: 70,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      T.s('museums').toUpperCase(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.5,
-                        fontFamily: 'serif',
+                        ),
+                        child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      T.s('museums_subtitle'),
-                      style: const TextStyle(
-                        color: Colors.white70, 
-                        fontSize: 15, 
-                        fontWeight: FontWeight.w300,
-                        letterSpacing: 0.5,
+                  ),
+                  Positioned(
+                    left: 20,
+                    bottom: 70,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          T.s('museums').toUpperCase(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.5,
+                            fontFamily: 'serif',
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          T.s('museums_subtitle'),
+                          style: const TextStyle(
+                            color: Colors.white70, 
+                            fontSize: 15, 
+                            fontWeight: FontWeight.w300,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    left: 20,
+                    bottom: 35,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(color: Colors.white30),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.location_on_outlined, color: Colors.white, size: 16),
+                          const SizedBox(width: 8),
+                          Text(
+                            '${pois.length} ${T.s('available')}',
+                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Positioned(
-                left: 20,
-                bottom: 35,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: Colors.white30),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.location_on_outlined, color: Colors.white, size: 16),
-                      const SizedBox(width: 8),
-                      Text(
-                        '${pois.length} ${T.s('available')}',
-                        style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                  Positioned(
+                    bottom: -28,
+                    left: 16,
+                    right: 16,
+                    child: _buildFilterBar(),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 45),
+
+              Expanded(
+                child: pois.isEmpty 
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.search_off_rounded, size: 80, color: Colors.grey[300]),
+                          const SizedBox(height: 16),
+                          Text(
+                            T.s('no_results') ?? 'No results found',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: -28,
-                left: 16,
-                right: 16,
-                child: _buildFilterBar(),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: pois.length,
+                      itemBuilder: (context, index) => _cardPunto(pois[index]),
+                    ),
               ),
             ],
           ),
-
-          const SizedBox(height: 45),
-
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-              physics: const BouncingScrollPhysics(),
-              itemCount: pois.length,
-              itemBuilder: (context, index) => _cardPunto(pois[index]),
-            ),
-          ),
-        ],
-      ),
+        );
+      }
     );
-  }
-);
   }
 
   Widget _buildFilterBar() {
@@ -210,16 +256,42 @@ class _PagMuseosState extends State<PagMuseos> {
           const Icon(Icons.search_rounded, color: Color(0xFF8E8E93), size: 22),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(
-              T.s('search'),
+            child: TextField(
+              controller: _searchController,
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+              decoration: InputDecoration(
+                hintText: T.s('search'),
+                hintStyle: const TextStyle(
+                  color: Color(0xFF8E8E93), 
+                  fontSize: 16, 
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: -0.2,
+                ),
+                border: InputBorder.none,
+                isDense: true,
+                contentPadding: EdgeInsets.zero,
+              ),
               style: const TextStyle(
-                color: Color(0xFF8E8E93), 
-                fontSize: 16, 
-                fontWeight: FontWeight.w400,
-                letterSpacing: -0.2,
+                fontSize: 16,
+                color: Color(0xFF1C1C1E),
               ),
             ),
           ),
+          if (_searchQuery.isNotEmpty)
+            GestureDetector(
+              onTap: () {
+                _searchController.clear();
+                setState(() {
+                  _searchQuery = '';
+                });
+              },
+              child: const Icon(Icons.close_rounded, color: Color(0xFF8E8E93), size: 20),
+            ),
+          const SizedBox(width: 10),
           _buildCategoryDropdown(),
           const SizedBox(width: 8),
         ],
@@ -301,6 +373,13 @@ class _PagMuseosState extends State<PagMuseos> {
               height: 180,
               width: double.infinity,
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  height: 180,
+                  color: Colors.grey[300],
+                  child: const Icon(Icons.image_not_supported, size: 50, color: Colors.grey),
+                );
+              },
             ),
           ),
           Padding(

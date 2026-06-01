@@ -29,7 +29,7 @@ class PagCategorias extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18),
                   child: Image.asset(
-                    'assets/images/2026-05-17 09_25_11-NVIDIA GeForce Overlay.png', 
+                    'assets/images/logo.png',
                     height: 118,
                   ),
                 ),
