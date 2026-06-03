@@ -276,7 +276,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              T.s('no_results') ?? 'No results found',
+                              T.s('no_results_found'),
                               style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.grey[600],
@@ -379,7 +379,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 12,
       itemBuilder: (context) {
-        List<String> categories = ['All', 'Cathedrals', 'Churches'];
+        List<String> categories = const ['All', 'Cathedrals', 'Churches'];
         return categories
             .map(
               (cat) => PopupMenuItem<String>(

@@ -83,6 +83,7 @@ class _PagConectarState extends State<PagConectar> {
 
     if (success) {
       await _saveSettings();
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Connected successfully! Saved settings.'),
@@ -98,8 +99,6 @@ class _PagConectarState extends State<PagConectar> {
       );
     }
   }
-
-  void _desconectar() => _conn.desconectar();
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +170,7 @@ class _PagConectarState extends State<PagConectar> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: _desconectar,
+                        onTap: () => _conn.desconectar(),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,

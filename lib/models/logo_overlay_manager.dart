@@ -1,6 +1,6 @@
 import 'package:dartssh2/dartssh2.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'dart:typed_data';
 
 class LogoOverlayManager {
   final SSHClient client;
@@ -46,7 +46,7 @@ class LogoOverlayManager {
       );
       await file.writeBytes(bytes);
       await file.close();
-      print('✅ Logo uploaded to LG web server');
+      debugPrint('✅ Logo uploaded to LG web server');
 
       // 2. Ensure KML directory exists
       await client.run('mkdir -p /var/www/html/kml');
@@ -63,9 +63,9 @@ class LogoOverlayManager {
         "printf '%s' '$safeKml' > /var/www/html/kml/slave_$leftSlave.kml",
       );
 
-      print('📺 Logo KML sent to slave_$leftSlave');
+      debugPrint('📺 Logo KML sent to slave_$leftSlave');
     } catch (e) {
-      print('❌ Error showing logo: $e');
+      debugPrint('❌ Error showing logo: $e');
     }
   }
 
@@ -74,9 +74,9 @@ class LogoOverlayManager {
     try {
       int leftSlave = screens;
       await client.run("printf '' > /var/www/html/kml/slave_$leftSlave.kml");
-      print('🧹 Logo removed');
+      debugPrint('🧹 Logo removed');
     } catch (e) {
-      print('Error removing logo: $e');
+      debugPrint('Error removing logo: $e');
     }
   }
 }

@@ -1,14 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prueba/screens/pag_acerca_de.dart';
-import 'package:prueba/screens/pag_ayuda.dart';
-import 'package:prueba/screens/pag_cat.ig.dart';
-import 'package:prueba/screens/pag_conectar.dart';
-import 'package:prueba/screens/pag_hechos_h.dart';
 import 'package:prueba/screens/pag_inicio_categ.dart';
-import 'package:prueba/screens/pag_museos.dart';
-import 'package:prueba/screens/pag_tools.dart';
-import 'package:prueba/screens/pag_ubi_interes.dart';
-import 'package:prueba/widgets/m_superior.dart';
 
 final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 final ValueNotifier<String> languageNotifier = ValueNotifier('en');
@@ -159,14 +150,14 @@ class T {
       'light': 'Aydınlık',
       'dark': 'Karanlık',
       'poi': 'İlgi Çekici Yerler',
-      'poi_subtitle': 'Lleida\'daki tarihi yapıları ve anıtları keşfedin',
+      'poi_subtitle': 'Lleida\'daki tarihi yapıları yand anıtları keşfedin',
       'cathedrals': 'Katedraller ve Kiliseler',
       'cathedrals_subtitle': 'Kutsal mimariyi ve dini mirası keşfedin',
       'museums': 'Müzeler',
       'museums_subtitle': 'Kültürel kurumları ve sergi alanlarını ziyaret edin',
       'events': 'Tarihi Olaylar',
       'events_subtitle': 'Lleida tarihindeki önemli anlar',
-      'categories': 'Kategoriler',
+      'categories': 'Categoriler',
       'search': 'Konum ara...',
       'show_all': 'Hepsini göster',
       'send_lg': 'LG\'YE GÖNDER',

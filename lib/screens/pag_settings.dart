@@ -10,7 +10,7 @@ class PagSettings extends StatefulWidget {
 }
 
 class _PagSettingsState extends State<PagSettings> {
-  final List<Map<String, String>> _languages = [
+  final List<Map<String, String>> _languages = const [
     {'code': 'en', 'flag': 'GB', 'name': 'English'},
     {'code': 'es', 'flag': 'ES', 'name': 'Español'},
     {'code': 'ca', 'flag': '🏴', 'name': 'Català'},
@@ -172,7 +172,7 @@ class _SectionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.2 : 0.06),
+            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.06),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -186,7 +186,7 @@ class _SectionCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: iconBg.withOpacity(isDark ? 0.1 : 1.0),
+                  color: iconBg.withValues(alpha: isDark ? 0.1 : 1.0),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, size: 20, color: iconColor),
@@ -251,7 +251,7 @@ class _ThemeOption extends StatelessWidget {
               decoration: BoxDecoration(
                 color: selected
                     ? (isDark
-                        ? const Color(0xFF4A3421).withOpacity(0.3)
+                        ? const Color(0xFF4A3421).withValues(alpha: 0.3)
                         : const Color(0xFFFEF7EE))
                     : (isDark ? Colors.black26 : Colors.grey.shade100),
                 borderRadius: BorderRadius.circular(12),

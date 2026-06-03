@@ -14,9 +14,9 @@ class PagTools extends StatelessWidget {
         child: Column(
           children: [
             // ── TOP BAR ──
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: const AppTopBar(currentTitle: 'Tools'),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: AppTopBar(currentTitle: 'Tools'),
             ),
 
             // ── BACK + TITLE ──
@@ -162,41 +162,31 @@ class _ToolCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-
-      // ✅ MODIFICADO:
-      // padding más equilibrado
       padding: EdgeInsets.symmetric(
         horizontal: 12,
         vertical: isFullWidth ? 10 : 14,
       ),
-
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF26221A) : backgroundColor,
         borderRadius: BorderRadius.circular(20),
         border: isDark
-            ? Border.all(color: backgroundColor.withOpacity(0.3), width: 1)
+            ? Border.all(
+                color: backgroundColor.withValues(alpha: 0.3), width: 1)
             : null,
       ),
-
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // ── TITLE ──
           Text(
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.w700,
-
-              // ✅ MODIFICADO:
-              // tamaño aumentado
               fontSize: isFullWidth ? 15 : 19,
-
               fontFamily: 'serif',
               color: isDark ? Colors.white : Colors.black87,
             ),
           ),
-
           if (description.isNotEmpty) ...[
             const SizedBox(height: 6),
             Text(
@@ -209,46 +199,24 @@ class _ToolCard extends StatelessWidget {
               ),
             ),
           ],
-
           const SizedBox(height: 10),
-
-          // ── BOTÓN ──
           GestureDetector(
             onTap: onConfirm,
-
-            // ✅ MODIFICADO:
-            // SizedBox + width infinity
-            // para que TODOS los botones
-            // tengan exactamente el mismo ancho
             child: SizedBox(
               width: double.infinity,
               child: Container(
-                // ✅ MODIFICADO:
-                // centra perfectamente el contenido
                 alignment: Alignment.center,
-
-                // ✅ MODIFICADO:
-                // padding uniforme
                 padding: const EdgeInsets.symmetric(vertical: 12),
-
                 decoration: BoxDecoration(
                   color: buttonColor,
-
-                  // ✅ MODIFICADO:
-                  // bordes más redondeados
                   borderRadius: BorderRadius.circular(22),
                 ),
-
                 child: Text(
                   buttonLabel,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
-
-                    // ✅ MODIFICADO:
-                    // texto del botón más grande
                     fontSize: 16,
-
                     fontWeight: FontWeight.w600,
                     height: 1.1,
                   ),
@@ -276,19 +244,14 @@ class _ConfirmDialog extends StatelessWidget {
           color: const Color(0xFF3A3A3A),
           borderRadius: BorderRadius.circular(20),
         ),
-
-        // ✅ MODIFICADO:
-        // padding uniforme
         padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // ── ICON ──
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: const Color(0xFFD4913A).withOpacity(0.2),
+                color: const Color(0xFFD4913A).withValues(alpha: 0.2),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -297,9 +260,7 @@ class _ConfirmDialog extends StatelessWidget {
                 size: 34,
               ),
             ),
-
             const SizedBox(height: 14),
-
             const Text(
               'Confirm Action',
               style: TextStyle(
@@ -308,9 +269,7 @@ class _ConfirmDialog extends StatelessWidget {
                 fontSize: 18,
               ),
             ),
-
             const SizedBox(height: 10),
-
             Text(
               'Are you sure you want to execute\n$accion?',
               textAlign: TextAlign.center,
@@ -320,12 +279,9 @@ class _ConfirmDialog extends StatelessWidget {
                 height: 1.4,
               ),
             ),
-
             const SizedBox(height: 24),
-
             Row(
               children: [
-                // ── CANCEL ──
                 Expanded(
                   child: GestureDetector(
                     onTap: () => Navigator.pop(context),
@@ -346,10 +302,7 @@ class _ConfirmDialog extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 const SizedBox(width: 12),
-
-                // ── CONFIRM ──
                 Expanded(
                   child: GestureDetector(
                     onTap: () {

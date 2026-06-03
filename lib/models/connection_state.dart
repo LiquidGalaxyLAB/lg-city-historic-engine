@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:prueba/models/logo_overlay_manager.dart';
-import 'dart:async';
 
 /// Estado global de conexión compartido por toda la app.
 class LGConnectionState extends ChangeNotifier {
@@ -61,7 +60,7 @@ class LGConnectionState extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      print('Error de conexión SSH: $e');
+      debugPrint('Error de conexión SSH: $e');
       _conectado = false;
       _client = null;
       notifyListeners();
@@ -82,7 +81,7 @@ class LGConnectionState extends ChangeNotifier {
       final result = await _client!.run(comando);
       return String.fromCharCodes(result);
     } catch (e) {
-      print('Error al ejecutar comando: $e');
+      debugPrint('Error al ejecutar comando: $e');
       return null;
     }
   }

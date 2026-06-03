@@ -76,7 +76,10 @@ class _AppTopBarState extends State<AppTopBar> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
-                BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 6),
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.08),
+                  blurRadius: 6,
+                ),
               ],
             ),
             child: const Icon(Icons.menu, size: 28),

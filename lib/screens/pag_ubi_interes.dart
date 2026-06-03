@@ -334,7 +334,7 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              T.s('no_results') ?? 'No results found',
+                              T.s('no_results_found'),
                               style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.grey[600],

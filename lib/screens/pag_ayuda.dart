@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../widgets/app_top_bar.dart';
-import '../widgets/m_superior.dart';
 
 class PagAyuda extends StatelessWidget {
   const PagAyuda({super.key});
@@ -13,9 +12,9 @@ class PagAyuda extends StatelessWidget {
         child: Column(
           children: [
             // ── TOP BAR ──
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: const AppTopBar(currentTitle: 'Help'),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: AppTopBar(currentTitle: 'Help'),
             ),
 
             // ── BACK + TITLE ──
@@ -39,12 +38,12 @@ class PagAyuda extends StatelessWidget {
             const SizedBox(height: 24),
 
             // ── CONTENT ──
-            Expanded(
+            const Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
                       'Welcome to the help section. Here you will find guidance on how to use the application.',
                       style: TextStyle(

@@ -39,7 +39,7 @@ class MenuFlotante extends StatelessWidget {
             color: const Color(0xFFF5F0E8),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.15),
+                color: Colors.black.withValues(alpha: 0.15),
                 blurRadius: 20,
                 offset: const Offset(4, 0),
               ),
@@ -216,7 +216,7 @@ class MenuFlotante extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       color: highlighted
-                          ? Colors.white.withOpacity(0.8)
+                          ? Colors.white.withValues(alpha: 0.8)
                           : Colors.black45,
                     ),
                   ),

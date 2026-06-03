@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../widgets/app_top_bar.dart';
-import '../widgets/m_superior.dart';
 
 class PagAcercaDe extends StatelessWidget {
   const PagAcercaDe({super.key});
@@ -12,10 +11,9 @@ class PagAcercaDe extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // ── TOP BAR ──
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
-              child: const AppTopBar(currentTitle: 'About Us'),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 18, vertical: 22),
+              child: AppTopBar(currentTitle: 'About Us'),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18),
