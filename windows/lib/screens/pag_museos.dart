@@ -25,30 +25,31 @@ class _PagMuseosState extends State<PagMuseos> {
   final Map<String, List<POI>> _data = {
     'Arte': [
       POI(
-        name: 'Museu d’Art Modern i Contemporani de Lleida', 
+        name: 'Museu d’Art Modern i Contemporani de Lleida',
         location: '41.6157°N, 0.6234°E',
-        image: 'assets/images_museums/Museu d’Art Modern i Contemporani de Lleida.jpg'
+        image:
+            'assets/images_museums/Museu d’Art Modern i Contemporani de Lleida.jpg',
       ),
     ],
     'Historia / Patrimonio': [
       POI(
-        name: 'Museu Diocesà', 
+        name: 'Museu Diocesà',
         location: '41.6148°N, 0.6268°E',
-        image: 'assets/images_museums/Museu Diocesà.jpg'
+        image: 'assets/images_museums/Museu Diocesà.jpg',
       ),
     ],
     'Ciencia / Tecnología / Medioambient': [
       POI(
-        name: 'Museu de l’Aigua', 
+        name: 'Museu de l’Aigua',
         location: '41.6106°N, 0.6178°E',
-        image: 'assets/images_museums/Museu de l’Aigua.jpg'
+        image: 'assets/images_museums/Museu de l’Aigua.jpg',
       ),
     ],
     'Automoción': [
       POI(
-        name: 'Museu de l’Automoció', 
+        name: 'Museu de l’Automoció',
         location: '41.6215°N, 0.6358°E',
-        image: 'assets/images_museums/Museu de l’Automoció.jpg'
+        image: 'assets/images_museums/Museu de l’Automoció.jpg',
       ),
     ],
   };
@@ -65,19 +66,22 @@ class _PagMuseosState extends State<PagMuseos> {
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
         // Filtrado por categoría
-        List<POI> pois = _selectedCategory == 'All' 
-            ? _data.values.expand((x) => x).toList() 
+        List<POI> pois = _selectedCategory == 'All'
+            ? _data.values.expand((x) => x).toList()
             : (_data[_selectedCategory] ?? []);
 
         // Filtrado por búsqueda
         if (_searchQuery.isNotEmpty) {
-          pois = pois.where((poi) => 
-            poi.name.toLowerCase().contains(_searchQuery.toLowerCase())
-          ).toList();
+          pois = pois
+              .where(
+                (poi) =>
+                    poi.name.toLowerCase().contains(_searchQuery.toLowerCase()),
+              )
+              .toList();
         }
 
         return Scaffold(
-          backgroundColor: const Color(0xFFF8F7F2), 
+          backgroundColor: const Color(0xFFF8F7F2),
           body: Column(
             children: [
               Stack(
@@ -88,7 +92,9 @@ class _PagMuseosState extends State<PagMuseos> {
                     width: double.infinity,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/images_museums/Museu Diocesà.jpg'),
+                        image: AssetImage(
+                          'assets/images_museums/Museu Diocesà.jpg',
+                        ),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -109,22 +115,35 @@ class _PagMuseosState extends State<PagMuseos> {
                   ),
                   SafeArea(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: () => MenuFlotante.mostrar(context, currentTitle: T.s('museums')),
+                            onTap: () => MenuFlotante.mostrar(
+                              context,
+                              currentTitle: T.s('museums'),
+                            ),
                             child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.15),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(Icons.menu, color: Colors.white, size: 26),
+                              child: const Icon(
+                                Icons.menu,
+                                color: Colors.white,
+                                size: 26,
+                              ),
                             ),
                           ),
-                          const AppTopBar(onDarkBackground: true, wifiOnly: true),
+                          const AppTopBar(
+                            onDarkBackground: true,
+                            wifiOnly: true,
+                          ),
                         ],
                       ),
                     ),
@@ -140,7 +159,11 @@ class _PagMuseosState extends State<PagMuseos> {
                           color: Colors.black.withValues(alpha: 0.15),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
+                        child: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.white,
+                          size: 22,
+                        ),
                       ),
                     ),
                   ),
@@ -164,8 +187,8 @@ class _PagMuseosState extends State<PagMuseos> {
                         Text(
                           T.s('museums_subtitle'),
                           style: const TextStyle(
-                            color: Colors.white70, 
-                            fontSize: 15, 
+                            color: Colors.white70,
+                            fontSize: 15,
                             fontWeight: FontWeight.w300,
                             letterSpacing: 0.5,
                           ),
@@ -177,7 +200,10 @@ class _PagMuseosState extends State<PagMuseos> {
                     left: 20,
                     bottom: 35,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(30),
@@ -186,11 +212,19 @@ class _PagMuseosState extends State<PagMuseos> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.location_on_outlined, color: Colors.white, size: 16),
+                          const Icon(
+                            Icons.location_on_outlined,
+                            color: Colors.white,
+                            size: 16,
+                          ),
                           const SizedBox(width: 8),
                           Text(
                             '${pois.length} ${T.s('available')}',
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ],
                       ),
@@ -208,43 +242,51 @@ class _PagMuseosState extends State<PagMuseos> {
               const SizedBox(height: 45),
 
               Expanded(
-                child: pois.isEmpty 
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.search_off_rounded, size: 80, color: Colors.grey.withOpacity(0.5)),
-                          const SizedBox(height: 16),
-                          Text(
-                            T.s('no_results_found') ?? 'No results found',
-                            style: TextStyle(
-                              fontSize: 18, 
-                              color: Colors.grey.shade600, 
-                              fontWeight: FontWeight.w500
+                child: pois.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.search_off_rounded,
+                              size: 80,
+                              color: Colors.grey.withOpacity(0.5),
                             ),
-                          ),
-                          if (_searchQuery.isNotEmpty) 
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8),
-                              child: Text(
-                                '"$_searchQuery" does not exist',
-                                style: TextStyle(color: Colors.grey.shade400),
+                            const SizedBox(height: 16),
+                            Text(
+                              T.s('no_results_found') ?? 'No results found',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey.shade600,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                        ],
+                            if (_searchQuery.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Text(
+                                  '"$_searchQuery" does not exist',
+                                  style: TextStyle(color: Colors.grey.shade400),
+                                ),
+                              ),
+                          ],
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 0,
+                        ),
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: pois.length,
+                        itemBuilder: (context, index) =>
+                            _cardPunto(pois[index]),
                       ),
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: pois.length,
-                      itemBuilder: (context, index) => _cardPunto(pois[index]),
-                    ),
               ),
             ],
           ),
         );
-      }
+      },
     );
   }
 
@@ -259,7 +301,7 @@ class _PagMuseosState extends State<PagMuseos> {
             color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 15,
             offset: const Offset(0, 8),
-          )
+          ),
         ],
       ),
       child: Row(
@@ -278,18 +320,15 @@ class _PagMuseosState extends State<PagMuseos> {
               decoration: InputDecoration(
                 hintText: T.s('search'),
                 hintStyle: const TextStyle(
-                  color: Color(0xFF8E8E93), 
-                  fontSize: 16, 
+                  color: Color(0xFF8E8E93),
+                  fontSize: 16,
                   fontWeight: FontWeight.w400,
                   letterSpacing: -0.2,
                 ),
                 border: InputBorder.none,
                 isDense: true,
               ),
-              style: const TextStyle(
-                fontSize: 16,
-                color: Color(0xFF1C1C1E),
-              ),
+              style: const TextStyle(fontSize: 16, color: Color(0xFF1C1C1E)),
             ),
           ),
           if (_searchQuery.isNotEmpty)
@@ -321,17 +360,23 @@ class _PagMuseosState extends State<PagMuseos> {
       elevation: 12,
       itemBuilder: (context) {
         List<String> categories = ['All', ..._data.keys];
-        return categories.map((cat) => PopupMenuItem<String>(
-          value: cat,
-          child: Text(
-            cat == 'All' ? T.s('show_all') : cat,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: _selectedCategory == cat ? FontWeight.w700 : FontWeight.w500,
-              color: const Color(0xFF1C1C1E),
-            ),
-          ),
-        )).toList();
+        return categories
+            .map(
+              (cat) => PopupMenuItem<String>(
+                value: cat,
+                child: Text(
+                  cat == 'All' ? T.s('show_all') : cat,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: _selectedCategory == cat
+                        ? FontWeight.w700
+                        : FontWeight.w500,
+                    color: const Color(0xFF1C1C1E),
+                  ),
+                ),
+              ),
+            )
+            .toList();
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -343,16 +388,22 @@ class _PagMuseosState extends State<PagMuseos> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              _selectedCategory == 'All' ? T.s('categories') : _selectedCategory, 
+              _selectedCategory == 'All'
+                  ? T.s('categories')
+                  : _selectedCategory,
               style: const TextStyle(
-                fontWeight: FontWeight.w800, 
-                fontSize: 13, 
+                fontWeight: FontWeight.w800,
+                fontSize: 13,
                 color: Color(0xFF1C1C1E),
                 letterSpacing: 0.5,
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF1C1C1E), size: 18),
+            const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: Color(0xFF1C1C1E),
+              size: 18,
+            ),
           ],
         ),
       ),
@@ -367,8 +418,8 @@ class _PagMuseosState extends State<PagMuseos> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04), 
-            blurRadius: 16, 
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 16,
             offset: const Offset(0, 8),
           ),
         ],
@@ -393,8 +444,8 @@ class _PagMuseosState extends State<PagMuseos> {
                 Text(
                   poi.name,
                   style: const TextStyle(
-                    fontSize: 22, 
-                    fontWeight: FontWeight.w800, 
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
                     fontFamily: 'serif',
                     color: Color(0xFF1C1C1E),
                   ),
@@ -407,12 +458,16 @@ class _PagMuseosState extends State<PagMuseos> {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.explore_outlined, size: 16, color: Color(0xFF8E8E93)),
+                        const Icon(
+                          Icons.explore_outlined,
+                          size: 16,
+                          color: Color(0xFF8E8E93),
+                        ),
                         const SizedBox(width: 6),
                         Text(
                           T.s('details'),
                           style: const TextStyle(
-                            fontSize: 14, 
+                            fontSize: 14,
                             color: Colors.grey,
                             fontWeight: FontWeight.w500,
                           ),
@@ -420,7 +475,10 @@ class _PagMuseosState extends State<PagMuseos> {
                       ],
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF2F2F7).withValues(alpha: 0.5),
                         borderRadius: BorderRadius.circular(12),
@@ -430,22 +488,26 @@ class _PagMuseosState extends State<PagMuseos> {
                           Text(
                             T.s('send_lg'),
                             style: const TextStyle(
-                              color: Color(0xFF6B5B45), 
-                              fontWeight: FontWeight.w900, 
+                              color: Color(0xFF6B5B45),
+                              fontWeight: FontWeight.w900,
                               fontSize: 13,
                               letterSpacing: 0.5,
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Icon(Icons.arrow_forward_rounded, size: 16, color: Color(0xFF6B5B45)),
+                          const Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 16,
+                            color: Color(0xFF6B5B45),
+                          ),
                         ],
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

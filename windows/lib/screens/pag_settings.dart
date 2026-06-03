@@ -20,7 +20,7 @@ class _PagSettingsState extends State<PagSettings> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return ValueListenableBuilder<String>(
       valueListenable: languageNotifier,
       builder: (context, currentLang, _) {
@@ -31,7 +31,10 @@ class _PagSettingsState extends State<PagSettings> {
               children: [
                 // ── TOP BAR ──
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   child: AppTopBar(currentTitle: T.s('settings')),
                 ),
 
@@ -42,7 +45,11 @@ class _PagSettingsState extends State<PagSettings> {
                     children: [
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
-                        child: Icon(Icons.arrow_back, size: 28, color: isDark ? Colors.white : Colors.black87),
+                        child: Icon(
+                          Icons.arrow_back,
+                          size: 28,
+                          color: isDark ? Colors.white : Colors.black87,
+                        ),
                       ),
                     ],
                   ),
@@ -50,7 +57,11 @@ class _PagSettingsState extends State<PagSettings> {
                 const SizedBox(height: 6),
                 Text(
                   T.s('settings'),
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: isDark ? Colors.white : Colors.black87),
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? Colors.white : Colors.black87,
+                  ),
                 ),
 
                 const SizedBox(height: 24),
@@ -73,7 +84,8 @@ class _PagSettingsState extends State<PagSettings> {
                                 child: _ThemeOption(
                                   label: T.s('light'),
                                   icon: Icons.wb_sunny_outlined,
-                                  selected: themeNotifier.value == ThemeMode.light,
+                                  selected:
+                                      themeNotifier.value == ThemeMode.light,
                                   onTap: () {
                                     themeNotifier.value = ThemeMode.light;
                                     setState(() {});
@@ -85,7 +97,8 @@ class _PagSettingsState extends State<PagSettings> {
                                 child: _ThemeOption(
                                   label: T.s('dark'),
                                   icon: Icons.dark_mode_outlined,
-                                  selected: themeNotifier.value == ThemeMode.dark,
+                                  selected:
+                                      themeNotifier.value == ThemeMode.dark,
                                   onTap: () {
                                     themeNotifier.value = ThemeMode.dark;
                                     setState(() {});
@@ -127,7 +140,7 @@ class _PagSettingsState extends State<PagSettings> {
             ),
           ),
         );
-      }
+      },
     );
   }
 }
@@ -150,7 +163,7 @@ class _SectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -158,7 +171,11 @@ class _SectionCard extends StatelessWidget {
         color: isDark ? const Color(0xFF26221A) : Colors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(isDark ? 0.2 : 0.06), blurRadius: 10, offset: const Offset(0, 4)),
+          BoxShadow(
+            color: Colors.black.withOpacity(isDark ? 0.2 : 0.06),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
         ],
       ),
       child: Column(
@@ -168,15 +185,18 @@ class _SectionCard extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(color: iconBg.withOpacity(isDark ? 0.1 : 1.0), shape: BoxShape.circle),
+                decoration: BoxDecoration(
+                  color: iconBg.withOpacity(isDark ? 0.1 : 1.0),
+                  shape: BoxShape.circle,
+                ),
                 child: Icon(icon, size: 20, color: iconColor),
               ),
               const SizedBox(width: 12),
               Text(
                 title,
                 style: TextStyle(
-                  fontSize: 18, 
-                  fontWeight: FontWeight.w600, 
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
                   fontFamily: 'serif',
                   color: isDark ? Colors.white : Colors.black87,
                 ),
@@ -207,18 +227,20 @@ class _ThemeOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          color: selected 
-              ? (isDark ? const Color(0xFF352E25) : const Color(0xFFFEF7EE)) 
+          color: selected
+              ? (isDark ? const Color(0xFF352E25) : const Color(0xFFFEF7EE))
               : (isDark ? const Color(0xFF1B1811) : Colors.white),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: selected ? const Color(0xFF8B7355) : (isDark ? Colors.grey.shade800 : Colors.grey.shade200),
+            color: selected
+                ? const Color(0xFF8B7355)
+                : (isDark ? Colors.grey.shade800 : Colors.grey.shade200),
             width: selected ? 1.5 : 1,
           ),
         ),
@@ -227,19 +249,27 @@ class _ThemeOption extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: selected 
-                    ? (isDark ? const Color(0xFF4A3421).withOpacity(0.3) : const Color(0xFFFEF7EE))
+                color: selected
+                    ? (isDark
+                          ? const Color(0xFF4A3421).withOpacity(0.3)
+                          : const Color(0xFFFEF7EE))
                     : (isDark ? Colors.black26 : Colors.grey.shade100),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(icon, size: 24, color: selected ? const Color(0xFFD4913A) : (isDark ? Colors.white38 : Colors.black38)),
+              child: Icon(
+                icon,
+                size: 24,
+                color: selected
+                    ? const Color(0xFFD4913A)
+                    : (isDark ? Colors.white38 : Colors.black38),
+              ),
             ),
             const SizedBox(height: 8),
             Text(
               label,
               style: TextStyle(
-                fontWeight: FontWeight.w600, 
-                fontSize: 15, 
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
                 fontFamily: 'serif',
                 color: isDark ? Colors.white : Colors.black87,
               ),
@@ -275,22 +305,24 @@ class _LanguageOption extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            color: selected 
+            color: selected
                 ? (isDark ? const Color(0xFF352E25) : const Color(0xFFFEF7EE))
                 : (isDark ? const Color(0xFF1B1811) : Colors.white),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: selected ? const Color(0xFF8B7355) : (isDark ? Colors.grey.shade800 : Colors.grey.shade200),
+              color: selected
+                  ? const Color(0xFF8B7355)
+                  : (isDark ? Colors.grey.shade800 : Colors.grey.shade200),
               width: selected ? 1.5 : 1,
             ),
           ),
           child: Row(
             children: [
               Text(
-                code, 
+                code,
                 style: TextStyle(
-                  fontSize: 15, 
-                  fontWeight: FontWeight.bold, 
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
                   fontFamily: 'serif',
                   color: isDark ? Colors.white : Colors.black87,
                 ),
@@ -300,8 +332,8 @@ class _LanguageOption extends StatelessWidget {
                 child: Text(
                   name,
                   style: TextStyle(
-                    fontSize: 16, 
-                    fontWeight: FontWeight.w500, 
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                     fontFamily: 'serif',
                     color: isDark ? Colors.white : Colors.black87,
                   ),
@@ -309,8 +341,12 @@ class _LanguageOption extends StatelessWidget {
               ),
               if (selected)
                 Container(
-                  width: 8, height: 8,
-                  decoration: const BoxDecoration(color: Color(0xFFD4913A), shape: BoxShape.circle),
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFD4913A),
+                    shape: BoxShape.circle,
+                  ),
                 ),
             ],
           ),

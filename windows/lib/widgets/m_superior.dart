@@ -18,7 +18,8 @@ class MenuFlotante extends StatelessWidget {
       barrierLabel: 'menu',
       barrierColor: Colors.transparent,
       transitionDuration: const Duration(milliseconds: 200),
-      pageBuilder: (context, anim1, anim2) => MenuFlotante(currentTitle: currentTitle),
+      pageBuilder: (context, anim1, anim2) =>
+          MenuFlotante(currentTitle: currentTitle),
       transitionBuilder: (context, anim1, anim2, child) {
         return FadeTransition(opacity: anim1, child: child);
       },
@@ -49,7 +50,10 @@ class MenuFlotante extends StatelessWidget {
             children: [
               const SizedBox(height: 60),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
                 child: Text(
                   'MENU',
                   style: TextStyle(
@@ -75,7 +79,9 @@ class MenuFlotante extends StatelessWidget {
                         Navigator.pop(context);
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (_) => const PagCategorias()),
+                          MaterialPageRoute(
+                            builder: (_) => const PagCategorias(),
+                          ),
                           (route) => false,
                         );
                       },
@@ -90,7 +96,9 @@ class MenuFlotante extends StatelessWidget {
                         Navigator.pop(context);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const PagConectar()),
+                          MaterialPageRoute(
+                            builder: (_) => const PagConectar(),
+                          ),
                         );
                       },
                     ),
@@ -118,7 +126,9 @@ class MenuFlotante extends StatelessWidget {
                         Navigator.pop(context);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const PagSettings()),
+                          MaterialPageRoute(
+                            builder: (_) => const PagSettings(),
+                          ),
                         );
                       },
                     ),
@@ -132,7 +142,9 @@ class MenuFlotante extends StatelessWidget {
                         Navigator.pop(context);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const PagAcercaDe()),
+                          MaterialPageRoute(
+                            builder: (_) => const PagAcercaDe(),
+                          ),
                         );
                       },
                     ),

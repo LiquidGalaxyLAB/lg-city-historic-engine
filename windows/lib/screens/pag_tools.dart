@@ -27,7 +27,11 @@ class PagTools extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: Icon(Icons.arrow_back, size: 28, color: isDark ? Colors.white : Colors.black87),
+                    child: Icon(
+                      Icons.arrow_back,
+                      size: 28,
+                      color: isDark ? Colors.white : Colors.black87,
+                    ),
                   ),
                 ],
               ),
@@ -66,7 +70,11 @@ class PagTools extends StatelessWidget {
                       backgroundColor: const Color(0xFFEEF3FA),
                       buttonColor: const Color(0xFF1D61E7),
                       isFullWidth: true,
-                      onConfirm: () => _confirmarEjecucion(context, 'Relaunch LG', () => LGConnectionState().relaunchLG()),
+                      onConfirm: () => _confirmarEjecucion(
+                        context,
+                        'Relaunch LG',
+                        () => LGConnectionState().relaunchLG(),
+                      ),
                     ),
                     const SizedBox(height: 8),
                     _ToolCard(
@@ -76,7 +84,11 @@ class PagTools extends StatelessWidget {
                       backgroundColor: const Color(0xFFFEEEEE),
                       buttonColor: const Color(0xFFE21111),
                       isFullWidth: true,
-                      onConfirm: () => _confirmarEjecucion(context, 'Shutdown LG', () => LGConnectionState().shutdownLG()),
+                      onConfirm: () => _confirmarEjecucion(
+                        context,
+                        'Shutdown LG',
+                        () => LGConnectionState().shutdownLG(),
+                      ),
                     ),
                     const SizedBox(height: 8),
                     _ToolCard(
@@ -86,27 +98,41 @@ class PagTools extends StatelessWidget {
                       backgroundColor: const Color(0xFFFEF7EE),
                       buttonColor: const Color(0xFFD4730A),
                       isFullWidth: true,
-                      onConfirm: () => _confirmarEjecucion(context, 'Reboot LG', () => LGConnectionState().rebootLG()),
+                      onConfirm: () => _confirmarEjecucion(
+                        context,
+                        'Reboot LG',
+                        () => LGConnectionState().rebootLG(),
+                      ),
                     ),
                     const SizedBox(height: 8),
                     _ToolCard(
                       title: 'Clean KMLs',
-                      description: 'Remove all active visualizations and KML files',
+                      description:
+                          'Remove all active visualizations and KML files',
                       buttonLabel: 'Execute Clean KMLs',
                       backgroundColor: const Color(0xFFE5E5E5),
                       buttonColor: const Color(0xFF454545),
                       isFullWidth: true,
-                      onConfirm: () => _confirmarEjecucion(context, 'Clean KMLs', () => LGConnectionState().cleanKMLs()),
+                      onConfirm: () => _confirmarEjecucion(
+                        context,
+                        'Clean KMLs',
+                        () => LGConnectionState().cleanKMLs(),
+                      ),
                     ),
                     const SizedBox(height: 8),
                     _ToolCard(
                       title: 'Show Logos',
-                      description: 'Display the application logo on the left screen',
+                      description:
+                          'Display the application logo on the left screen',
                       buttonLabel: 'Execute Show',
                       backgroundColor: const Color(0xFFFDE7FF),
                       buttonColor: const Color(0xFFA50DBA),
                       isFullWidth: true,
-                      onConfirm: () => _confirmarEjecucion(context, 'Show Logos', () => LGConnectionState().showLogo()),
+                      onConfirm: () => _confirmarEjecucion(
+                        context,
+                        'Show Logos',
+                        () => LGConnectionState().showLogo(),
+                      ),
                     ),
                     const SizedBox(height: 8),
                     _ToolCard(
@@ -116,7 +142,11 @@ class PagTools extends StatelessWidget {
                       backgroundColor: const Color(0xFFFDE7FF),
                       buttonColor: const Color(0xFF7B0A8A),
                       isFullWidth: true,
-                      onConfirm: () => _confirmarEjecucion(context, 'Hide Logos', () => LGConnectionState().cleanLogos()),
+                      onConfirm: () => _confirmarEjecucion(
+                        context,
+                        'Hide Logos',
+                        () => LGConnectionState().cleanLogos(),
+                      ),
                     ),
                     const SizedBox(height: 20),
                   ],
@@ -129,10 +159,17 @@ class PagTools extends StatelessWidget {
     );
   }
 
-  void _confirmarEjecucion(BuildContext context, String accion, Future<void> Function() funcion) {
+  void _confirmarEjecucion(
+    BuildContext context,
+    String accion,
+    Future<void> Function() funcion,
+  ) {
     if (!LGConnectionState().conectado) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please connect to Liquid Galaxy first'), backgroundColor: Colors.red),
+        const SnackBar(
+          content: Text('Please connect to Liquid Galaxy first'),
+          backgroundColor: Colors.red,
+        ),
       );
       return;
     }
@@ -143,20 +180,26 @@ class PagTools extends StatelessWidget {
         accion: accion,
         onConfirm: () async {
           Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Executing: $accion...')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Executing: $accion...')));
           try {
             await funcion();
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('$accion executed successfully'), backgroundColor: Colors.green),
+                SnackBar(
+                  content: Text('$accion executed successfully'),
+                  backgroundColor: Colors.green,
+                ),
               );
             }
           } catch (e) {
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Error executing $accion: $e'), backgroundColor: Colors.red),
+                SnackBar(
+                  content: Text('Error executing $accion: $e'),
+                  backgroundColor: Colors.red,
+                ),
               );
             }
           }
@@ -198,7 +241,9 @@ class _ToolCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF26221A) : backgroundColor,
         borderRadius: BorderRadius.circular(20),
-        border: isDark ? Border.all(color: backgroundColor.withOpacity(0.3), width: 1) : null,
+        border: isDark
+            ? Border.all(color: backgroundColor.withOpacity(0.3), width: 1)
+            : null,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -260,10 +305,7 @@ class _ConfirmDialog extends StatelessWidget {
   final String accion;
   final VoidCallback onConfirm;
 
-  const _ConfirmDialog({
-    required this.accion,
-    required this.onConfirm,
-  });
+  const _ConfirmDialog({required this.accion, required this.onConfirm});
 
   @override
   Widget build(BuildContext context) {

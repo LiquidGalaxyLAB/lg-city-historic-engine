@@ -24,21 +24,66 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
 
   final Map<String, List<POI>> _data = {
     'Catedrales': [
-      POI(name: 'Seu Vella', location: '41.6177°N, 0.6264°E', image: 'assets/images_churches_cathedrals/Seu Vella.jpg'),
-      POI(name: 'Catedral Nova', location: '41.6148°N, 0.6234°E', image: 'assets/images_churches_cathedrals/catedral_nova.jpg'),
+      POI(
+        name: 'Seu Vella',
+        location: '41.6177°N, 0.6264°E',
+        image: 'assets/images_churches_cathedrals/Seu Vella.jpg',
+      ),
+      POI(
+        name: 'Catedral Nova',
+        location: '41.6148°N, 0.6234°E',
+        image: 'assets/images_churches_cathedrals/catedral_nova.jpg',
+      ),
     ],
     'Iglesias/Capillas/Ermitas': [
-      POI(name: 'Iglesia antigua de Sant Martí', location: '41.6191°N, 0.6247°E', image: 'assets/images_churches_cathedrals/Iglesia antigua de Sant Martí.jpg'),
-      POI(name: 'Iglesia de Sant Llorenç', location: '41.6158°N, 0.6244°E', image: 'assets/images_churches_cathedrals/Iglesia de Sant Llorenç .jpg'),
-      POI(name: 'Iglesia de San Juan', location: '41.6163°N, 0.6275°E', image: 'assets/images_churches_cathedrals/Iglesia de San Juan.png'),
-      POI(name: 'Capella de la Sang', location: '41.6145°N, 0.6256°E', image: 'assets/images_churches_cathedrals/Capella de la Sang.jpg'),
-      POI(name: 'Capella de sant Jaume', location: '41.6152°N, 0.6261°E', image: 'assets/images_churches_cathedrals/Capella de Sant Jaume.jpg'),
-      POI(name: 'Iglesia de Sant Pere', location: '41.6169°N, 0.6300°E', image: 'assets/images_churches_cathedrals/Iglesia de Sant Pere.jpeg'),
-      POI(name: 'Ermita de Granyena', location: '41.6111°N, 0.6805°E', image: 'assets/images_churches_cathedrals/Ermita de Granyena.jpg'),
+      POI(
+        name: 'Iglesia antigua de Sant Martí',
+        location: '41.6191°N, 0.6247°E',
+        image:
+            'assets/images_churches_cathedrals/Iglesia antigua de Sant Martí.jpg',
+      ),
+      POI(
+        name: 'Iglesia de Sant Llorenç',
+        location: '41.6158°N, 0.6244°E',
+        image: 'assets/images_churches_cathedrals/Iglesia de Sant Llorenç .jpg',
+      ),
+      POI(
+        name: 'Iglesia de San Juan',
+        location: '41.6163°N, 0.6275°E',
+        image: 'assets/images_churches_cathedrals/Iglesia de San Juan.png',
+      ),
+      POI(
+        name: 'Capella de la Sang',
+        location: '41.6145°N, 0.6256°E',
+        image: 'assets/images_churches_cathedrals/Capella de la Sang.jpg',
+      ),
+      POI(
+        name: 'Capella de sant Jaume',
+        location: '41.6152°N, 0.6261°E',
+        image: 'assets/images_churches_cathedrals/Capella de Sant Jaume.jpg',
+      ),
+      POI(
+        name: 'Iglesia de Sant Pere',
+        location: '41.6169°N, 0.6300°E',
+        image: 'assets/images_churches_cathedrals/Iglesia de Sant Pere.jpeg',
+      ),
+      POI(
+        name: 'Ermita de Granyena',
+        location: '41.6111°N, 0.6805°E',
+        image: 'assets/images_churches_cathedrals/Ermita de Granyena.jpg',
+      ),
     ],
     'Conventos/Instituciones religiosas': [
-      POI(name: 'Convent del Roser', location: '41.6160°N, 0.6240°E', image: 'assets/images_churches_cathedrals/Convent del Roser.jpg'),
-      POI(name: 'Academia Mariana', location: '41.6165°N, 0.6285°E', image: 'assets/images_churches_cathedrals/Academia Mariana.jpg'),
+      POI(
+        name: 'Convent del Roser',
+        location: '41.6160°N, 0.6240°E',
+        image: 'assets/images_churches_cathedrals/Convent del Roser.jpg',
+      ),
+      POI(
+        name: 'Academia Mariana',
+        location: '41.6165°N, 0.6285°E',
+        image: 'assets/images_churches_cathedrals/Academia Mariana.jpg',
+      ),
     ],
   };
 
@@ -53,14 +98,17 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
     return ValueListenableBuilder<String>(
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
-        List<POI> pois = _selectedCategory == 'All' 
-            ? _data.values.expand((x) => x).toList() 
+        List<POI> pois = _selectedCategory == 'All'
+            ? _data.values.expand((x) => x).toList()
             : (_data[_selectedCategory] ?? []);
 
         if (_searchQuery.isNotEmpty) {
-          pois = pois.where((poi) => 
-            poi.name.toLowerCase().contains(_searchQuery.toLowerCase())
-          ).toList();
+          pois = pois
+              .where(
+                (poi) =>
+                    poi.name.toLowerCase().contains(_searchQuery.toLowerCase()),
+              )
+              .toList();
         }
 
         return Scaffold(
@@ -75,7 +123,9 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                     width: double.infinity,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/images_churches_cathedrals/catedral_nova.jpg'),
+                        image: AssetImage(
+                          'assets/images_churches_cathedrals/catedral_nova.jpg',
+                        ),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -96,22 +146,35 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                   ),
                   SafeArea(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: () => MenuFlotante.mostrar(context, currentTitle: T.s('cathedrals')),
+                            onTap: () => MenuFlotante.mostrar(
+                              context,
+                              currentTitle: T.s('cathedrals'),
+                            ),
                             child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.15),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(Icons.menu, color: Colors.white, size: 26),
+                              child: const Icon(
+                                Icons.menu,
+                                color: Colors.white,
+                                size: 26,
+                              ),
                             ),
                           ),
-                          const AppTopBar(onDarkBackground: true, wifiOnly: true),
+                          const AppTopBar(
+                            onDarkBackground: true,
+                            wifiOnly: true,
+                          ),
                         ],
                       ),
                     ),
@@ -127,7 +190,11 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                           color: Colors.black.withValues(alpha: 0.15),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
+                        child: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.white,
+                          size: 22,
+                        ),
                       ),
                     ),
                   ),
@@ -151,8 +218,8 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                         Text(
                           T.s('cathedrals_subtitle'),
                           style: const TextStyle(
-                            color: Colors.white70, 
-                            fontSize: 15, 
+                            color: Colors.white70,
+                            fontSize: 15,
                             fontWeight: FontWeight.w300,
                             letterSpacing: 0.5,
                           ),
@@ -164,7 +231,10 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                     left: 20,
                     bottom: 35,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(30),
@@ -173,11 +243,19 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.location_on_outlined, color: Colors.white, size: 16),
+                          const Icon(
+                            Icons.location_on_outlined,
+                            color: Colors.white,
+                            size: 16,
+                          ),
                           const SizedBox(width: 8),
                           Text(
                             '${pois.length} ${T.s('available')}',
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ],
                       ),
@@ -195,19 +273,23 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
               const SizedBox(height: 45),
 
               Expanded(
-                child: pois.isEmpty 
-                  ? Center(child: Text(T.s('no_results_found')))
-                  : ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: pois.length,
-                      itemBuilder: (context, index) => _cardPunto(pois[index]),
-                    ),
+                child: pois.isEmpty
+                    ? Center(child: Text(T.s('no_results_found')))
+                    : ListView.builder(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 0,
+                        ),
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: pois.length,
+                        itemBuilder: (context, index) =>
+                            _cardPunto(pois[index]),
+                      ),
               ),
             ],
           ),
         );
-      }
+      },
     );
   }
 
@@ -222,7 +304,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
             color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 15,
             offset: const Offset(0, 8),
-          )
+          ),
         ],
       ),
       child: Row(
@@ -241,8 +323,8 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
               decoration: InputDecoration(
                 hintText: T.s('search'),
                 hintStyle: const TextStyle(
-                  color: Color(0xFF8E8E93), 
-                  fontSize: 16, 
+                  color: Color(0xFF8E8E93),
+                  fontSize: 16,
                   fontWeight: FontWeight.w400,
                   letterSpacing: -0.2,
                 ),
@@ -270,17 +352,23 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
       elevation: 12,
       itemBuilder: (context) {
         List<String> categories = ['All', ..._data.keys];
-        return categories.map((cat) => PopupMenuItem<String>(
-          value: cat,
-          child: Text(
-            cat == 'All' ? T.s('show_all') : cat,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: _selectedCategory == cat ? FontWeight.w700 : FontWeight.w500,
-              color: const Color(0xFF1C1C1E),
-            ),
-          ),
-        )).toList();
+        return categories
+            .map(
+              (cat) => PopupMenuItem<String>(
+                value: cat,
+                child: Text(
+                  cat == 'All' ? T.s('show_all') : cat,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: _selectedCategory == cat
+                        ? FontWeight.w700
+                        : FontWeight.w500,
+                    color: const Color(0xFF1C1C1E),
+                  ),
+                ),
+              ),
+            )
+            .toList();
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -292,16 +380,22 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              _selectedCategory == 'All' ? T.s('categories') : _selectedCategory, 
+              _selectedCategory == 'All'
+                  ? T.s('categories')
+                  : _selectedCategory,
               style: const TextStyle(
-                fontWeight: FontWeight.w800, 
-                fontSize: 13, 
+                fontWeight: FontWeight.w800,
+                fontSize: 13,
                 color: Color(0xFF1C1C1E),
                 letterSpacing: 0.5,
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF1C1C1E), size: 18),
+            const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: Color(0xFF1C1C1E),
+              size: 18,
+            ),
           ],
         ),
       ),
@@ -316,8 +410,8 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04), 
-            blurRadius: 16, 
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 16,
             offset: const Offset(0, 8),
           ),
         ],
@@ -342,8 +436,8 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                 Text(
                   poi.name,
                   style: const TextStyle(
-                    fontSize: 22, 
-                    fontWeight: FontWeight.w800, 
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
                     fontFamily: 'serif',
                     color: Color(0xFF1C1C1E),
                   ),
@@ -356,12 +450,16 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.explore_outlined, size: 16, color: Color(0xFF8E8E93)),
+                        const Icon(
+                          Icons.explore_outlined,
+                          size: 16,
+                          color: Color(0xFF8E8E93),
+                        ),
                         const SizedBox(width: 6),
                         Text(
                           T.s('details'),
                           style: const TextStyle(
-                            fontSize: 14, 
+                            fontSize: 14,
                             color: Colors.grey,
                             fontWeight: FontWeight.w500,
                           ),
@@ -369,7 +467,10 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                       ],
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF2F2F7).withValues(alpha: 0.5),
                         borderRadius: BorderRadius.circular(12),
@@ -379,22 +480,26 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                           Text(
                             T.s('send_lg'),
                             style: const TextStyle(
-                              color: Color(0xFF6B5B45), 
-                              fontWeight: FontWeight.w900, 
+                              color: Color(0xFF6B5B45),
+                              fontWeight: FontWeight.w900,
                               fontSize: 13,
                               letterSpacing: 0.5,
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Icon(Icons.arrow_forward_rounded, size: 16, color: Color(0xFF6B5B45)),
+                          const Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 16,
+                            color: Color(0xFF6B5B45),
+                          ),
                         ],
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

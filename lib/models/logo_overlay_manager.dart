@@ -29,15 +29,21 @@ class LogoOverlayManager {
   }
 
   /// Uploads the logo and sends the KML to the left screen (slave_N).
-  Future<void> showLogo({required int screens, required String masterIp, String assetPath = 'assets/images/logos.png'}) async {
+  Future<void> showLogo({
+    required int screens,
+    required String masterIp,
+    String assetPath = 'assets/images/logos.png',
+  }) async {
     try {
       // 1. Upload logo image to the master node
       final sftp = await client.sftp();
       final ByteData data = await rootBundle.load(assetPath);
       final Uint8List bytes = data.buffer.asUint8List();
-      
-      final file = await sftp.open('/var/www/html/logos.png',
-          mode: SftpFileOpenMode.create | SftpFileOpenMode.write);
+
+      final file = await sftp.open(
+        '/var/www/html/logos.png',
+        mode: SftpFileOpenMode.create | SftpFileOpenMode.write,
+      );
       await file.writeBytes(bytes);
       await file.close();
       print('✅ Logo uploaded to LG web server');
@@ -50,11 +56,13 @@ class LogoOverlayManager {
 
       // 4. Build KML using the internal LG address
       final kml = _buildLogoKml('http://lg1/logos.png');
-      
+
       // 5. Write the KML to the specific slave file to trigger display
       final safeKml = kml.replaceAll("'", "'\\''");
-      await client.run("printf '%s' '$safeKml' > /var/www/html/kml/slave_$leftSlave.kml");
-      
+      await client.run(
+        "printf '%s' '$safeKml' > /var/www/html/kml/slave_$leftSlave.kml",
+      );
+
       print('📺 Logo KML sent to slave_$leftSlave');
     } catch (e) {
       print('❌ Error showing logo: $e');

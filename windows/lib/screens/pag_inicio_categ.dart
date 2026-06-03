@@ -21,7 +21,10 @@ class PagCategorias extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 22,
+                  ),
                   child: AppTopBar(currentTitle: T.s('home')),
                 ),
 
@@ -29,7 +32,7 @@ class PagCategorias extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18),
                   child: Image.asset(
-                    'assets/images/2026-05-17 09_25_11-NVIDIA GeForce Overlay.png', 
+                    'assets/images/2026-05-17 09_25_11-NVIDIA GeForce Overlay.png',
                     height: 118,
                   ),
                 ),
@@ -48,8 +51,12 @@ class PagCategorias extends StatelessWidget {
                         iconColor: const Color(0xFFD4913A),
                         title: T.s('poi'),
                         subtitle: T.s('poi_subtitle'),
-                        onTap: () => Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => const PagUbicInteres())),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PagUbicInteres(),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 12),
                       _CategoryCard(
@@ -59,8 +66,12 @@ class PagCategorias extends StatelessWidget {
                         iconColor: const Color(0xFF5B7FA6),
                         title: T.s('cathedrals'),
                         subtitle: T.s('cathedrals_subtitle'),
-                        onTap: () => Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => const PagCatedralesIglesias())),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PagCatedralesIglesias(),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 12),
                       _CategoryCard(
@@ -70,8 +81,10 @@ class PagCategorias extends StatelessWidget {
                         iconColor: const Color(0xFF3A8C63),
                         title: T.s('museums'),
                         subtitle: T.s('museums_subtitle'),
-                        onTap: () => Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => const PagMuseos())),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const PagMuseos()),
+                        ),
                       ),
                       const SizedBox(height: 12),
                       _CategoryCard(
@@ -81,13 +94,21 @@ class PagCategorias extends StatelessWidget {
                         iconColor: const Color(0xFF7A5AA6),
                         title: T.s('events'),
                         subtitle: T.s('events_subtitle'),
-                        onTap: () => Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => const PagHechosHistoricos())),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PagHechosHistoricos(),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 40),
                       GestureDetector(
-                        onTap: () => Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => const PagConectar())),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PagConectar(),
+                          ),
+                        ),
                         child: Container(
                           width: double.infinity,
                           padding: const EdgeInsets.symmetric(vertical: 17),
@@ -114,7 +135,7 @@ class PagCategorias extends StatelessWidget {
             ),
           ),
         );
-      }
+      },
     );
   }
 }
@@ -126,8 +147,12 @@ class _CategoryCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const _CategoryCard({
-    required this.color, required this.iconBgColor, required this.icon,
-    required this.iconColor, required this.title, required this.subtitle,
+    required this.color,
+    required this.iconBgColor,
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    required this.subtitle,
     required this.onTap,
   });
 
@@ -140,13 +165,23 @@ class _CategoryCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6, offset: const Offset(0, 2))],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Row(
           children: [
             Container(
-              width: 50, height: 50,
-              decoration: BoxDecoration(color: iconBgColor, borderRadius: BorderRadius.circular(12)),
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: iconBgColor,
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: Icon(icon, color: iconColor, size: 28),
             ),
             const SizedBox(width: 18),
@@ -154,13 +189,31 @@ class _CategoryCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: Colors.black87)),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black87,
+                    ),
+                  ),
                   const SizedBox(height: 4),
-                  Text(subtitle, style: const TextStyle(fontSize: 13, color: Colors.black54, height: 1.4)),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Colors.black54,
+                      height: 1.4,
+                    ),
+                  ),
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black38),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: Colors.black38,
+            ),
           ],
         ),
       ),

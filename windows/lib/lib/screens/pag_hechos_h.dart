@@ -9,7 +9,6 @@ class PagHechosHistoricos extends StatelessWidget {
       backgroundColor: const Color(0xFFE6E0D6),
       body: Stack(
         children: [
-
           // 🖼️ HEADER CON IMAGEN
           SizedBox(
             height: 220,
@@ -21,9 +20,7 @@ class PagHechosHistoricos extends StatelessWidget {
                   'assets/images/denoche.jpg', // 👈 tu imagen
                   fit: BoxFit.cover,
                 ),
-                Container(
-                  color: Colors.black.withOpacity(0.3),
-                ),
+                Container(color: Colors.black.withOpacity(0.3)),
 
                 // 🔝 ICONOS
                 Positioned(
@@ -35,7 +32,10 @@ class PagHechosHistoricos extends StatelessWidget {
                       const SizedBox(height: 10),
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
-                        child: const Icon(Icons.arrow_back, color: Colors.white),
+                        child: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                        ),
                       ),
                     ],
                   ),
@@ -59,10 +59,7 @@ class PagHechosHistoricos extends StatelessWidget {
                       SizedBox(height: 5),
                       Text(
                         'Significant moments in Lleida history',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14,
-                        ),
+                        style: TextStyle(color: Colors.white70, fontSize: 14),
                       ),
                     ],
                   ),
@@ -100,7 +97,6 @@ class PagHechosHistoricos extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             // 🏷️ TITULO
             Center(
               child: Text(
@@ -126,10 +122,7 @@ class PagHechosHistoricos extends StatelessWidget {
                 Expanded(
                   child: Text(
                     '41.6141°N, 0.6258°E  Explore in Google Earth',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ),
                 Icon(Icons.arrow_forward, size: 16, color: Colors.grey),

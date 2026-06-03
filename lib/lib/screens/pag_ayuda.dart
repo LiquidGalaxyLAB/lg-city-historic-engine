@@ -40,7 +40,11 @@ class PagAyuda extends StatelessWidget {
                       color: const Color(0xFFD4C9B0),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(Icons.auto_awesome, size: 22, color: Colors.brown),
+                    child: const Icon(
+                      Icons.auto_awesome,
+                      size: 22,
+                      color: Colors.brown,
+                    ),
                   ),
                 ],
               ),
@@ -75,16 +79,26 @@ class PagAyuda extends StatelessWidget {
                   children: const [
                     Text(
                       'Welcome to the help section. Here you will find guidance on how to use the application.',
-                      style: TextStyle(fontSize: 14, color: Colors.black87, height: 1.5),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black87,
+                        height: 1.5,
+                      ),
                     ),
                     SizedBox(height: 22),
                     _SectionTitle('How to navigate'),
-                    _BulletItem('Use the main menu to explore different sections.'),
-                    _BulletItem('Select a category to view available locations or historical events.'),
+                    _BulletItem(
+                      'Use the main menu to explore different sections.',
+                    ),
+                    _BulletItem(
+                      'Select a category to view available locations or historical events.',
+                    ),
                     _BulletItem('Click on any item to display it on the map.'),
                     SizedBox(height: 18),
                     _SectionTitle('Send to Liquid Galaxy'),
-                    _BulletItem('Press "Send to LG →" to display the selected location on the screens.'),
+                    _BulletItem(
+                      'Press "Send to LG →" to display the selected location on the screens.',
+                    ),
                     SizedBox(height: 18),
                     _SectionTitle('Settings'),
                     Text(
@@ -93,12 +107,18 @@ class PagAyuda extends StatelessWidget {
                     ),
                     SizedBox(height: 6),
                     _BulletItem('Theme (Light/Dark)'),
-                    _BulletItem('Language (English, Spanish, Catalan, Turkish)'),
+                    _BulletItem(
+                      'Language (English, Spanish, Catalan, Turkish)',
+                    ),
                     SizedBox(height: 18),
                     _SectionTitle('Need more help?'),
                     Text(
                       ' If you experience any issues, please restart the application or check your connection.',
-                      style: TextStyle(fontSize: 13.5, color: Colors.black87, height: 1.5),
+                      style: TextStyle(
+                        fontSize: 13.5,
+                        color: Colors.black87,
+                        height: 1.5,
+                      ),
                     ),
                     SizedBox(height: 40),
                   ],
@@ -147,7 +167,11 @@ class _BulletItem extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(fontSize: 13.5, color: Colors.black87, height: 1.4),
+              style: const TextStyle(
+                fontSize: 13.5,
+                color: Colors.black87,
+                height: 1.4,
+              ),
             ),
           ),
         ],

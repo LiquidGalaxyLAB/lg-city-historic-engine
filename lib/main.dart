@@ -67,7 +67,8 @@ class T {
       'poi': 'Points of Interest',
       'poi_subtitle': 'Discover historic landmarks and monuments across Lleida',
       'cathedrals': 'Cathedrals & Churches',
-      'cathedrals_subtitle': 'Explore sacred architecture and religious heritage',
+      'cathedrals_subtitle':
+          'Explore sacred architecture and religious heritage',
       'museums': 'Museums',
       'museums_subtitle': 'Visit cultural institutions and exhibition spaces',
       'events': 'Historical Events',
@@ -97,9 +98,11 @@ class T {
       'poi': 'Puntos de Interés',
       'poi_subtitle': 'Descubre monumentos y lugares históricos en Lleida',
       'cathedrals': 'Catedrales e Iglesias',
-      'cathedrals_subtitle': 'Explora la arquitectura sagrada y el patrimonio religioso',
+      'cathedrals_subtitle':
+          'Explora la arquitectura sagrada y el patrimonio religioso',
       'museums': 'Museos',
-      'museums_subtitle': 'Visita instituciones culturales y espacios de exposición',
+      'museums_subtitle':
+          'Visita instituciones culturales y espacios de exposición',
       'events': 'Eventos Históricos',
       'events_subtitle': 'Momentos significativos de la historia de Lleida',
       'categories': 'Categorías',
@@ -127,7 +130,8 @@ class T {
       'poi': 'Punts d\'Interès',
       'poi_subtitle': 'Descobreix monuments i llocs històrics a Lleida',
       'cathedrals': 'Catedrals i Esglésies',
-      'cathedrals_subtitle': 'Explora l\'arquitectura sagrada i el patrimoni religiós',
+      'cathedrals_subtitle':
+          'Explora l\'arquitectura sagrada i el patrimoni religiós',
       'museums': 'Museus',
       'museums_subtitle': 'Visita institucions culturals i espais d\'exposició',
       'events': 'Esdeveniments Històrics',

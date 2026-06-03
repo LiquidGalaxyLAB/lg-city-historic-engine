@@ -42,7 +42,11 @@ class PagTools extends StatelessWidget {
                         color: const Color(0xFFD4C9B0),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: const Icon(Icons.auto_awesome, size: 22, color: Colors.brown),
+                      child: const Icon(
+                        Icons.auto_awesome,
+                        size: 22,
+                        color: Colors.brown,
+                      ),
                     ),
                   ),
                 ],
@@ -66,10 +70,7 @@ class PagTools extends StatelessWidget {
 
             const Text(
               'Tools',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
             ),
             const Text(
               'Liquid Galaxy system management tools',
@@ -83,7 +84,10 @@ class PagTools extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFF8E1),
                   borderRadius: BorderRadius.circular(10),
@@ -91,7 +95,11 @@ class PagTools extends StatelessWidget {
                 ),
                 child: const Text(
                   'These actions affect the entire Liquid Galaxy system.\nMake sure you\'re connected before proceeding.',
-                  style: TextStyle(fontSize: 12.5, color: Colors.black87, height: 1.4),
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    color: Colors.black87,
+                    height: 1.4,
+                  ),
                 ),
               ),
             ),
@@ -110,7 +118,8 @@ class PagTools extends StatelessWidget {
                   children: [
                     _ToolCard(
                       title: 'Relaunch LG',
-                      description: 'Restart the Liquid Galaxy, rebooting the system',
+                      description:
+                          'Restart the Liquid Galaxy, rebooting the system',
                       buttonLabel: 'Execute\nRelaunch LG',
                       buttonColor: const Color(0xFF4CAF72),
                       onConfirm: () => _ejecutar(context, 'Relaunch LG'),
@@ -124,7 +133,8 @@ class PagTools extends StatelessWidget {
                     ),
                     _ToolCard(
                       title: 'Import POIs',
-                      description: 'Upload and import Points of interest to the system',
+                      description:
+                          'Upload and import Points of interest to the system',
                       buttonLabel: 'Execute\nImport POIs',
                       buttonColor: const Color(0xFF4CAF72),
                       onConfirm: () => _ejecutar(context, 'Import POIs'),
@@ -279,10 +289,7 @@ class _BottomTool extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 6,
-          ),
+          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 6),
         ],
       ),
       child: Row(
@@ -291,7 +298,10 @@ class _BottomTool extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 13.5,
+              ),
             ),
           ),
           GestureDetector(

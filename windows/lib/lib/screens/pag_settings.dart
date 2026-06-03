@@ -55,7 +55,11 @@ class _PagSettingsState extends State<PagSettings> {
                       color: const Color(0xFFD4C9B0),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(Icons.auto_awesome, size: 22, color: Colors.brown),
+                    child: const Icon(
+                      Icons.auto_awesome,
+                      size: 22,
+                      color: Colors.brown,
+                    ),
                   ),
                 ],
               ),
@@ -95,7 +99,10 @@ class _PagSettingsState extends State<PagSettings> {
                         const SizedBox(width: 8),
                         const Text(
                           'Theme',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ],
                     ),
@@ -127,7 +134,10 @@ class _PagSettingsState extends State<PagSettings> {
                         const SizedBox(width: 8),
                         const Text(
                           'Language',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ],
                     ),
@@ -151,7 +161,9 @@ class _PagSettingsState extends State<PagSettings> {
                             onTap: () => setState(() => _lang = lang['code']!),
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 18, vertical: 16),
+                                horizontal: 18,
+                                vertical: 16,
+                              ),
                               decoration: BoxDecoration(
                                 border: Border(
                                   bottom: lang != _languages.last
@@ -234,7 +246,11 @@ class _ThemeButton extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Icon(icon, size: 24, color: selected ? const Color(0xFF8B7355) : Colors.black45),
+            Icon(
+              icon,
+              size: 24,
+              color: selected ? const Color(0xFF8B7355) : Colors.black45,
+            ),
             const SizedBox(height: 6),
             Text(
               label,

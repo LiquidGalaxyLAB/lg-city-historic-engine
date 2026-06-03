@@ -45,7 +45,11 @@ class PagCategorias extends StatelessWidget {
                       color: const Color(0xFFD4C9B0),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(Icons.auto_awesome, size: 22, color: Colors.brown),
+                    child: const Icon(
+                      Icons.auto_awesome,
+                      size: 22,
+                      color: Colors.brown,
+                    ),
                   ),
                 ],
               ),
@@ -69,12 +73,7 @@ class PagCategorias extends StatelessWidget {
                   ],
                 ),
                 child: Column(
-                  children: [
-                    Image.asset(
-                      'assets/images/che.png',
-                      height: 90,
-                    ),
-                  ],
+                  children: [Image.asset('assets/images/che.png', height: 90)],
                 ),
               ),
             ),
@@ -92,7 +91,8 @@ class PagCategorias extends StatelessWidget {
                     icon: Icons.location_on_outlined,
                     iconColor: const Color(0xFFD4913A),
                     title: 'Points of interest',
-                    subtitle: 'Discover historics landmarks\nand monuments across Lleida',
+                    subtitle:
+                        'Discover historics landmarks\nand monuments across Lleida',
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => const PagUbicInteres()),
@@ -105,10 +105,13 @@ class PagCategorias extends StatelessWidget {
                     icon: Icons.account_balance_outlined,
                     iconColor: const Color(0xFF5B7FA6),
                     title: 'Cathedrals & Churches',
-                    subtitle: 'Explore sacrted archuteture\nand religious heritage',
+                    subtitle:
+                        'Explore sacrted archuteture\nand religious heritage',
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const PagCatedralesIglesias()),
+                      MaterialPageRoute(
+                        builder: (_) => const PagCatedralesIglesias(),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -118,7 +121,8 @@ class PagCategorias extends StatelessWidget {
                     icon: Icons.museum_outlined,
                     iconColor: const Color(0xFF3A8C63),
                     title: 'Museums',
-                    subtitle: 'Visit cultural institutions\nand exhibition spaces',
+                    subtitle:
+                        'Visit cultural institutions\nand exhibition spaces',
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => const PagMuseos()),
@@ -131,10 +135,13 @@ class PagCategorias extends StatelessWidget {
                     icon: Icons.calendar_month_outlined,
                     iconColor: const Color(0xFF7A5AA6),
                     title: 'Historical Events',
-                    subtitle: 'Learn about significant\nmoments in Lleida history',
+                    subtitle:
+                        'Learn about significant\nmoments in Lleida history',
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const PagHechosHistoricos()),
+                      MaterialPageRoute(
+                        builder: (_) => const PagHechosHistoricos(),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -248,7 +255,11 @@ class _CategoryCard extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios, size: 15, color: Colors.black38),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 15,
+              color: Colors.black38,
+            ),
           ],
         ),
       ),

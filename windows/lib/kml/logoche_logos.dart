@@ -1,5 +1,11 @@
 class LogocheLogosKML {
-  static String screenOverlayImage(String imageUrl, double top, double left, double width, double height) {
+  static String screenOverlayImage(
+    String imageUrl,
+    double top,
+    double left,
+    double width,
+    double height,
+  ) {
     return '''
     <ScreenOverlay>
       <name>Logo</name>

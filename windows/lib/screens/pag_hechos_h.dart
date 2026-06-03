@@ -7,7 +7,11 @@ class POI {
   final String name;
   final String location;
   final String image;
-  POI({required this.name, required this.location, this.image = 'assets/images/denoche.jpg'});
+  POI({
+    required this.name,
+    required this.location,
+    this.image = 'assets/images/denoche.jpg',
+  });
 }
 
 class PagHechosHistoricos extends StatefulWidget {
@@ -23,14 +27,37 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
   final TextEditingController _searchController = TextEditingController();
 
   final Map<String, List<POI>> _data = {
-    'Antigüedad': List.generate(2, (i) => POI(name: 'Ancient Event ${i + 1}', location: '41.61°N, 0.62°E')),
-    'Edad Media Temprana (Dominio Musulmán)': List.generate(3, (i) => POI(name: 'Islamic Period Event ${i + 1}', location: '41.61°N, 0.62°E')),
+    'Antigüedad': List.generate(
+      2,
+      (i) => POI(name: 'Ancient Event ${i + 1}', location: '41.61°N, 0.62°E'),
+    ),
+    'Edad Media Temprana (Dominio Musulmán)': List.generate(
+      3,
+      (i) => POI(
+        name: 'Islamic Period Event ${i + 1}',
+        location: '41.61°N, 0.62°E',
+      ),
+    ),
     'Reconquista / Alta Edad Media': [
       POI(name: 'Reconquista Landmark', location: '41.61°N, 0.62°E'),
     ],
-    'Edad Media / Baja Edad Media': List.generate(4, (i) => POI(name: 'Late Medieval Event ${i + 1}', location: '41.61°N, 0.62°E')),
-    'Edad Moderna': List.generate(5, (i) => POI(name: 'Modern Era Event ${i + 1}', location: '41.61°N, 0.62°E')),
-    'Edad Contemporánea': List.generate(2, (i) => POI(name: 'Contemporary Event ${i + 1}', location: '41.61°N, 0.62°E')),
+    'Edad Media / Baja Edad Media': List.generate(
+      4,
+      (i) => POI(
+        name: 'Late Medieval Event ${i + 1}',
+        location: '41.61°N, 0.62°E',
+      ),
+    ),
+    'Edad Moderna': List.generate(
+      5,
+      (i) =>
+          POI(name: 'Modern Era Event ${i + 1}', location: '41.61°N, 0.62°E'),
+    ),
+    'Edad Contemporánea': List.generate(
+      2,
+      (i) =>
+          POI(name: 'Contemporary Event ${i + 1}', location: '41.61°N, 0.62°E'),
+    ),
   };
 
   @override
@@ -45,15 +72,18 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
         // Filtrado por categoría
-        List<POI> pois = _selectedCategory == 'All' 
-            ? _data.values.expand((x) => x).toList() 
+        List<POI> pois = _selectedCategory == 'All'
+            ? _data.values.expand((x) => x).toList()
             : (_data[_selectedCategory] ?? []);
 
         // Filtrado por búsqueda
         if (_searchQuery.isNotEmpty) {
-          pois = pois.where((poi) => 
-            poi.name.toLowerCase().contains(_searchQuery.toLowerCase())
-          ).toList();
+          pois = pois
+              .where(
+                (poi) =>
+                    poi.name.toLowerCase().contains(_searchQuery.toLowerCase()),
+              )
+              .toList();
         }
 
         return Scaffold(
@@ -89,22 +119,35 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                   ),
                   SafeArea(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: () => MenuFlotante.mostrar(context, currentTitle: T.s('events')),
+                            onTap: () => MenuFlotante.mostrar(
+                              context,
+                              currentTitle: T.s('events'),
+                            ),
                             child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.15),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(Icons.menu, color: Colors.white, size: 26),
+                              child: const Icon(
+                                Icons.menu,
+                                color: Colors.white,
+                                size: 26,
+                              ),
                             ),
                           ),
-                          const AppTopBar(onDarkBackground: true, wifiOnly: true),
+                          const AppTopBar(
+                            onDarkBackground: true,
+                            wifiOnly: true,
+                          ),
                         ],
                       ),
                     ),
@@ -120,7 +163,11 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                           color: Colors.black.withValues(alpha: 0.15),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
+                        child: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.white,
+                          size: 22,
+                        ),
                       ),
                     ),
                   ),
@@ -144,8 +191,8 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                         Text(
                           T.s('events_subtitle'),
                           style: const TextStyle(
-                            color: Colors.white70, 
-                            fontSize: 15, 
+                            color: Colors.white70,
+                            fontSize: 15,
                             fontWeight: FontWeight.w300,
                             letterSpacing: 0.5,
                           ),
@@ -157,7 +204,10 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                     left: 20,
                     bottom: 35,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.18),
                         borderRadius: BorderRadius.circular(30),
@@ -166,11 +216,19 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.history_edu_outlined, color: Colors.white, size: 16),
+                          const Icon(
+                            Icons.history_edu_outlined,
+                            color: Colors.white,
+                            size: 16,
+                          ),
                           const SizedBox(width: 8),
                           Text(
                             '${pois.length} ${T.s('events_available')}',
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ],
                       ),
@@ -188,43 +246,51 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
               const SizedBox(height: 45),
 
               Expanded(
-                child: pois.isEmpty 
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.search_off_rounded, size: 80, color: Colors.grey.withOpacity(0.5)),
-                          const SizedBox(height: 16),
-                          Text(
-                            T.s('no_results_found') ?? 'No results found',
-                            style: TextStyle(
-                              fontSize: 18, 
-                              color: Colors.grey.shade600, 
-                              fontWeight: FontWeight.w500
+                child: pois.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.search_off_rounded,
+                              size: 80,
+                              color: Colors.grey.withOpacity(0.5),
                             ),
-                          ),
-                          if (_searchQuery.isNotEmpty) 
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8),
-                              child: Text(
-                                '"$_searchQuery" does not exist',
-                                style: TextStyle(color: Colors.grey.shade400),
+                            const SizedBox(height: 16),
+                            Text(
+                              T.s('no_results_found') ?? 'No results found',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey.shade600,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                        ],
+                            if (_searchQuery.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Text(
+                                  '"$_searchQuery" does not exist',
+                                  style: TextStyle(color: Colors.grey.shade400),
+                                ),
+                              ),
+                          ],
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 0,
+                        ),
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: pois.length,
+                        itemBuilder: (context, index) =>
+                            _cardPunto(pois[index]),
                       ),
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: pois.length,
-                      itemBuilder: (context, index) => _cardPunto(pois[index]),
-                    ),
               ),
             ],
           ),
         );
-      }
+      },
     );
   }
 
@@ -239,7 +305,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
             color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 20,
             offset: const Offset(0, 10),
-          )
+          ),
         ],
       ),
       child: Row(
@@ -258,18 +324,15 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
               decoration: InputDecoration(
                 hintText: T.s('search'),
                 hintStyle: const TextStyle(
-                  color: Color(0xFF8E8E93), 
-                  fontSize: 16, 
+                  color: Color(0xFF8E8E93),
+                  fontSize: 16,
                   fontWeight: FontWeight.w400,
                   letterSpacing: -0.2,
                 ),
                 border: InputBorder.none,
                 isDense: true,
               ),
-              style: const TextStyle(
-                fontSize: 16,
-                color: Color(0xFF1C1C1E),
-              ),
+              style: const TextStyle(fontSize: 16, color: Color(0xFF1C1C1E)),
             ),
           ),
           if (_searchQuery.isNotEmpty)
@@ -301,17 +364,23 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
       elevation: 12,
       itemBuilder: (context) {
         List<String> categories = ['All', ..._data.keys];
-        return categories.map((cat) => PopupMenuItem<String>(
-          value: cat,
-          child: Text(
-            cat == 'All' ? T.s('show_all') : cat,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: _selectedCategory == cat ? FontWeight.w800 : FontWeight.w500,
-              color: const Color(0xFF1C1C1E),
-            ),
-          ),
-        )).toList();
+        return categories
+            .map(
+              (cat) => PopupMenuItem<String>(
+                value: cat,
+                child: Text(
+                  cat == 'All' ? T.s('show_all') : cat,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: _selectedCategory == cat
+                        ? FontWeight.w800
+                        : FontWeight.w500,
+                    color: const Color(0xFF1C1C1E),
+                  ),
+                ),
+              ),
+            )
+            .toList();
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -323,16 +392,22 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              _selectedCategory == 'All' ? T.s('categories') : _selectedCategory, 
+              _selectedCategory == 'All'
+                  ? T.s('categories')
+                  : _selectedCategory,
               style: const TextStyle(
-                fontWeight: FontWeight.w900, 
-                fontSize: 13, 
+                fontWeight: FontWeight.w900,
+                fontSize: 13,
                 color: Color(0xFF1C1C1E),
                 letterSpacing: 0.5,
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF1C1C1E), size: 18),
+            const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: Color(0xFF1C1C1E),
+              size: 18,
+            ),
           ],
         ),
       ),
@@ -347,8 +422,8 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03), 
-            blurRadius: 16, 
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 16,
             offset: const Offset(0, 8),
           ),
         ],
@@ -373,8 +448,8 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                 Text(
                   poi.name,
                   style: const TextStyle(
-                    fontSize: 22, 
-                    fontWeight: FontWeight.w800, 
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
                     fontFamily: 'serif',
                     color: Color(0xFF1C1C1E),
                   ),
@@ -387,12 +462,16 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.event_available_outlined, size: 16, color: Color(0xFF8E8E93)),
+                        const Icon(
+                          Icons.event_available_outlined,
+                          size: 16,
+                          color: Color(0xFF8E8E93),
+                        ),
                         const SizedBox(width: 6),
                         Text(
                           T.s('history_details'),
                           style: const TextStyle(
-                            fontSize: 14, 
+                            fontSize: 14,
                             color: Color(0xFF8E8E93),
                             fontWeight: FontWeight.w500,
                           ),
@@ -400,7 +479,10 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                       ],
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF2F2F7).withValues(alpha: 0.6),
                         borderRadius: BorderRadius.circular(12),
@@ -410,22 +492,26 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                           Text(
                             T.s('send_lg'),
                             style: const TextStyle(
-                              color: Color(0xFF6B5B45), 
-                              fontWeight: FontWeight.w900, 
+                              color: Color(0xFF6B5B45),
+                              fontWeight: FontWeight.w900,
                               fontSize: 13,
                               letterSpacing: 0.6,
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Icon(Icons.arrow_forward_rounded, size: 16, color: Color(0xFF6B5B45)),
+                          const Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 16,
+                            color: Color(0xFF6B5B45),
+                          ),
                         ],
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

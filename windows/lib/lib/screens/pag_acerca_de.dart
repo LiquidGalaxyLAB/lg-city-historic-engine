@@ -25,7 +25,10 @@ class PagAcercaDe extends StatelessWidget {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
-                          BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 6),
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.08),
+                            blurRadius: 6,
+                          ),
                         ],
                       ),
                       child: const Icon(Icons.menu, size: 22),
@@ -37,7 +40,11 @@ class PagAcercaDe extends StatelessWidget {
                       color: const Color(0xFFD4C9B0),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(Icons.auto_awesome, size: 22, color: Colors.brown),
+                    child: const Icon(
+                      Icons.auto_awesome,
+                      size: 22,
+                      color: Colors.brown,
+                    ),
                   ),
                 ],
               ),
@@ -54,7 +61,10 @@ class PagAcercaDe extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 6),
-            const Text('About Us', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
+            const Text(
+              'About Us',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+            ),
             const SizedBox(height: 30),
             Expanded(
               child: SingleChildScrollView(
@@ -69,7 +79,11 @@ class PagAcercaDe extends StatelessWidget {
                       'yasiramadan@gmail.com\n'
                       'Soporte Lleida Liquid Galaxy LAB',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15, height: 1.6, color: Colors.black87),
+                      style: TextStyle(
+                        fontSize: 15,
+                        height: 1.6,
+                        color: Colors.black87,
+                      ),
                     ),
                     const SizedBox(height: 30),
                     Image.asset('assets/images/lg.jpg', height: 80),
@@ -85,7 +99,10 @@ class PagAcercaDe extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Image.asset('assets/images/Parc-Agrobiotech.jpg', height: 60),
+                        Image.asset(
+                          'assets/images/Parc-Agrobiotech.jpg',
+                          height: 60,
+                        ),
                         Image.asset('assets/images/lglab.jpg', height: 50),
                       ],
                     ),

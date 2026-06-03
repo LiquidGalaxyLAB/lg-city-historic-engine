@@ -13,17 +13,13 @@ class PagPrincipal extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-
                 const SizedBox(height: 40),
 
                 // 🏷️ TÍTULO
                 const Text(
                   'City Historic Engine\nCHE',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
                 ),
 
                 const SizedBox(height: 25),
@@ -44,7 +40,9 @@ class PagPrincipal extends StatelessWidget {
                   children: [
                     _logo('assets/images/lg.jpg'),
                     _logo('assets/images/tic.jpg'),
-                    _logo('assets/images/lg.jpg'), // google.png -> fallback to lg
+                    _logo(
+                      'assets/images/lg.jpg',
+                    ), // google.png -> fallback to lg
                     _logo('assets/images/Parc-Agrobiotech.jpg'),
                     _logo('assets/images/lglab.jpg'),
                     _logo('assets/images/LGEU.jpg'),
@@ -63,10 +61,6 @@ class PagPrincipal extends StatelessWidget {
 
   // 🔹 WIDGET LOGO
   Widget _logo(String path) {
-    return Image.asset(
-      path,
-      height: 60,
-      fit: BoxFit.contain,
-    );
+    return Image.asset(path, height: 60, fit: BoxFit.contain);
   }
 }

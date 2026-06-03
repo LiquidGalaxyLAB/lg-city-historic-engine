@@ -10,7 +10,12 @@ class AppTopBar extends StatefulWidget {
   final bool wifiOnly;
   final String? currentTitle;
 
-  const AppTopBar({super.key, this.onDarkBackground = false, this.wifiOnly = false, this.currentTitle});
+  const AppTopBar({
+    super.key,
+    this.onDarkBackground = false,
+    this.wifiOnly = false,
+    this.currentTitle,
+  });
 
   @override
   State<AppTopBar> createState() => _AppTopBarState();
@@ -48,7 +53,10 @@ class _AppTopBarState extends State<AppTopBar> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onTap: () => MenuFlotante.mostrar(context, currentTitle: widget.currentTitle),
+            onTap: () => MenuFlotante.mostrar(
+              context,
+              currentTitle: widget.currentTitle,
+            ),
             child: const Icon(Icons.menu, color: Colors.white, size: 32),
           ),
           _WifiIcon(connected: connected, onDark: true),
@@ -60,13 +68,16 @@ class _AppTopBarState extends State<AppTopBar> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
-          onTap: () => MenuFlotante.mostrar(context, currentTitle: widget.currentTitle),
+          onTap: () =>
+              MenuFlotante.mostrar(context, currentTitle: widget.currentTitle),
           child: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 6)],
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 6),
+              ],
             ),
             child: const Icon(Icons.menu, size: 28),
           ),

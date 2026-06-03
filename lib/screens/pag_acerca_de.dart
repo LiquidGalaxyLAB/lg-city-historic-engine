@@ -29,7 +29,10 @@ class PagAcercaDe extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            const Text('About Us', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600)),
+            const Text(
+              'About Us',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+            ),
             const SizedBox(height: 10),
             Expanded(
               child: SingleChildScrollView(
@@ -44,7 +47,11 @@ class PagAcercaDe extends StatelessWidget {
                       'yasiramadan@gmail.com\n'
                       'Soporte - Lleida Liquid Galaxy LAB',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15, height: 1.6, color: Colors.black87),
+                      style: TextStyle(
+                        fontSize: 15,
+                        height: 1.6,
+                        color: Colors.black87,
+                      ),
                     ),
                     const SizedBox(height: 30),
                     Image.asset('assets/images/lg.jpg', height: 80),
@@ -60,7 +67,10 @@ class PagAcercaDe extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Image.asset('assets/images/Parc-Agrobiotech.jpg', height: 60),
+                        Image.asset(
+                          'assets/images/Parc-Agrobiotech.jpg',
+                          height: 60,
+                        ),
                         Image.asset('assets/images/lglab.jpg', height: 50),
                       ],
                     ),

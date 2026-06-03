@@ -26,7 +26,11 @@ class PagTools extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: Icon(Icons.arrow_back, size: 28, color: isDark ? Colors.white : Colors.black87),
+                    child: Icon(
+                      Icons.arrow_back,
+                      size: 28,
+                      color: isDark ? Colors.white : Colors.black87,
+                    ),
                   ),
                 ],
               ),
@@ -169,13 +173,14 @@ class _ToolCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF26221A) : backgroundColor,
         borderRadius: BorderRadius.circular(20),
-        border: isDark ? Border.all(color: backgroundColor.withOpacity(0.3), width: 1) : null,
+        border: isDark
+            ? Border.all(color: backgroundColor.withOpacity(0.3), width: 1)
+            : null,
       ),
 
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-
           // ── TITLE ──
           Text(
             title,
@@ -222,16 +227,13 @@ class _ToolCard extends StatelessWidget {
               width: double.infinity,
 
               child: Container(
-
                 // ✅ MODIFICADO:
                 // centra perfectamente el contenido
                 alignment: Alignment.center,
 
                 // ✅ MODIFICADO:
                 // padding uniforme
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12,
-                ),
+                padding: const EdgeInsets.symmetric(vertical: 12),
 
                 decoration: BoxDecoration(
                   color: buttonColor,
@@ -268,9 +270,7 @@ class _ToolCard extends StatelessWidget {
 class _ConfirmDialog extends StatelessWidget {
   final String accion;
 
-  const _ConfirmDialog({
-    required this.accion,
-  });
+  const _ConfirmDialog({required this.accion});
 
   @override
   Widget build(BuildContext context) {
@@ -285,24 +285,17 @@ class _ConfirmDialog extends StatelessWidget {
 
         // ✅ MODIFICADO:
         // padding uniforme
-        padding: const EdgeInsets.fromLTRB(
-          24,
-          24,
-          24,
-          24,
-        ),
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
 
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-
             // ── ICON ──
             Container(
               padding: const EdgeInsets.all(10),
 
               decoration: BoxDecoration(
-                color: const Color(0xFFD4913A)
-                    .withOpacity(0.2),
+                color: const Color(0xFFD4913A).withOpacity(0.2),
 
                 shape: BoxShape.circle,
               ),
@@ -343,22 +336,18 @@ class _ConfirmDialog extends StatelessWidget {
 
             Row(
               children: [
-
                 // ── CANCEL ──
                 Expanded(
                   child: GestureDetector(
                     onTap: () => Navigator.pop(context),
 
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
 
                       decoration: BoxDecoration(
                         color: const Color(0xFF5A5A5A),
 
-                        borderRadius:
-                        BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12),
                       ),
 
                       child: const Text(
@@ -385,15 +374,12 @@ class _ConfirmDialog extends StatelessWidget {
                     },
 
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
 
                       decoration: BoxDecoration(
                         color: const Color(0xFF8B7355),
 
-                        borderRadius:
-                        BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12),
                       ),
 
                       child: const Text(

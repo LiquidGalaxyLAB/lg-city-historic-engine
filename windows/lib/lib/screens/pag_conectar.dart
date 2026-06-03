@@ -22,7 +22,9 @@ class _PagConectarState extends State<PagConectar> {
   void _conectar() {
     setState(() {
       _conectado = true;
-      _ip = _ipController.text.isNotEmpty ? _ipController.text : '192.168.1.229';
+      _ip = _ipController.text.isNotEmpty
+          ? _ipController.text
+          : '192.168.1.229';
     });
   }
 
@@ -104,7 +106,10 @@ class _PagConectarState extends State<PagConectar> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFFD8F0D8),
                     borderRadius: BorderRadius.circular(10),
@@ -112,7 +117,11 @@ class _PagConectarState extends State<PagConectar> {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.check_circle, color: Colors.green, size: 18),
+                      const Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 18,
+                      ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -127,7 +136,10 @@ class _PagConectarState extends State<PagConectar> {
                       GestureDetector(
                         onTap: _desconectar,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.green.shade100,
                             borderRadius: BorderRadius.circular(8),
@@ -161,15 +173,30 @@ class _PagConectarState extends State<PagConectar> {
                     _campo('Password LG', _passController, obscure: true),
                     _campo('IP', _ipController, hint: '192.168.1.229'),
                     _campo('Port LG', _portController, hint: '22'),
-                    _campo('Password Admin', _passAdminController, obscure: true),
-                    _campo('Screens', _screensController, hint: '5',
-                        suffix: const Icon(Icons.monitor, size: 18, color: Colors.black45)),
+                    _campo(
+                      'Password Admin',
+                      _passAdminController,
+                      obscure: true,
+                    ),
+                    _campo(
+                      'Screens',
+                      _screensController,
+                      hint: '5',
+                      suffix: const Icon(
+                        Icons.monitor,
+                        size: 18,
+                        color: Colors.black45,
+                      ),
+                    ),
                     if (_conectado)
                       Padding(
                         padding: const EdgeInsets.only(top: 4, bottom: 8),
                         child: Text(
                           'Number of display screens',
-                          style: TextStyle(fontSize: 11.5, color: Colors.black45),
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            color: Colors.black45,
+                          ),
                         ),
                       ),
                     const SizedBox(height: 24),
@@ -205,8 +232,13 @@ class _PagConectarState extends State<PagConectar> {
     );
   }
 
-  Widget _campo(String label, TextEditingController controller,
-      {bool obscure = false, String? hint, Widget? suffix}) {
+  Widget _campo(
+    String label,
+    TextEditingController controller, {
+    bool obscure = false,
+    String? hint,
+    Widget? suffix,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Column(
@@ -232,7 +264,10 @@ class _PagConectarState extends State<PagConectar> {
               style: const TextStyle(fontSize: 14),
               decoration: InputDecoration(
                 border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
                 hintText: hint,
                 hintStyle: const TextStyle(color: Colors.black26, fontSize: 14),
                 suffixIcon: suffix,

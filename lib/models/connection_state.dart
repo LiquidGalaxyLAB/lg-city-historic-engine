@@ -36,7 +36,11 @@ class LGConnectionState extends ChangeNotifier {
       _port = port;
       _screens = screens;
 
-      final socket = await SSHSocket.connect(_ip, _port, timeout: const Duration(seconds: 5));
+      final socket = await SSHSocket.connect(
+        _ip,
+        _port,
+        timeout: const Duration(seconds: 5),
+      );
       _client = SSHClient(
         socket,
         username: _user,
@@ -50,7 +54,7 @@ class LGConnectionState extends ChangeNotifier {
       final logoManager = LogoOverlayManager(_client!);
       await logoManager.showLogo(
         screens: _screens,
-        masterIp: _ip,           // ← añadido
+        masterIp: _ip, // ← añadido
         assetPath: 'assets/images/logos.png',
       );
 

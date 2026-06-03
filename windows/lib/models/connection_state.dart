@@ -16,7 +16,7 @@ class LGConnectionState extends ChangeNotifier {
   String _password = '';
   int _port = 22;
   int _screens = 5;
-  
+
   SSHClient? _client;
 
   bool get conectado => _conectado;
@@ -37,7 +37,11 @@ class LGConnectionState extends ChangeNotifier {
       _port = port;
       _screens = screens;
 
-      final socket = await SSHSocket.connect(_ip, _port, timeout: const Duration(seconds: 5));
+      final socket = await SSHSocket.connect(
+        _ip,
+        _port,
+        timeout: const Duration(seconds: 5),
+      );
       _client = SSHClient(
         socket,
         username: _user,
@@ -45,10 +49,10 @@ class LGConnectionState extends ChangeNotifier {
       );
 
       await _client!.authenticated;
-      
+
       _conectado = true;
       await showLogo();
-      
+
       notifyListeners();
       return true;
     } catch (e) {
@@ -82,19 +86,25 @@ class LGConnectionState extends ChangeNotifier {
 
   Future<void> relaunchLG() async {
     for (var i = _screens; i >= 1; i--) {
-      await ejecutar('sshpass -p $_password ssh -t lg$i "/home/$_user/bin/lg-relaunch"');
+      await ejecutar(
+        'sshpass -p $_password ssh -t lg$i "/home/$_user/bin/lg-relaunch"',
+      );
     }
   }
 
   Future<void> rebootLG() async {
     for (var i = _screens; i >= 1; i--) {
-      await ejecutar('sshpass -p $_password ssh -t lg$i "echo $_password | sudo -S reboot"');
+      await ejecutar(
+        'sshpass -p $_password ssh -t lg$i "echo $_password | sudo -S reboot"',
+      );
     }
   }
 
   Future<void> shutdownLG() async {
     for (var i = _screens; i >= 1; i--) {
-      await ejecutar('sshpass -p $_password ssh -t lg$i "echo $_password | sudo -S poweroff"');
+      await ejecutar(
+        'sshpass -p $_password ssh -t lg$i "echo $_password | sudo -S poweroff"',
+      );
     }
   }
 
@@ -113,8 +123,10 @@ class LGConnectionState extends ChangeNotifier {
       final sftp = await _client!.sftp();
       // Logo solicitado: logoche_logos.png
       final bytes = await rootBundle.load('assets/images/logoche_logos.png');
-      final file = await sftp.open('/var/www/html/logo.png', 
-          mode: SftpFileOpenMode.create | SftpFileOpenMode.write);
+      final file = await sftp.open(
+        '/var/www/html/logo.png',
+        mode: SftpFileOpenMode.create | SftpFileOpenMode.write,
+      );
       await file.writeBytes(bytes.buffer.asUint8List());
 
       int leftSlave = (_screens / 2).floor() + 2;
@@ -122,7 +134,9 @@ class LGConnectionState extends ChangeNotifier {
       // Usando el generador externo de KML con el método correcto
       String logoKml = LogocheLogosKML.generate();
 
-      await ejecutar("echo '$logoKml' > /var/www/html/kml/slave_$leftSlave.kml");
+      await ejecutar(
+        "echo '$logoKml' > /var/www/html/kml/slave_$leftSlave.kml",
+      );
     } catch (e) {
       print('Error showing logo: $e');
     }
