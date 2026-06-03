@@ -8,7 +8,7 @@ class PagAcercaDe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF0EBE0),
+      backgroundColor: const Color(0xFFF0EBE0), 
       body: SafeArea(
         child: Column(
           children: [
