@@ -235,9 +235,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 45),
-
               Expanded(
                 child: pois.isEmpty
                     ? Center(

@@ -262,9 +262,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 45),
-
               Expanded(
                 child: pois.isEmpty
                     ? Center(

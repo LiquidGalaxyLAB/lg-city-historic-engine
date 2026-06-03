@@ -320,9 +320,7 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 45),
-
               Expanded(
                 child: pois.isEmpty
                     ? Center(

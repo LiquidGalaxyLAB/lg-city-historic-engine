@@ -231,9 +231,7 @@ class _PagMuseosState extends State<PagMuseos> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 45),
-
               Expanded(
                 child: pois.isEmpty
                     ? Center(

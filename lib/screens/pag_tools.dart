@@ -185,7 +185,6 @@ class _ToolCard extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-
             style: TextStyle(
               fontWeight: FontWeight.w700,
 
@@ -200,11 +199,9 @@ class _ToolCard extends StatelessWidget {
 
           if (description.isNotEmpty) ...[
             const SizedBox(height: 6),
-
             Text(
               description,
               textAlign: TextAlign.center,
-
               style: const TextStyle(
                 fontSize: 13,
                 color: Colors.black87,
@@ -225,7 +222,6 @@ class _ToolCard extends StatelessWidget {
             // tengan exactamente el mismo ancho
             child: SizedBox(
               width: double.infinity,
-
               child: Container(
                 // ✅ MODIFICADO:
                 // centra perfectamente el contenido
@@ -246,7 +242,6 @@ class _ToolCard extends StatelessWidget {
                 child: Text(
                   buttonLabel,
                   textAlign: TextAlign.center,
-
                   style: const TextStyle(
                     color: Colors.white,
 
@@ -276,7 +271,6 @@ class _ConfirmDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.transparent,
-
       child: Container(
         decoration: BoxDecoration(
           color: const Color(0xFF3A3A3A),
@@ -293,13 +287,10 @@ class _ConfirmDialog extends StatelessWidget {
             // ── ICON ──
             Container(
               padding: const EdgeInsets.all(10),
-
               decoration: BoxDecoration(
                 color: const Color(0xFFD4913A).withOpacity(0.2),
-
                 shape: BoxShape.circle,
               ),
-
               child: const Icon(
                 Icons.warning_amber_rounded,
                 color: Color(0xFFD4913A),
@@ -322,9 +313,7 @@ class _ConfirmDialog extends StatelessWidget {
 
             Text(
               'Are you sure you want to execute\n$accion?',
-
               textAlign: TextAlign.center,
-
               style: const TextStyle(
                 color: Colors.white70,
                 fontSize: 14,
@@ -340,21 +329,15 @@ class _ConfirmDialog extends StatelessWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () => Navigator.pop(context),
-
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 12),
-
                       decoration: BoxDecoration(
                         color: const Color(0xFF5A5A5A),
-
                         borderRadius: BorderRadius.circular(12),
                       ),
-
                       child: const Text(
                         'Cancel',
-
                         textAlign: TextAlign.center,
-
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
@@ -372,21 +355,15 @@ class _ConfirmDialog extends StatelessWidget {
                     onTap: () {
                       Navigator.pop(context);
                     },
-
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 12),
-
                       decoration: BoxDecoration(
                         color: const Color(0xFF8B7355),
-
                         borderRadius: BorderRadius.circular(12),
                       ),
-
                       child: const Text(
                         'Confirm',
-
                         textAlign: TextAlign.center,
-
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,

@@ -251,8 +251,8 @@ class _ThemeOption extends StatelessWidget {
               decoration: BoxDecoration(
                 color: selected
                     ? (isDark
-                          ? const Color(0xFF4A3421).withOpacity(0.3)
-                          : const Color(0xFFFEF7EE))
+                        ? const Color(0xFF4A3421).withOpacity(0.3)
+                        : const Color(0xFFFEF7EE))
                     : (isDark ? Colors.black26 : Colors.grey.shade100),
                 borderRadius: BorderRadius.circular(12),
               ),
