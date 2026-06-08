@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../kmls/logos_kml.dart';
 
 /// Estado global de conexión compartido por toda la app.
 class LGConnectionState extends ChangeNotifier {
@@ -54,8 +55,13 @@ class LGConnectionState extends ChangeNotifier {
       notifyListeners();
       debugPrint('LGService: Conexión establecida con éxito');
 
+      // Preparar directorios básicos
       await execute('mkdir -p /var/www/html/logos');
       await execute('mkdir -p /var/www/html/kml');
+
+      // Subir imagen y mostrar logo
+      await uploadAssets();
+      await sendLogoKML(LogoOverlayManager.generate());
 
       return true;
     } catch (e) {
@@ -116,7 +122,6 @@ class LGConnectionState extends ChangeNotifier {
       return result;
     } catch (e) {
       debugPrint('LGService: Execution error for "$command": $e');
-      // Only disconnect if it's a connection-related error
       if (e.toString().contains('SocketException') ||
           e.toString().contains('Connection failed')) {
         _isConnected = false;
@@ -137,8 +142,6 @@ class LGConnectionState extends ChangeNotifier {
   }
 
   Future<void> sendLogoKML(String kml) async {
-    // En tu configuración de 5 pantallas, slave_4 es la de la izquierda del todo.
-    // En uno de 3 pantallas, es slave_2.
     int slaveNo = _screens == 5 ? 4 : 2;
 
     await execute('echo $_password | sudo -S mkdir -p /var/www/html/kml');
@@ -156,11 +159,8 @@ class LGConnectionState extends ChangeNotifier {
     ];
 
     try {
-      // 1. Crear el directorio y dar permisos totales usando sudo
       await execute('echo $_password | sudo -S mkdir -p /var/www/html/logos');
-      await execute(
-        'echo $_password | sudo -S chmod -R 777 /var/www/html/logos',
-      );
+      await execute('echo $_password | sudo -S chmod -R 777 /var/www/html/logos');
 
       final sftp = await _client!.sftp();
 
@@ -176,15 +176,19 @@ class LGConnectionState extends ChangeNotifier {
                 SftpFileOpenMode.write |
                 SftpFileOpenMode.truncate,
           );
-          await file.write(Stream.value(bytes));
+          await file.writeBytes(bytes);
           await file.close();
+          
+          // Asegurar permisos del archivo subido
+          await execute('echo $_password | sudo -S chmod 644 $remotePath');
+          
           debugPrint('LGService: cargado ${asset['name']} en $remotePath');
         } catch (e) {
           debugPrint('LGService: Error subiendo ${asset['name']}: $e');
         }
       }
     } catch (e) {
-      debugPrint('L  GService: Error de SFTP: $e');
+      debugPrint('LGService: Error de SFTP: $e');
     }
   }
 
