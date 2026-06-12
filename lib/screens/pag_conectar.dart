@@ -73,6 +73,7 @@ class _PagConectarState extends State<PagConectar> {
       ip: _ipController.text,
       user: _userController.text,
       password: _passController.text,
+      sudoPassword: _passAdminController.text.isEmpty ? null : _passAdminController.text,
       port: int.tryParse(_portController.text) ?? 22,
       screens: int.tryParse(_screensController.text) ?? 5,
     );

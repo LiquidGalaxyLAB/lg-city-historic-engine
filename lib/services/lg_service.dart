@@ -1,27 +1,50 @@
-Future<void> clearLogos() async {
-  String blank = '''<?xml version="1.0" encoding="UTF-8"?>
+import 'package:flutter/foundation.dart';
+import '../models/connection_state.dart';
+import '../kmls/logos_kml.dart';
+
+class LGService {
+  final LGConnectionState _conn = LGConnectionState();
+
+  /// Limpia los logos enviando un KML vacío a todos los slots de esclavos en el Master.
+  Future<void> clearLogos() async {
+    const String blank = '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document></Document>
 </kml>''';
-  await execute("echo '$_password' | sudo -S mkdir -p /var/www/html/kml");
-  await execute("echo '$_password' | sudo -S chmod -R 777 /var/www/html/kml");
-  // Limpiamos desde slave_2 hasta slave_{screens}
-  for (var i = 2; i <= _screens; i++) {
-    await execute(
-      "echo '$_password' | sudo -S tee /var/www/html/kml/slave_$i.kml <<'EOF'\n$blank\nEOF > /dev/null",
-    );
+    final sudo = _conn.sudoPassword;
+    final screens = _conn.screens;
+
+    // Aseguramos directorios en el Master (donde corre el servidor web Apache)
+    await _conn.execute("echo '$sudo' | sudo -S mkdir -p /var/www/html/kml");
+    await _conn.execute("echo '$sudo' | sudo -S chmod -R 777 /var/www/html/kml");
+    
+    // Escribimos KMLs vacíos para cada pantalla en el Master
+    for (var i = 1; i <= screens; i++) {
+      await _conn.execute("cat <<'EOF' > /var/www/html/kml/slave_$i.kml\n$blank\nEOF");
+    }
   }
-}
+  
+  /// Muestra los logos enviando el KML de LogoOverlayManager.
+  Future<void> showLogos() async {
+    await _conn.sendLogoKML(LogoOverlayManager.generate());
+  }
 
-Future<void> relaunch() async {
-  if (_password == null || _username == null) return;
+  /// Ejecuta el script de relanzamiento en el Master y reinicia el entorno en esclavos.
+  Future<void> relaunch() async {
+    final password = _conn.password;
+    final sudo = _conn.sudoPassword;
+    final user = _conn.username;
+    final screens = _conn.screens;
 
-  await setRefresh();
+    if (password == null || user == null) return;
 
-  List<Future> ops = [];
-  for (var i = _screens; i >= 1; i--) {
-    final relaunchCommand =
-    """RELAUNCH_CMD="\\
+    await setRefresh();
+
+    List<Future> ops = [];
+    for (var i = screens; i >= 1; i--) {
+      final String hostname = i == 1 ? 'localhost' : 'lg$i';
+      
+      final relaunchCommand = """RELAUNCH_CMD="\\
 if [ -f /etc/init/lxdm.conf ]; then
   export SERVICE=lxdm
 elif [ -f /etc/init/lightdm.conf ]; then
@@ -30,95 +53,122 @@ else
   exit 1
 fi
 if  [[ \\\$(service \\\$SERVICE status) =~ 'stop' ]]; then
-  echo $_password | sudo -S service \\\${SERVICE} start
+  echo $sudo | sudo -S service \\\${SERVICE} start
 else
-  echo $_password | sudo -S service \\\${SERVICE} restart
+  echo $sudo | sudo -S service \\\${SERVICE} restart
 fi
-" && sshpass -p $_password ssh -x -t lg@lg$i "\$RELAUNCH_CMD\"""";
+" && sshpass -p $password ssh -o StrictHostKeyChecking=no -x -t $user@$hostname "\$RELAUNCH_CMD\"""";
 
-    if (i == 1) {
-      ops.add(execute('"/home/$_username/bin/lg-relaunch" > /home/$_username/log.txt'));
+      if (i == 1) {
+        ops.add(_conn.execute('"/home/$user/bin/lg-relaunch" > /home/$user/log.txt 2>&1'));
+      }
+      ops.add(_conn.execute(relaunchCommand));
     }
-    ops.add(execute(relaunchCommand));
+    await Future.wait(ops);
   }
-  await Future.wait(ops);
-}
 
-Future<void> shutdown() async {
-  if (_password == null) return;
-  for (var i = _screens; i >= 1; i--) {
-    await execute(
-      'sshpass -p $_password ssh -t lg$i "echo $_password | sudo -S poweroff"',
-    );
+  /// Apaga todas las máquinas del sistema.
+  Future<void> shutdown() async {
+    final password = _conn.password;
+    final sudo = _conn.sudoPassword;
+    final user = _conn.username;
+    final screens = _conn.screens;
+    if (password == null) return;
+    
+    for (var i = screens; i >= 1; i--) {
+      final String hostname = i == 1 ? 'localhost' : 'lg$i';
+      await _conn.execute(
+        'sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@$hostname "echo $sudo | sudo -S poweroff"',
+      );
+    }
   }
-}
 
-Future<void> reboot() async {
-  if (_password == null) return;
-  for (var i = _screens; i >= 1; i--) {
-    await execute(
-      'sshpass -p $_password ssh -t lg$i "echo $_password | sudo -S reboot"',
-    );
+  /// Reinicia todas las máquinas del sistema.
+  Future<void> reboot() async {
+    final password = _conn.password;
+    final sudo = _conn.sudoPassword;
+    final user = _conn.username;
+    final screens = _conn.screens;
+    if (password == null) return;
+    
+    for (var i = screens; i >= 1; i--) {
+      final String hostname = i == 1 ? 'localhost' : 'lg$i';
+      await _conn.execute(
+        'sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@$hostname "echo $sudo | sudo -S reboot"',
+      );
+    }
   }
-}
 
-Future<void> setRefresh() async {
-  if (_password == null || _host == null) return;
-  try {
-    List<Future> ops = [];
-    for (var i = 1; i <= _screens; i++) {
-      final paths = [
-        '/home/lg/earth/kml/myplaces.kml',
-        '/home/lg/earth/kml/slave/myplaces.kml',
-        '/home/lg/.googleearth/instance-1/myplaces.kml',
-      ];
+  /// Configura el refresco automático de KMLs en todas las pantallas.
+  Future<void> setRefresh() async {
+    final password = _conn.password;
+    final sudo = _conn.sudoPassword;
+    final host = _conn.ip;
+    final screens = _conn.screens;
+    final user = _conn.username;
 
-      // Para el master usamos localhost, para esclavos la IP del master
-      final String effectiveHost = (i == 1) ? 'localhost' : _host!;
-      final globalUrl = 'http://$effectiveHost:81/kmls.txt';
-      final slaveUrl = 'http://$effectiveHost:81/kml/slave_$i.kml';
+    if (password == null || host.isEmpty) return;
+    try {
+      List<Future> ops = [];
+      for (var i = 1; i <= screens; i++) {
+        final paths = [
+          '/home/$user/earth/kml/myplaces.kml',
+          '/home/$user/earth/kml/slave/myplaces.kml',
+          '/home/$user/.googleearth/instance-1/myplaces.kml',
+        ];
 
-      for (var path in paths) {
-        String script = """
+        final String effectiveHost = (i == 1) ? 'localhost' : host;
+        final globalUrl = 'http://$effectiveHost:81/kmls.txt';
+        final slaveUrl = 'http://$effectiveHost:81/kml/slave_$i.kml';
+
+        for (var path in paths) {
+          String script = """
             if [ -f $path ]; then
-              # Limpiar entradas antiguas para evitar duplicados
               sed -i '/kmls.txt/d' $path
               sed -i '/slave_.*.kml/d' $path
-              # Insertar antes del cierre de Document
               sed -i '/<\\/Document>/i <NetworkLink><name>global_$i</name><Link><href>$globalUrl</href><refreshMode>onInterval</refreshMode><refreshInterval>2</refreshInterval></Link></NetworkLink>' $path
               sed -i '/<\\/Document>/i <NetworkLink><name>slave_$i</name><Link><href>$slaveUrl</href><refreshMode>onInterval</refreshMode><refreshInterval>2</refreshInterval></Link></NetworkLink>' $path
             fi
           """;
 
-        String execCmd = "echo '$_password' | sudo -S bash -c \"$script\"";
-        if (i == 1) {
-          ops.add(execute(execCmd));
-        } else {
-          ops.add(execute('sshpass -p $_password ssh -t lg$i "$execCmd"'));
+          String execCmd = "echo '$sudo' | sudo -S bash -c \"$script\"";
+          if (i == 1) {
+            ops.add(_conn.execute(execCmd));
+          } else {
+            ops.add(_conn.execute('sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@lg$i "$execCmd"'));
+          }
         }
       }
+      await Future.wait(ops);
+      debugPrint('LGService: Refresco configurado e inyectado correctamente.');
+    } catch (e) {
+      debugPrint('LGService: Error crítico en setRefresh: $e');
     }
-    await Future.wait(ops);
-    debugPrint('LGService: Refresco configurado e inyectado correctamente.');
-  } catch (e) {
-    debugPrint('LGService: Error crítico en setRefresh: $e');
   }
-}
 
-Future<void> resetRefresh() async {
-  if (_password == null) return;
-  try {
-    for (var i = 1; i <= _screens; i++) {
-      String path = i == 1
-          ? '~/earth/kml/myplaces.kml'
-          : '~/earth/kml/slave/myplaces.kml';
-      // Eliminamos las etiquetas de refresco
-      final cmd =
-          "echo '$_password' | sudo -S sed -i 's@<refreshMode>onInterval</refreshMode><refreshInterval>2</refreshInterval>@@g' $path";
-      await execute('sshpass -p $_password ssh -t lg$i "$cmd"');
+  /// Elimina la configuración de refresco automático.
+  Future<void> resetRefresh() async {
+    final password = _conn.password;
+    final sudo = _conn.sudoPassword;
+    final user = _conn.username;
+    final screens = _conn.screens;
+    if (password == null) return;
+    
+    try {
+      for (var i = 1; i <= screens; i++) {
+        String path = i == 1
+            ? '~/earth/kml/myplaces.kml'
+            : '~/earth/kml/slave/myplaces.kml';
+        
+        final cmd = "echo '$sudo' | sudo -S sed -i '/kmls.txt/d; /slave_.*.kml/d' $path";
+        if (i == 1) {
+          await _conn.execute(cmd);
+        } else {
+          await _conn.execute('sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@lg$i "$cmd"');
+        }
+      }
+    } catch (e) {
+      debugPrint('LGService: Error al resetear refresco: $e');
     }
-  } catch (e) {
-    debugPrint('LGService: Error al resetear refresco: $e');
   }
-}
 }

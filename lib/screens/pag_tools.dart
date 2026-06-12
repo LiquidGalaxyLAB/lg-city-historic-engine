@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import '../widgets/app_top_bar.dart';
+import '../services/lg_service.dart';
 
-class PagTools extends StatelessWidget {
+class PagTools extends StatefulWidget {
   const PagTools({super.key});
+
+  @override
+  State<PagTools> createState() => _PagToolsState();
+}
+
+class _PagToolsState extends State<PagTools> {
+  final LGService _lgService = LGService();
+  bool _isLogosVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -57,70 +66,85 @@ class PagTools extends StatelessWidget {
 
             const SizedBox(height: 5),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: Column(
-                children: [
-                  _ToolCard(
-                    title: 'Relaunch LG',
-                    description: '',
-                    buttonLabel: 'Execute Relaunch LG',
-                    backgroundColor: const Color(0xFFEEF3FA),
-                    buttonColor: const Color(0xFF1D61E7),
-                    isFullWidth: true,
-                    onConfirm: () => _ejecutar(context, 'Relaunch LG'),
-                  ),
-                  const SizedBox(height: 8),
-                  _ToolCard(
-                    title: 'Shutdown LG',
-                    description: '',
-                    buttonLabel: 'Execute Shutdown LG',
-                    backgroundColor: const Color(0xFFFEEEEE),
-                    buttonColor: const Color(0xFFE21111),
-                    isFullWidth: true,
-                    onConfirm: () => _ejecutar(context, 'Shutdown LG'),
-                  ),
-                  const SizedBox(height: 8),
-                  _ToolCard(
-                    title: 'Import POIs',
-                    description: '',
-                    buttonLabel: 'Execute Import POIs',
-                    backgroundColor: const Color(0xFFEEF8F3),
-                    buttonColor: const Color(0xFF0C8A4C),
-                    isFullWidth: true,
-                    onConfirm: () => _ejecutar(context, 'Import POIs'),
-                  ),
-                  const SizedBox(height: 8),
-                  _ToolCard(
-                    title: 'Reboot LG',
-                    description: '',
-                    buttonLabel: 'Execute Reboot LG',
-                    backgroundColor: const Color(0xFFFEF7EE),
-                    buttonColor: const Color(0xFFD4730A),
-                    isFullWidth: true,
-                    onConfirm: () => _ejecutar(context, 'Reboot LG'),
-                  ),
-                  const SizedBox(height: 8),
-                  _ToolCard(
-                    title: 'Clean KMLs',
-                    description: '',
-                    buttonLabel: 'Execute Clean KMLs',
-                    backgroundColor: const Color(0xFFE5E5E5),
-                    buttonColor: const Color(0xFF454545),
-                    isFullWidth: true,
-                    onConfirm: () => _ejecutar(context, 'Clean KMLs'),
-                  ),
-                  const SizedBox(height: 8),
-                  _ToolCard(
-                    title: 'Show/Hide Logos',
-                    description: '',
-                    buttonLabel: 'Execute Show/Hide',
-                    backgroundColor: const Color(0xFFFDE7FF),
-                    buttonColor: const Color(0xFFA50DBA),
-                    isFullWidth: true,
-                    onConfirm: () => _ejecutar(context, 'Show/Hide Logos'),
-                  ),
-                ],
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Column(
+                  children: [
+                    _ToolCard(
+                      title: 'Relaunch LG',
+                      description: '',
+                      buttonLabel: 'Execute Relaunch LG',
+                      backgroundColor: const Color(0xFFEEF3FA),
+                      buttonColor: const Color(0xFF1D61E7),
+                      isFullWidth: true,
+                      onConfirm: () => _ejecutar(context, 'Relaunch LG', _lgService.relaunch),
+                    ),
+                    const SizedBox(height: 8),
+                    _ToolCard(
+                      title: 'Shutdown LG',
+                      description: '',
+                      buttonLabel: 'Execute Shutdown LG',
+                      backgroundColor: const Color(0xFFFEEEEE),
+                      buttonColor: const Color(0xFFE21111),
+                      isFullWidth: true,
+                      onConfirm: () => _ejecutar(context, 'Shutdown LG', _lgService.shutdown),
+                    ),
+                    const SizedBox(height: 8),
+                    _ToolCard(
+                      title: 'Import POIs',
+                      description: '',
+                      buttonLabel: 'Execute Import POIs',
+                      backgroundColor: const Color(0xFFEEF8F3),
+                      buttonColor: const Color(0xFF0C8A4C),
+                      isFullWidth: true,
+                      onConfirm: () => _ejecutar(context, 'Import POIs', () async {
+                        // TODO: Implement Import POIs logic if needed
+                        debugPrint('Import POIs not yet implemented');
+                      }),
+                    ),
+                    const SizedBox(height: 8),
+                    _ToolCard(
+                      title: 'Reboot LG',
+                      description: '',
+                      buttonLabel: 'Execute Reboot LG',
+                      backgroundColor: const Color(0xFFFEF7EE),
+                      buttonColor: const Color(0xFFD4730A),
+                      isFullWidth: true,
+                      onConfirm: () => _ejecutar(context, 'Reboot LG', _lgService.reboot),
+                    ),
+                    const SizedBox(height: 8),
+                    _ToolCard(
+                      title: 'Clean KMLs',
+                      description: '',
+                      buttonLabel: 'Execute Clean KMLs',
+                      backgroundColor: const Color(0xFFE5E5E5),
+                      buttonColor: const Color(0xFF454545),
+                      isFullWidth: true,
+                      onConfirm: () => _ejecutar(context, 'Clean KMLs', _lgService.clearLogos),
+                    ),
+                    const SizedBox(height: 8),
+                    _ToolCard(
+                      title: 'Show/Hide Logos',
+                      description: '',
+                      buttonLabel: 'Execute Show/Hide',
+                      backgroundColor: const Color(0xFFFDE7FF),
+                      buttonColor: const Color(0xFFA50DBA),
+                      isFullWidth: true,
+                      onConfirm: () => _ejecutar(context, 'Show/Hide Logos', () async {
+                        if (_isLogosVisible) {
+                          await _lgService.clearLogos();
+                        } else {
+                          await _lgService.showLogos();
+                        }
+                        setState(() {
+                          _isLogosVisible = !_isLogosVisible;
+                        });
+                      }),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
           ],
@@ -129,10 +153,28 @@ class PagTools extends StatelessWidget {
     );
   }
 
-  void _ejecutar(BuildContext context, String accion) {
+  void _ejecutar(BuildContext context, String accion, Future<void> Function() callback) {
     showDialog(
       context: context,
-      builder: (_) => _ConfirmDialog(accion: accion),
+      builder: (_) => _ConfirmDialog(
+        accion: accion,
+        onConfirm: () async {
+          try {
+            await callback();
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('$accion executed successfully')),
+              );
+            }
+          } catch (e) {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error executing $accion: $e')),
+              );
+            }
+          }
+        },
+      ),
     );
   }
 }
@@ -232,8 +274,9 @@ class _ToolCard extends StatelessWidget {
 
 class _ConfirmDialog extends StatelessWidget {
   final String accion;
+  final VoidCallback onConfirm;
 
-  const _ConfirmDialog({required this.accion});
+  const _ConfirmDialog({required this.accion, required this.onConfirm});
 
   @override
   Widget build(BuildContext context) {
@@ -307,6 +350,7 @@ class _ConfirmDialog extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
+                      onConfirm();
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 12),
