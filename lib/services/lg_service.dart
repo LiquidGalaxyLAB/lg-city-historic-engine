@@ -25,14 +25,16 @@ class LGService {
 
     // Aseguramos directorios en el Master (donde corre el servidor web Apache)
     await _conn.execute("echo '$sudo' | sudo -S mkdir -p /var/www/html/kml");
-    await _conn.execute("echo '$sudo' | sudo -S chmod -R 777 /var/www/html/kml");
-    
+    await _conn
+        .execute("echo '$sudo' | sudo -S chmod -R 777 /var/www/html/kml");
+
     // Escribimos KMLs vacíos para cada pantalla en el Master
     for (var i = 1; i <= screens; i++) {
-      await _conn.execute("cat <<'EOF' > /var/www/html/kml/slave_$i.kml\n$blank\nEOF");
+      await _conn
+          .execute("cat <<'EOF' > /var/www/html/kml/slave_$i.kml\n$blank\nEOF");
     }
   }
-  
+
   /// Muestra los logos enviando el KML de LogoOverlayManager.
   Future<void> showLogos() async {
     await _conn.sendLogoKML(LogoOverlayManager.generate());
@@ -52,7 +54,7 @@ class LGService {
     List<Future> ops = [];
     for (var i = screens; i >= 1; i--) {
       final String hostname = i == 1 ? 'localhost' : 'lg$i';
-      
+
       final relaunchCommand = """RELAUNCH_CMD="\\
 if [ -f /etc/init/lxdm.conf ]; then
   export SERVICE=lxdm
@@ -69,7 +71,8 @@ fi
 " && sshpass -p $password ssh -o StrictHostKeyChecking=no -x -t $user@$hostname "\$RELAUNCH_CMD\"""";
 
       if (i == 1) {
-        ops.add(_conn.execute('"/home/$user/bin/lg-relaunch" > /home/$user/log.txt 2>&1'));
+        ops.add(_conn.execute(
+            '"/home/$user/bin/lg-relaunch" > /home/$user/log.txt 2>&1'));
       }
       ops.add(_conn.execute(relaunchCommand));
     }
@@ -83,7 +86,7 @@ fi
     final user = _conn.username;
     final screens = _conn.screens;
     if (password == null) return;
-    
+
     for (var i = screens; i >= 1; i--) {
       final String hostname = i == 1 ? 'localhost' : 'lg$i';
       await _conn.execute(
@@ -99,7 +102,7 @@ fi
     final user = _conn.username;
     final screens = _conn.screens;
     if (password == null) return;
-    
+
     for (var i = screens; i >= 1; i--) {
       final String hostname = i == 1 ? 'localhost' : 'lg$i';
       await _conn.execute(
@@ -144,7 +147,8 @@ fi
           if (i == 1) {
             ops.add(_conn.execute(execCmd));
           } else {
-            ops.add(_conn.execute('sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@lg$i "$execCmd"'));
+            ops.add(_conn.execute(
+                'sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@lg$i "$execCmd"'));
           }
         }
       }
@@ -162,18 +166,20 @@ fi
     final user = _conn.username;
     final screens = _conn.screens;
     if (password == null) return;
-    
+
     try {
       for (var i = 1; i <= screens; i++) {
         String path = i == 1
             ? '~/earth/kml/myplaces.kml'
             : '~/earth/kml/slave/myplaces.kml';
-        
-        final cmd = "echo '$sudo' | sudo -S sed -i '/kmls.txt/d; /slave_.*.kml/d' $path";
+
+        final cmd =
+            "echo '$sudo' | sudo -S sed -i '/kmls.txt/d; /slave_.*.kml/d' $path";
         if (i == 1) {
           await _conn.execute(cmd);
         } else {
-          await _conn.execute('sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@lg$i "$cmd"');
+          await _conn.execute(
+              'sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@lg$i "$cmd"');
         }
       }
     } catch (e) {

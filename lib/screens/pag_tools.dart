@@ -78,7 +78,8 @@ class _PagToolsState extends State<PagTools> {
                       backgroundColor: const Color(0xFFEEF3FA),
                       buttonColor: const Color(0xFF1D61E7),
                       isFullWidth: true,
-                      onConfirm: () => _ejecutar(context, 'Relaunch LG', _lgService.relaunch),
+                      onConfirm: () => _ejecutar(
+                          context, 'Relaunch LG', _lgService.relaunch),
                     ),
                     const SizedBox(height: 8),
                     _ToolCard(
@@ -88,7 +89,8 @@ class _PagToolsState extends State<PagTools> {
                       backgroundColor: const Color(0xFFFEEEEE),
                       buttonColor: const Color(0xFFE21111),
                       isFullWidth: true,
-                      onConfirm: () => _ejecutar(context, 'Shutdown LG', _lgService.shutdown),
+                      onConfirm: () => _ejecutar(
+                          context, 'Shutdown LG', _lgService.shutdown),
                     ),
                     const SizedBox(height: 8),
                     _ToolCard(
@@ -98,7 +100,8 @@ class _PagToolsState extends State<PagTools> {
                       backgroundColor: const Color(0xFFFEF7EE),
                       buttonColor: const Color(0xFFD4730A),
                       isFullWidth: true,
-                      onConfirm: () => _ejecutar(context, 'Reboot LG', _lgService.reboot),
+                      onConfirm: () =>
+                          _ejecutar(context, 'Reboot LG', _lgService.reboot),
                     ),
                     const SizedBox(height: 8),
                     _ToolCard(
@@ -108,7 +111,8 @@ class _PagToolsState extends State<PagTools> {
                       backgroundColor: const Color(0xFFE5E5E5),
                       buttonColor: const Color(0xFF454545),
                       isFullWidth: true,
-                      onConfirm: () => _ejecutar(context, 'Clean KMLs', _lgService.clearKMLs),
+                      onConfirm: () => _ejecutar(
+                          context, 'Clean KMLs', _lgService.clearKMLs),
                     ),
                     const SizedBox(height: 8),
                     _ToolCard(
@@ -118,7 +122,8 @@ class _PagToolsState extends State<PagTools> {
                       backgroundColor: const Color(0xFFE5E5E5),
                       buttonColor: const Color(0xFF454545),
                       isFullWidth: true,
-                      onConfirm: () => _ejecutar(context, 'Clean Logos', _lgService.clearLogos),
+                      onConfirm: () => _ejecutar(
+                          context, 'Clean Logos', _lgService.clearLogos),
                     ),
                     const SizedBox(height: 8),
                     _ToolCard(
@@ -128,7 +133,8 @@ class _PagToolsState extends State<PagTools> {
                       backgroundColor: const Color(0xFFFDE7FF),
                       buttonColor: const Color(0xFFA50DBA),
                       isFullWidth: true,
-                      onConfirm: () => _ejecutar(context, 'Show/Hide Logos', () async {
+                      onConfirm: () =>
+                          _ejecutar(context, 'Show/Hide Logos', () async {
                         if (_isLogosVisible) {
                           await _lgService.clearLogos();
                         } else {
@@ -150,7 +156,8 @@ class _PagToolsState extends State<PagTools> {
     );
   }
 
-  void _ejecutar(BuildContext context, String accion, Future<void> Function() callback) {
+  void _ejecutar(
+      BuildContext context, String accion, Future<void> Function() callback) {
     showDialog(
       context: context,
       builder: (_) => _ConfirmDialog(
