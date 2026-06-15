@@ -92,19 +92,6 @@ class _PagToolsState extends State<PagTools> {
                     ),
                     const SizedBox(height: 8),
                     _ToolCard(
-                      title: 'Import POIs',
-                      description: '',
-                      buttonLabel: 'Execute Import POIs',
-                      backgroundColor: const Color(0xFFEEF8F3),
-                      buttonColor: const Color(0xFF0C8A4C),
-                      isFullWidth: true,
-                      onConfirm: () => _ejecutar(context, 'Import POIs', () async {
-                        // TODO: Implement Import POIs logic if needed
-                        debugPrint('Import POIs not yet implemented');
-                      }),
-                    ),
-                    const SizedBox(height: 8),
-                    _ToolCard(
                       title: 'Reboot LG',
                       description: '',
                       buttonLabel: 'Execute Reboot LG',
@@ -121,7 +108,17 @@ class _PagToolsState extends State<PagTools> {
                       backgroundColor: const Color(0xFFE5E5E5),
                       buttonColor: const Color(0xFF454545),
                       isFullWidth: true,
-                      onConfirm: () => _ejecutar(context, 'Clean KMLs', _lgService.clearLogos),
+                      onConfirm: () => _ejecutar(context, 'Clean KMLs', _lgService.clearKMLs),
+                    ),
+                    const SizedBox(height: 8),
+                    _ToolCard(
+                      title: 'Clean Logos',
+                      description: '',
+                      buttonLabel: 'Execute Clean Logos',
+                      backgroundColor: const Color(0xFFE5E5E5),
+                      buttonColor: const Color(0xFF454545),
+                      isFullWidth: true,
+                      onConfirm: () => _ejecutar(context, 'Clean Logos', _lgService.clearLogos),
                     ),
                     const SizedBox(height: 8),
                     _ToolCard(

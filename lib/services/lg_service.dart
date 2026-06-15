@@ -5,6 +5,15 @@ import '../kmls/logos_kml.dart';
 class LGService {
   final LGConnectionState _conn = LGConnectionState();
 
+  /// Limpia el KML principal enviando uno vacío.
+  Future<void> clearKMLs() async {
+    const String blank = '''<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document></Document>
+</kml>''';
+    await _conn.execute("cat <<'EOF' > /var/www/html/kmls.kml\n$blank\nEOF");
+  }
+
   /// Limpia los logos enviando un KML vacío a todos los slots de esclavos en el Master.
   Future<void> clearLogos() async {
     const String blank = '''<?xml version="1.0" encoding="UTF-8"?>
