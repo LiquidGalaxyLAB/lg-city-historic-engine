@@ -2,13 +2,8 @@ import 'package:flutter/material.dart';
 import '../widgets/app_top_bar.dart';
 import '../widgets/m_superior.dart';
 import '../main.dart';
-
-class POI {
-  final String name;
-  final String location;
-  final String image;
-  POI({required this.name, required this.location, required this.image});
-}
+import '../models/poi_model.dart';
+import 'pag_lanza_lg.dart';
 
 class PagCatedralesIglesias extends StatefulWidget {
   const PagCatedralesIglesias({super.key});
@@ -28,11 +23,13 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         name: 'Seu Vella Cathedral',
         location: '41.6176° N, 0.6267° E',
         image: 'assets/images_churches_cathedrals/img.png',
+        lat: 41.6176, lng: 0.6267, range: 1000,
       ),
       POI(
         name: 'New Cathedral',
         location: '41.6141° N, 0.6258° E',
         image: 'assets/images_churches_cathedrals/catedral.jpg',
+        lat: 41.6141, lng: 0.6258, range: 800,
       ),
     ],
     'Churches': [
@@ -40,47 +37,55 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         name: 'Iglesia de Sant Llorenç',
         location: '41.6151° N, 0.6225° E',
         image: 'assets/images_churches_cathedrals/Iglesia de Sant Llorenç.jpg',
+        lat: 41.6151, lng: 0.6225, range: 500,
       ),
       POI(
         name: 'Iglesia de San Juan',
         location: '41.6166° N, 0.6289° E',
         image: 'assets/images_churches_cathedrals/Iglesia de San Juan.jpg',
+        lat: 41.6166, lng: 0.6289, range: 500,
       ),
       POI(
         name: 'Sant Pere',
         location: '41.6135° N, 0.6272° E',
         image: 'assets/images_churches_cathedrals/Sant_pere.jpg',
+        lat: 41.6135, lng: 0.6272, range: 500,
       ),
       POI(
         name: 'Acadèmia Mariana',
         location: '41.6171° N, 0.6261° E',
         image: 'assets/images_churches_cathedrals/academia_mariana.jpg',
+        lat: 41.6171, lng: 0.6261, range: 500,
       ),
       POI(
         name: 'Capella de la Sang',
         location: '41.6158° N, 0.6275° E',
         image: 'assets/images_churches_cathedrals/Capella_sang.png',
+        lat: 41.6158, lng: 0.6275, range: 400,
       ),
       POI(
         name: 'Convent del Roser',
         location: '41.6155° N, 0.6241° E',
         image: 'assets/images_churches_cathedrals/Convent del Roser.jpg',
+        lat: 41.6155, lng: 0.6241, range: 500,
       ),
       POI(
         name: 'Ermita de Granyena',
         location: '41.6322° N, 0.6611° E',
         image: 'assets/images_churches_cathedrals/Ermita de Granyena.jpg',
+        lat: 41.6322, lng: 0.6611, range: 1000,
       ),
       POI(
         name: 'Capella de Sant Jaume',
         location: '41.6148° N, 0.6264° E',
         image: 'assets/images_churches_cathedrals/Capella de Sant Jaume.jpg',
+        lat: 41.6148, lng: 0.6264, range: 400,
       ),
       POI(
         name: 'Iglesia antigua de Sant Martí',
         location: '41.6183° N, 0.6239° E',
-        image:
-            'assets/images_churches_cathedrals/Iglesia antigua de Sant Martí.jpg',
+        image: 'assets/images_churches_cathedrals/Iglesia antigua de Sant Martí.jpg',
+        lat: 41.6183, lng: 0.6239, range: 500,
       ),
     ],
   };
@@ -116,9 +121,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                     width: double.infinity,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(
-                          'assets/images_churches_cathedrals/catedral.jpg',
-                        ),
+                        image: AssetImage('assets/images_churches_cathedrals/catedral.jpg'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -130,44 +133,31 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Colors.black.withValues(alpha: 0.5),
+                          Colors.black.withOpacity(0.5),
                           Colors.transparent,
-                          Colors.black.withValues(alpha: 0.4),
+                          Colors.black.withOpacity(0.4),
                         ],
                       ),
                     ),
                   ),
                   SafeArea(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: () => MenuFlotante.mostrar(
-                              context,
-                              currentTitle: T.s('cathedrals'),
-                            ),
+                            onTap: () => MenuFlotante.mostrar(context, currentTitle: T.s('cathedrals')),
                             child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.15),
+                                color: Colors.white.withOpacity(0.15),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(
-                                Icons.menu,
-                                color: Colors.white,
-                                size: 26,
-                              ),
+                              child: const Icon(Icons.menu, color: Colors.white, size: 26),
                             ),
                           ),
-                          const AppTopBar(
-                            onDarkBackground: true,
-                            wifiOnly: true,
-                          ),
+                          const AppTopBar(onDarkBackground: true, wifiOnly: true),
                         ],
                       ),
                     ),
@@ -180,14 +170,10 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.15),
+                          color: Colors.black.withOpacity(0.15),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          Icons.arrow_back_ios_new,
-                          color: Colors.white,
-                          size: 22,
-                        ),
+                        child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
                       ),
                     ),
                   ),
@@ -224,23 +210,16 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                     left: 20,
                     bottom: 35,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 6,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: Colors.white.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(30),
                         border: Border.all(color: Colors.white30),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(
-                            Icons.location_on_outlined,
-                            color: Colors.white,
-                            size: 16,
-                          ),
+                          const Icon(Icons.location_on_outlined, color: Colors.white, size: 16),
                           const SizedBox(width: 8),
                           Text(
                             '${pois.length} ${T.s('available')}',
@@ -254,12 +233,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: -28,
-                    left: 16,
-                    right: 16,
-                    child: _buildFilterBar(),
-                  ),
+                  Positioned(bottom: -28, left: 16, right: 16, child: _buildFilterBar()),
                 ],
               ),
               const SizedBox(height: 45),
@@ -269,11 +243,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.search_off_rounded,
-                              size: 80,
-                              color: Colors.grey[300],
-                            ),
+                            Icon(Icons.search_off_rounded, size: 80, color: Colors.grey[300]),
                             const SizedBox(height: 16),
                             Text(
                               T.s('no_results_found'),
@@ -287,14 +257,10 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                         ),
                       )
                     : ListView.builder(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 0,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                         physics: const BouncingScrollPhysics(),
                         itemCount: pois.length,
-                        itemBuilder: (context, index) =>
-                            _cardPunto(pois[index]),
+                        itemBuilder: (context, index) => _cardPunto(pois[index]),
                       ),
               ),
             ],
@@ -312,7 +278,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
+            color: Colors.black.withOpacity(0.08),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -354,11 +320,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                   _searchQuery = '';
                 });
               },
-              child: const Icon(
-                Icons.close_rounded,
-                color: Color(0xFF8E8E93),
-                size: 20,
-              ),
+              child: const Icon(Icons.close_rounded, color: Color(0xFF8E8E93), size: 20),
             ),
           const SizedBox(width: 10),
           _buildCategoryDropdown(),
@@ -388,9 +350,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                   cat == 'All' ? T.s('show_all') : cat,
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: _selectedCategory == cat
-                        ? FontWeight.w700
-                        : FontWeight.w500,
+                    fontWeight: _selectedCategory == cat ? FontWeight.w700 : FontWeight.w500,
                     color: const Color(0xFF1C1C1E),
                   ),
                 ),
@@ -417,11 +377,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              color: Color(0xFF1C1C1E),
-              size: 18,
-            ),
+            const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF1C1C1E), size: 18),
           ],
         ),
       ),
@@ -436,7 +392,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: Colors.black.withOpacity(0.04),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -456,11 +412,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                 return Container(
                   height: 180,
                   color: Colors.grey[300],
-                  child: const Icon(
-                    Icons.image_not_supported,
-                    size: 50,
-                    color: Colors.grey,
-                  ),
+                  child: const Icon(Icons.image_not_supported, size: 50, color: Colors.grey),
                 );
               },
             ),
@@ -487,11 +439,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                   children: [
                     Row(
                       children: [
-                        const Icon(
-                          Icons.explore_outlined,
-                          size: 16,
-                          color: Color(0xFF8E8E93),
-                        ),
+                        const Icon(Icons.explore_outlined, size: 16, color: Color(0xFF8E8E93)),
                         const SizedBox(width: 6),
                         Text(
                           T.s('details'),
@@ -503,33 +451,32 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                         ),
                       ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => PagLanzaLG(poi: poi)),
                       ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF2F2F7).withValues(alpha: 0.5),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            T.s('send_lg'),
-                            style: const TextStyle(
-                              color: Color(0xFF6B5B45),
-                              fontWeight: FontWeight.w900,
-                              fontSize: 13,
-                              letterSpacing: 0.5,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF2F2F7).withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Text(
+                              T.s('send_lg'),
+                              style: const TextStyle(
+                                color: Color(0xFF6B5B45),
+                                fontWeight: FontWeight.w900,
+                                fontSize: 13,
+                                letterSpacing: 0.5,
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Icon(
-                            Icons.arrow_forward_rounded,
-                            size: 16,
-                            color: Color(0xFF6B5B45),
-                          ),
-                        ],
+                            const SizedBox(width: 8),
+                            const Icon(Icons.arrow_forward_rounded, size: 16, color: Color(0xFF6B5B45)),
+                          ],
+                        ),
                       ),
                     ),
                   ],

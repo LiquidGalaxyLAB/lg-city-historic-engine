@@ -1,9 +1,51 @@
 import 'package:flutter/foundation.dart';
 import '../models/connection_state.dart';
+import '../models/lugares.dart';
+import '../models/poi_model.dart';
 import '../kmls/logos_kml.dart';
 
 class LGService {
   final LGConnectionState _conn = LGConnectionState();
+  bool _isOrbiting = false;
+
+  Future<void> sendKML(String kml) async {
+    await _conn.execute("cat <<'EOF' > /var/www/html/kmls.kml\n$kml\nEOF");
+  }
+
+  Future<void> flyTo(Lloc lloc) async {
+    final String command = 'echo "flytoview=<LookAt><longitude>${lloc.longitud}</longitude><latitude>${lloc.latitud}</latitude><range>${lloc.range}</range><tilt>${lloc.tilt}</tilt><heading>${lloc.heading}</heading><altitudeMode>${lloc.altitudeMode}</altitudeMode></LookAt>" > /tmp/query.txt';
+    await _conn.execute(command);
+  }
+
+  Future<void> flyToPOI(POI poi) async {
+    final String command = 'echo "flytoview=<LookAt><longitude>${poi.lng ?? 0.6268}</longitude><latitude>${poi.lat ?? 41.6147}</latitude><range>${poi.range ?? 1000}</range><tilt>${poi.tilt ?? 45}</tilt><heading>${poi.heading ?? 0}</heading><altitudeMode>${poi.altitudeMode ?? 'relativeToGround'}</altitudeMode></LookAt>" > /tmp/query.txt';
+    await _conn.execute(command);
+  }
+
+  Future<void> buildOrbit(Lloc lloc) async {
+    _isOrbiting = true;
+    for (int i = 0; _isOrbiting; i += 10) {
+      final double heading = (lloc.heading + i) % 360;
+      final String command = 'echo "flytoview=<LookAt><longitude>${lloc.longitud}</longitude><latitude>${lloc.latitud}</latitude><range>${lloc.range}</range><tilt>${lloc.tilt}</tilt><heading>$heading</heading><altitudeMode>${lloc.altitudeMode}</altitudeMode></LookAt>" > /tmp/query.txt';
+      await _conn.execute(command);
+      await Future.delayed(const Duration(milliseconds: 500));
+    }
+  }
+
+  Future<void> startOrbitPOI(POI poi) async {
+    _isOrbiting = true;
+    double heading = poi.heading ?? 0;
+    while (_isOrbiting) {
+      heading = (heading + 10) % 360;
+      final String command = 'echo "flytoview=<LookAt><longitude>${poi.lng ?? 0.6268}</longitude><latitude>${poi.lat ?? 41.6147}</latitude><range>${poi.range ?? 1000}</range><tilt>${poi.tilt ?? 45}</tilt><heading>$heading</heading><altitudeMode>${poi.altitudeMode ?? 'relativeToGround'}</altitudeMode></LookAt>" > /tmp/query.txt';
+      await _conn.execute(command);
+      await Future.delayed(const Duration(milliseconds: 500));
+    }
+  }
+
+  void stopOrbit() {
+    _isOrbiting = false;
+  }
 
   /// Limpia el KML principal enviando uno vacío.
   Future<void> clearKMLs() async {
@@ -23,24 +65,18 @@ class LGService {
     final sudo = _conn.sudoPassword;
     final screens = _conn.screens;
 
-    // Aseguramos directorios en el Master (donde corre el servidor web Apache)
     await _conn.execute("echo '$sudo' | sudo -S mkdir -p /var/www/html/kml");
-    await _conn
-        .execute("echo '$sudo' | sudo -S chmod -R 777 /var/www/html/kml");
+    await _conn.execute("echo '$sudo' | sudo -S chmod -R 777 /var/www/html/kml");
 
-    // Escribimos KMLs vacíos para cada pantalla en el Master
     for (var i = 1; i <= screens; i++) {
-      await _conn
-          .execute("cat <<'EOF' > /var/www/html/kml/slave_$i.kml\n$blank\nEOF");
+      await _conn.execute("cat <<'EOF' > /var/www/html/kml/slave_$i.kml\n$blank\nEOF");
     }
   }
 
-  /// Muestra los logos enviando el KML de LogoOverlayManager.
   Future<void> showLogos() async {
     await _conn.sendLogoKML(LogoOverlayManager.generate());
   }
 
-  /// Ejecuta el script de relanzamiento en el Master y reinicia el entorno en esclavos.
   Future<void> relaunch() async {
     final password = _conn.password;
     final sudo = _conn.sudoPassword;
@@ -71,15 +107,13 @@ fi
 " && sshpass -p $password ssh -o StrictHostKeyChecking=no -x -t $user@$hostname "\$RELAUNCH_CMD\"""";
 
       if (i == 1) {
-        ops.add(_conn.execute(
-            '"/home/$user/bin/lg-relaunch" > /home/$user/log.txt 2>&1'));
+        ops.add(_conn.execute('"/home/$user/bin/lg-relaunch" > /home/$user/log.txt 2>&1'));
       }
       ops.add(_conn.execute(relaunchCommand));
     }
     await Future.wait(ops);
   }
 
-  /// Apaga todas las máquinas del sistema.
   Future<void> shutdown() async {
     final password = _conn.password;
     final sudo = _conn.sudoPassword;
@@ -89,13 +123,10 @@ fi
 
     for (var i = screens; i >= 1; i--) {
       final String hostname = i == 1 ? 'localhost' : 'lg$i';
-      await _conn.execute(
-        'sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@$hostname "echo $sudo | sudo -S poweroff"',
-      );
+      await _conn.execute('sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@$hostname "echo $sudo | sudo -S poweroff"');
     }
   }
 
-  /// Reinicia todas las máquinas del sistema.
   Future<void> reboot() async {
     final password = _conn.password;
     final sudo = _conn.sudoPassword;
@@ -105,13 +136,10 @@ fi
 
     for (var i = screens; i >= 1; i--) {
       final String hostname = i == 1 ? 'localhost' : 'lg$i';
-      await _conn.execute(
-        'sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@$hostname "echo $sudo | sudo -S reboot"',
-      );
+      await _conn.execute('sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@$hostname "echo $sudo | sudo -S reboot"');
     }
   }
 
-  /// Configura el refresco automático de KMLs en todas las pantallas.
   Future<void> setRefresh() async {
     final password = _conn.password;
     final sudo = _conn.sudoPassword;
@@ -147,8 +175,7 @@ fi
           if (i == 1) {
             ops.add(_conn.execute(execCmd));
           } else {
-            ops.add(_conn.execute(
-                'sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@lg$i "$execCmd"'));
+            ops.add(_conn.execute('sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@lg$i "$execCmd"'));
           }
         }
       }
@@ -159,7 +186,6 @@ fi
     }
   }
 
-  /// Elimina la configuración de refresco automático.
   Future<void> resetRefresh() async {
     final password = _conn.password;
     final sudo = _conn.sudoPassword;
@@ -169,17 +195,12 @@ fi
 
     try {
       for (var i = 1; i <= screens; i++) {
-        String path = i == 1
-            ? '~/earth/kml/myplaces.kml'
-            : '~/earth/kml/slave/myplaces.kml';
-
-        final cmd =
-            "echo '$sudo' | sudo -S sed -i '/kmls.txt/d; /slave_.*.kml/d' $path";
+        String path = i == 1 ? '~/earth/kml/myplaces.kml' : '~/earth/kml/slave/myplaces.kml';
+        final cmd = "echo '$sudo' | sudo -S sed -i '/kmls.txt/d; /slave_.*.kml/d' $path";
         if (i == 1) {
           await _conn.execute(cmd);
         } else {
-          await _conn.execute(
-              'sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@lg$i "$cmd"');
+          await _conn.execute('sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@lg$i "$cmd"');
         }
       }
     } catch (e) {

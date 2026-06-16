@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/lugares.dart';
+import '../data/datos_lleida.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
@@ -22,7 +23,7 @@ class DatabaseHelper {
       version: 1,
       onCreate: (db, version) async {
         await db.execute('''
-          CREATE TABLE llocs (
+          CREATE TABLE lugares (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             categoria TEXT NOT NULL,
             nom TEXT NOT NULL,
@@ -41,24 +42,24 @@ class DatabaseHelper {
             descripcio_en TEXT NOT NULL
           )
         ''');
-        await _insertarDades(db);
+        await insertarDades(db);
       },
     );
   }
 
-  Future<List<Lloc>> getLlocsByCategoria(String categoria) async {
+  Future<List<Lloc>> getLugaresByCategoria(String categoria) async {
     final db = await database;
     final maps = await db.query(
-      'llocs',
+      'Lugares',
       where: 'categoria = ?',
       whereArgs: [categoria],
     );
     return maps.map((m) => Lloc.fromMap(m)).toList();
   }
 
-  Future<List<Lloc>> getAllLlocs() async {
+  Future<List<Lloc>> getAllLugares() async {
     final db = await database;
-    final maps = await db.query('llocs');
+    final maps = await db.query('lugares');
     return maps.map((m) => Lloc.fromMap(m)).toList();
   }
 }

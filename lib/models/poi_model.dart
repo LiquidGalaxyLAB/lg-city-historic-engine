@@ -5,6 +5,9 @@ class POI {
   final double? lat;
   final double? lng;
   final double? range;
+  final double? tilt;
+  final double? heading;
+  final String? altitudeMode;
 
   POI({
     required this.name,
@@ -13,5 +16,8 @@ class POI {
     this.lat,
     this.lng,
     this.range,
+    this.tilt,
+    this.heading,
+    this.altitudeMode,
   });
 }

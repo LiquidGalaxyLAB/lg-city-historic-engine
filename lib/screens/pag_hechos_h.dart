@@ -3,7 +3,7 @@ import '../widgets/app_top_bar.dart';
 import '../widgets/m_superior.dart';
 import '../main.dart';
 import '../models/poi_model.dart';
-import 'pag_detalles_poi.dart';
+import 'pag_lanza_lg.dart'; // Import the launch page
 
 class PagHechosHistoricos extends StatefulWidget {
   const PagHechosHistoricos({super.key});
@@ -532,7 +532,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => PagDetallesPOI(poi: poi),
+                      builder: (_) => PagLanzaLG(poi: poi), // Navigate to the launch page
                     ),
                   ),
                   child: Container(
