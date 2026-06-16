@@ -2,17 +2,8 @@ import 'package:flutter/material.dart';
 import '../widgets/app_top_bar.dart';
 import '../widgets/m_superior.dart';
 import '../main.dart';
-
-class POI {
-  final String name;
-  final String location;
-  final String image;
-  POI({
-    required this.name,
-    required this.location,
-    this.image = 'assets/images/denoche.jpg',
-  });
-}
+import '../models/poi_model.dart';
+import 'pag_detalles_poi.dart';
 
 class PagHechosHistoricos extends StatefulWidget {
   const PagHechosHistoricos({super.key});
@@ -27,37 +18,120 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
   final TextEditingController _searchController = TextEditingController();
 
   final Map<String, List<POI>> _data = {
-    'Antigüedad': List.generate(
-      2,
-      (i) => POI(name: 'Ancient Event ${i + 1}', location: '41.61°N, 0.62°E'),
-    ),
-    'Edad Media Temprana (Dominio Musulmán)': List.generate(
-      3,
-      (i) => POI(
-        name: 'Islamic Period Event ${i + 1}',
-        location: '41.61°N, 0.62°E',
+    'Antigüedad': [
+      POI(
+        name: 'Revolta d\'Indíbil i Mandoni',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Revolta d\'Indíbil i Mandoni.jpg',
+        lat: 41.6147, lng: 0.6268, range: 400,
       ),
-    ),
-    'Reconquista / Alta Edad Media': [
-      POI(name: 'Reconquista Landmark', location: '41.61°N, 0.62°E'),
+      POI(
+        name: 'Batalla de Ilerda 49 aC',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Batalla de Ilerda 49 aC.png',
+        lat: 41.6147, lng: 0.6268, range: 400,
+      ),
     ],
-    'Edad Media / Baja Edad Media': List.generate(
-      4,
-      (i) => POI(
-        name: 'Late Medieval Event ${i + 1}',
-        location: '41.61°N, 0.62°E',
+    'Edad Media Temprana': [
+      POI(
+        name: 'Invasio musulmana',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Invasio musulmana.jpg',
+        lat: 41.6147, lng: 0.6268,
       ),
-    ),
-    'Edad Moderna': List.generate(
-      5,
-      (i) =>
-          POI(name: 'Modern Era Event ${i + 1}', location: '41.61°N, 0.62°E'),
-    ),
-    'Edad Contemporánea': List.generate(
-      2,
-      (i) =>
-          POI(name: 'Contemporary Event ${i + 1}', location: '41.61°N, 0.62°E'),
-    ),
+      POI(
+        name: 'Setge de lleida (800)',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Setge de lleida (800).png',
+        lat: 41.6147, lng: 0.6268,
+      ),
+      POI(
+        name: 'Setge de lleida (884)',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Setge de lleida (884).png',
+        lat: 41.6147, lng: 0.6268,
+      ),
+    ],
+    'Reconquista / Alta Edad Media': [
+      POI(
+        name: 'Reonquista Cristiana 1149',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Reonquista Cristiana1149.jpg',
+        lat: 41.6147, lng: 0.6268,
+      ),
+      POI(
+        name: 'Unio del regne de Arago i comtat de barcelona',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Unio del regne de Arago i comtat de barcelona.jpg',
+        lat: 41.6147, lng: 0.6268,
+      ),
+    ],
+    'Edad Media / Baja Edad Media': [
+      POI(
+        name: 'Jura de fidelitat a Jaume I',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/jura de fidelitat a Jaume I.jpg',
+        lat: 41.6147, lng: 0.6268,
+      ),
+      POI(
+        name: 'Primera universitat del regne d\'arago',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Primera universitat del regne d\'arago.jpg',
+        lat: 41.6147, lng: 0.6268,
+      ),
+      POI(
+        name: 'Setge de lleida (1413)',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Setge de lleida (1413).jpg',
+        lat: 41.6147, lng: 0.6268,
+      ),
+    ],
+    'Edad Moderna': [
+      POI(
+        name: 'La batalla de Lleida (1642)',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/La batalla de Lleida (1642).jpg',
+        lat: 41.6147, lng: 0.6268,
+      ),
+      POI(
+        name: 'Setge de lleida (1644)',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Setge de lleida (1644).png',
+        lat: 41.6147, lng: 0.6268,
+      ),
+      POI(
+        name: 'Setge de lleida (1646)',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Setge de lleida (1646).jpg',
+        lat: 41.6147, lng: 0.6268,
+      ),
+      POI(
+        name: 'Setge de lleida (1647)',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Setge de lleida (1647).png',
+        lat: 41.6147, lng: 0.6268,
+      ),
+      POI(
+        name: 'Setge de lleida (1707)',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Setge de lleida (1707)png.png',
+        lat: 41.6147, lng: 0.6268,
+      ),
+    ],
+    'Edad Contemporánea': [
+      POI(
+        name: 'Setge de lleida (1810)',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Setge de lleida (1810).png',
+        lat: 41.6147, lng: 0.6268,
+      ),
+      POI(
+        name: 'Batalla de Lleida (1938)',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Batalla de Lleida (1938).jpeg',
+        lat: 41.6147, lng: 0.6268,
+      ),
+    ],
   };
 
   @override
@@ -103,9 +177,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Colors.black.withValues(alpha: 0.55),
+                          Colors.black.withOpacity(0.55),
                           Colors.transparent,
-                          Colors.black.withValues(alpha: 0.45),
+                          Colors.black.withOpacity(0.45),
                         ],
                       ),
                     ),
@@ -127,7 +201,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                             child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.15),
+                                color: Colors.white.withOpacity(0.15),
                                 shape: BoxShape.circle,
                               ),
                               child: const Icon(
@@ -153,7 +227,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.15),
+                          color: Colors.black.withOpacity(0.15),
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -202,7 +276,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.18),
+                        color: Colors.white.withOpacity(0.18),
                         borderRadius: BorderRadius.circular(30),
                         border: Border.all(color: Colors.white24),
                       ),
@@ -285,7 +359,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
+            color: Colors.black.withOpacity(0.06),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -409,7 +483,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withOpacity(0.03),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -440,72 +514,46 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
           ),
           Padding(
             padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  poi.name,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    fontFamily: 'serif',
-                    color: Color(0xFF1C1C1E),
+                Expanded(
+                  child: Text(
+                    poi.name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      fontFamily: 'serif',
+                      color: Color(0xFF1C1C1E),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 12),
-                const Divider(color: Color(0xFFF2F2F7), thickness: 1.5),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.event_available_outlined,
-                          size: 16,
-                          color: Color(0xFF8E8E93),
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          T.s('history_details'),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF8E8E93),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
+                GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PagDetallesPOI(poi: poi),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF2F2F7).withValues(alpha: 0.6),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            T.s('send_lg'),
-                            style: const TextStyle(
-                              color: Color(0xFF6B5B45),
-                              fontWeight: FontWeight.w900,
-                              fontSize: 13,
-                              letterSpacing: 0.6,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Icon(
-                            Icons.arrow_forward_rounded,
-                            size: 16,
-                            color: Color(0xFF6B5B45),
-                          ),
-                        ],
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF2F2F7),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      T.s('send_lg'),
+                      style: const TextStyle(
+                        color: Color(0xFF6B5B45),
+                        fontWeight: FontWeight.w900,
+                        fontSize: 13,
+                        letterSpacing: 0.6,
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),

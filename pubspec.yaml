@@ -13,6 +13,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   dartssh2: ^2.2.0
   shared_preferences: ^2.2.0
+  sqflite: ^2.3.3
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_test:
@@ -29,3 +31,5 @@ flutter:
     - assets/images_churches_cathedrals/
     - assets/images_museums/
     - assets/images_historical_events/
+
+
