@@ -22,14 +22,19 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
       POI(
         name: 'Revolta d\'Indíbil i Mandoni',
         location: '41.6147° N, 0.6268° E',
-        image: 'assets/images_historical_events/Revolta d\'Indíbil i Mandoni.jpg',
-        lat: 41.6147, lng: 0.6268, range: 400,
+        image:
+            'assets/images_historical_events/Revolta d\'Indíbil i Mandoni.jpg',
+        lat: 41.6147,
+        lng: 0.6268,
+        range: 400,
       ),
       POI(
         name: 'Batalla de Ilerda 49 aC',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Batalla de Ilerda 49 aC.png',
-        lat: 41.6147, lng: 0.6268, range: 400,
+        lat: 41.6147,
+        lng: 0.6268,
+        range: 400,
       ),
     ],
     'Edad Media Temprana': [
@@ -37,19 +42,22 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         name: 'Invasio musulmana',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Invasio musulmana.jpg',
-        lat: 41.6147, lng: 0.6268,
+        lat: 41.6147,
+        lng: 0.6268,
       ),
       POI(
         name: 'Setge de lleida (800)',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Setge de lleida (800).png',
-        lat: 41.6147, lng: 0.6268,
+        lat: 41.6147,
+        lng: 0.6268,
       ),
       POI(
         name: 'Setge de lleida (884)',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Setge de lleida (884).png',
-        lat: 41.6147, lng: 0.6268,
+        lat: 41.6147,
+        lng: 0.6268,
       ),
     ],
     'Reconquista / Alta Edad Media': [
@@ -57,65 +65,79 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         name: 'Reonquista Cristiana 1149',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Reonquista Cristiana1149.jpg',
-        lat: 41.6147, lng: 0.6268,
+        lat: 41.6147,
+        lng: 0.6268,
       ),
       POI(
         name: 'Unio del regne de Arago i comtat de barcelona',
         location: '41.6147° N, 0.6268° E',
-        image: 'assets/images_historical_events/Unio del regne de Arago i comtat de barcelona.jpg',
-        lat: 41.6147, lng: 0.6268,
+        image:
+            'assets/images_historical_events/Unio del regne de Arago i comtat de barcelona.jpg',
+        lat: 41.6147,
+        lng: 0.6268,
       ),
     ],
     'Edad Media / Baja Edad Media': [
       POI(
         name: 'Jura de fidelitat a Jaume I',
         location: '41.6147° N, 0.6268° E',
-        image: 'assets/images_historical_events/jura de fidelitat a Jaume I.jpg',
-        lat: 41.6147, lng: 0.6268,
+        image:
+            'assets/images_historical_events/jura de fidelitat a Jaume I.jpg',
+        lat: 41.6147,
+        lng: 0.6268,
       ),
       POI(
         name: 'Primera universitat del regne d\'arago',
         location: '41.6147° N, 0.6268° E',
-        image: 'assets/images_historical_events/Primera universitat del regne d\'arago.jpg',
-        lat: 41.6147, lng: 0.6268,
+        image:
+            'assets/images_historical_events/Primera universitat del regne d\'arago.jpg',
+        lat: 41.6147,
+        lng: 0.6268,
       ),
       POI(
         name: 'Setge de lleida (1413)',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Setge de lleida (1413).jpg',
-        lat: 41.6147, lng: 0.6268,
+        lat: 41.6147,
+        lng: 0.6268,
       ),
     ],
     'Edad Moderna': [
       POI(
         name: 'La batalla de Lleida (1642)',
         location: '41.6147° N, 0.6268° E',
-        image: 'assets/images_historical_events/La batalla de Lleida (1642).jpg',
-        lat: 41.6147, lng: 0.6268,
+        image:
+            'assets/images_historical_events/La batalla de Lleida (1642).jpg',
+        lat: 41.6147,
+        lng: 0.6268,
       ),
       POI(
         name: 'Setge de lleida (1644)',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Setge de lleida (1644).png',
-        lat: 41.6147, lng: 0.6268,
+        lat: 41.6147,
+        lng: 0.6268,
       ),
       POI(
         name: 'Setge de lleida (1646)',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Setge de lleida (1646).jpg',
-        lat: 41.6147, lng: 0.6268,
+        lat: 41.6147,
+        lng: 0.6268,
       ),
       POI(
         name: 'Setge de lleida (1647)',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Setge de lleida (1647).png',
-        lat: 41.6147, lng: 0.6268,
+        lat: 41.6147,
+        lng: 0.6268,
       ),
       POI(
         name: 'Setge de lleida (1707)',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Setge de lleida (1707)png.png',
-        lat: 41.6147, lng: 0.6268,
+        lat: 41.6147,
+        lng: 0.6268,
       ),
     ],
     'Edad Contemporánea': [
@@ -123,13 +145,15 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         name: 'Setge de lleida (1810)',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Setge de lleida (1810).png',
-        lat: 41.6147, lng: 0.6268,
+        lat: 41.6147,
+        lng: 0.6268,
       ),
       POI(
         name: 'Batalla de Lleida (1938)',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Batalla de Lleida (1938).jpeg',
-        lat: 41.6147, lng: 0.6268,
+        lat: 41.6147,
+        lng: 0.6268,
       ),
     ],
   };
@@ -532,7 +556,8 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => PagLanzaLG(poi: poi), // Navigate to the launch page
+                      builder: (_) =>
+                          PagLanzaLG(poi: poi), // Navigate to the launch page
                     ),
                   ),
                   child: Container(

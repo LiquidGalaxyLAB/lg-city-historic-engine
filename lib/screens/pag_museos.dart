@@ -22,8 +22,11 @@ class _PagMuseosState extends State<PagMuseos> {
       POI(
         name: 'Museu d’Art Modern i Contemporani de Lleida',
         location: '41.6141° N, 0.6258° E',
-        image: 'assets/images_museums/Museu d’Art Modern i Contemporani de Lleida.jpg',
-        lat: 41.6141, lng: 0.6258, range: 600,
+        image:
+            'assets/images_museums/Museu d’Art Modern i Contemporani de Lleida.jpg',
+        lat: 41.6141,
+        lng: 0.6258,
+        range: 600,
       ),
     ],
     'Historia/Patrimonio': [
@@ -31,7 +34,9 @@ class _PagMuseosState extends State<PagMuseos> {
         name: 'Museu Diocesà',
         location: '41.6146° N, 0.6257° E',
         image: 'assets/images_museums/museonoche.jpg',
-        lat: 41.6146, lng: 0.6257, range: 600,
+        lat: 41.6146,
+        lng: 0.6257,
+        range: 600,
       ),
     ],
     'Ciencia/Tecnología': [
@@ -39,7 +44,9 @@ class _PagMuseosState extends State<PagMuseos> {
         name: 'Museu de l’Aigua',
         location: '41.6111° N, 0.6212° E',
         image: 'assets/images_museums/Museu de l’Aigua.jpg',
-        lat: 41.6111, lng: 0.6212, range: 800,
+        lat: 41.6111,
+        lng: 0.6212,
+        range: 800,
       ),
     ],
     'Automoción': [
@@ -47,7 +54,9 @@ class _PagMuseosState extends State<PagMuseos> {
         name: 'Museu de l’Automoció',
         location: '41.6125° N, 0.6302° E',
         image: 'assets/images_museums/Museu de l’Automoció.jpg',
-        lat: 41.6125, lng: 0.6302, range: 600,
+        lat: 41.6125,
+        lng: 0.6302,
+        range: 600,
       ),
     ],
   };
@@ -83,7 +92,8 @@ class _PagMuseosState extends State<PagMuseos> {
                     width: double.infinity,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/images_museums/museonoche.jpg'),
+                        image:
+                            AssetImage('assets/images_museums/museonoche.jpg'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -104,22 +114,26 @@ class _PagMuseosState extends State<PagMuseos> {
                   ),
                   SafeArea(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: () => MenuFlotante.mostrar(context, currentTitle: T.s('museums')),
+                            onTap: () => MenuFlotante.mostrar(context,
+                                currentTitle: T.s('museums')),
                             child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 color: Colors.white.withOpacity(0.15),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(Icons.menu, color: Colors.white, size: 26),
+                              child: const Icon(Icons.menu,
+                                  color: Colors.white, size: 26),
                             ),
                           ),
-                          const AppTopBar(onDarkBackground: true, wifiOnly: true),
+                          const AppTopBar(
+                              onDarkBackground: true, wifiOnly: true),
                         ],
                       ),
                     ),
@@ -135,7 +149,8 @@ class _PagMuseosState extends State<PagMuseos> {
                           color: Colors.black.withOpacity(0.15),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
+                        child: const Icon(Icons.arrow_back_ios_new,
+                            color: Colors.white, size: 22),
                       ),
                     ),
                   ),
@@ -172,7 +187,8 @@ class _PagMuseosState extends State<PagMuseos> {
                     left: 20,
                     bottom: 35,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 6),
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(30),
@@ -181,7 +197,8 @@ class _PagMuseosState extends State<PagMuseos> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.location_on_outlined, color: Colors.white, size: 16),
+                          const Icon(Icons.location_on_outlined,
+                              color: Colors.white, size: 16),
                           const SizedBox(width: 8),
                           Text(
                             '${pois.length} ${T.s('available')}',
@@ -195,7 +212,11 @@ class _PagMuseosState extends State<PagMuseos> {
                       ),
                     ),
                   ),
-                  Positioned(bottom: -28, left: 16, right: 16, child: _buildFilterBar()),
+                  Positioned(
+                      bottom: -28,
+                      left: 16,
+                      right: 16,
+                      child: _buildFilterBar()),
                 ],
               ),
               const SizedBox(height: 45),
@@ -205,7 +226,8 @@ class _PagMuseosState extends State<PagMuseos> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.search_off_rounded, size: 80, color: Colors.grey[300]),
+                            Icon(Icons.search_off_rounded,
+                                size: 80, color: Colors.grey[300]),
                             const SizedBox(height: 16),
                             Text(
                               T.s('no_results_found'),
@@ -219,10 +241,12 @@ class _PagMuseosState extends State<PagMuseos> {
                         ),
                       )
                     : ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 0),
                         physics: const BouncingScrollPhysics(),
                         itemCount: pois.length,
-                        itemBuilder: (context, index) => _cardPunto(pois[index]),
+                        itemBuilder: (context, index) =>
+                            _cardPunto(pois[index]),
                       ),
               ),
             ],
@@ -282,7 +306,8 @@ class _PagMuseosState extends State<PagMuseos> {
                   _searchQuery = '';
                 });
               },
-              child: const Icon(Icons.close_rounded, color: Color(0xFF8E8E93), size: 20),
+              child: const Icon(Icons.close_rounded,
+                  color: Color(0xFF8E8E93), size: 20),
             ),
           const SizedBox(width: 10),
           _buildCategoryDropdown(),
@@ -312,7 +337,9 @@ class _PagMuseosState extends State<PagMuseos> {
                   cat == 'All' ? T.s('show_all') : cat,
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: _selectedCategory == cat ? FontWeight.w700 : FontWeight.w500,
+                    fontWeight: _selectedCategory == cat
+                        ? FontWeight.w700
+                        : FontWeight.w500,
                     color: const Color(0xFF1C1C1E),
                   ),
                 ),
@@ -339,7 +366,8 @@ class _PagMuseosState extends State<PagMuseos> {
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF1C1C1E), size: 18),
+            const Icon(Icons.keyboard_arrow_down_rounded,
+                color: Color(0xFF1C1C1E), size: 18),
           ],
         ),
       ),
@@ -374,7 +402,8 @@ class _PagMuseosState extends State<PagMuseos> {
                 return Container(
                   height: 180,
                   color: Colors.grey[300],
-                  child: const Icon(Icons.image_not_supported, size: 50, color: Colors.grey),
+                  child: const Icon(Icons.image_not_supported,
+                      size: 50, color: Colors.grey),
                 );
               },
             ),
@@ -401,7 +430,8 @@ class _PagMuseosState extends State<PagMuseos> {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.explore_outlined, size: 16, color: Color(0xFF8E8E93)),
+                        const Icon(Icons.explore_outlined,
+                            size: 16, color: Color(0xFF8E8E93)),
                         const SizedBox(width: 6),
                         Text(
                           T.s('details'),
@@ -419,7 +449,8 @@ class _PagMuseosState extends State<PagMuseos> {
                         MaterialPageRoute(builder: (_) => PagLanzaLG(poi: poi)),
                       ),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
                         decoration: BoxDecoration(
                           color: const Color(0xFFF2F2F7).withOpacity(0.5),
                           borderRadius: BorderRadius.circular(12),
@@ -436,7 +467,8 @@ class _PagMuseosState extends State<PagMuseos> {
                               ),
                             ),
                             const SizedBox(width: 8),
-                            const Icon(Icons.arrow_forward_rounded, size: 16, color: Color(0xFF6B5B45)),
+                            const Icon(Icons.arrow_forward_rounded,
+                                size: 16, color: Color(0xFF6B5B45)),
                           ],
                         ),
                       ),

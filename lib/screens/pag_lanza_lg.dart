@@ -79,7 +79,8 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () => MenuFlotante.mostrar(context, currentTitle: widget.poi.name),
+                    onTap: () => MenuFlotante.mostrar(context,
+                        currentTitle: widget.poi.name),
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
@@ -106,14 +107,15 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
                 ],
               ),
             ),
-            
+
             // Back Arrow
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: const EdgeInsets.only(left: 16),
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Color(0xFF6B5B45), size: 30),
+                  icon: const Icon(Icons.arrow_back,
+                      color: Color(0xFF6B5B45), size: 30),
                   onPressed: () {
                     _lgService.stopOrbit();
                     Navigator.pop(context);
@@ -127,12 +129,14 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
             // Main Card
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(40), // Very rounded corners
+                    borderRadius:
+                        BorderRadius.circular(40), // Very rounded corners
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.05),
@@ -147,19 +151,22 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
                       Expanded(
                         flex: 5,
                         child: ClipRRect(
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(40)),
                           child: Image.asset(
                             widget.poi.image,
                             width: double.infinity,
                             fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => Container(
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(
                               color: Colors.grey[300],
-                              child: const Icon(Icons.image_not_supported, size: 80),
+                              child: const Icon(Icons.image_not_supported,
+                                  size: 80),
                             ),
                           ),
                         ),
                       ),
-                      
+
                       // Title
                       Padding(
                         padding: const EdgeInsets.only(top: 25, bottom: 10),
@@ -174,17 +181,19 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
                           ),
                         ),
                       ),
-                      
+
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 40),
-                        child: Divider(color: Color(0xFFF2F2F7), thickness: 1.5),
+                        child:
+                            Divider(color: Color(0xFFF2F2F7), thickness: 1.5),
                       ),
-                      
+
                       const Spacer(),
 
                       // Action Buttons
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 30, left: 20, right: 20),
+                        padding: const EdgeInsets.only(
+                            bottom: 30, left: 20, right: 20),
                         child: Row(
                           children: [
                             Expanded(
@@ -227,10 +236,12 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
     bool isActive = false,
   }) {
     // Definimos los colores para el estado activo (marrón oscuro solicitado) e inactivo
-    final Color bgColor = isActive ? const Color(0xFF4E342E) : const Color(0xFFFBF9F6);
+    final Color bgColor =
+        isActive ? const Color(0xFF4E342E) : const Color(0xFFFBF9F6);
     final Color iconColor = isActive ? Colors.white : const Color(0xFF6B5B45);
     final Color textColor = isActive ? Colors.white : const Color(0xFF1C1C1E);
-    final Color circleColor = isActive ? const Color(0xFF3E2723) : const Color(0xFFF5F1E9);
+    final Color circleColor =
+        isActive ? const Color(0xFF3E2723) : const Color(0xFFF5F1E9);
 
     return GestureDetector(
       onTap: onTap,
@@ -239,7 +250,8 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(25),
-          border: Border.all(color: isActive ? Colors.transparent : const Color(0xFFF2F2F7)),
+          border: Border.all(
+              color: isActive ? Colors.transparent : const Color(0xFFF2F2F7)),
         ),
         child: Column(
           children: [
