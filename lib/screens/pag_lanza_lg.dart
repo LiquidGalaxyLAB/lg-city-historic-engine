@@ -127,7 +127,7 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
             Expanded(
               child: Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -155,10 +155,10 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
                                 Container(
-                                  color: Colors.grey[300],
-                                  child: const Icon(Icons.image_not_supported,
-                                      size: 80),
-                                ),
+                              color: Colors.grey[300],
+                              child: const Icon(Icons.image_not_supported,
+                                  size: 80),
+                            ),
                           ),
                         ),
                       ),
@@ -180,8 +180,8 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
 
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 40),
-                        child: Divider(
-                            color: Color(0xFFF2F2F7), thickness: 1.5),
+                        child:
+                            Divider(color: Color(0xFFF2F2F7), thickness: 1.5),
                       ),
 
                       const Spacer(),
@@ -230,13 +230,11 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
     bool isActive = false,
   }) {
     final Color bgColor =
-    isActive ? const Color(0xFF4E342E) : const Color(0xFFFBF9F6);
-    final Color iconColor =
-    isActive ? Colors.white : const Color(0xFF6B5B45);
-    final Color textColor =
-    isActive ? Colors.white : const Color(0xFF1C1C1E);
+        isActive ? const Color(0xFF4E342E) : const Color(0xFFFBF9F6);
+    final Color iconColor = isActive ? Colors.white : const Color(0xFF6B5B45);
+    final Color textColor = isActive ? Colors.white : const Color(0xFF1C1C1E);
     final Color circleColor =
-    isActive ? const Color(0xFF3E2723) : const Color(0xFFF5F1E9);
+        isActive ? const Color(0xFF3E2723) : const Color(0xFFF5F1E9);
 
     return GestureDetector(
       onTap: onTap,
@@ -246,8 +244,7 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
           color: bgColor,
           borderRadius: BorderRadius.circular(25),
           border: Border.all(
-              color:
-              isActive ? Colors.transparent : const Color(0xFFF2F2F7)),
+              color: isActive ? Colors.transparent : const Color(0xFFF2F2F7)),
         ),
         child: Column(
           children: [

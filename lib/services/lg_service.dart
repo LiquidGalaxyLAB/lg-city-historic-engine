@@ -221,6 +221,7 @@ fi
       debugPrint('LGService: Error al resetear refresco: $e');
     }
   }
+
   Future<void> sendBalloon(POI poi) async {
     final int slaveNo = _conn.screens == 5 ? 4 : 2;
 
@@ -228,11 +229,13 @@ fi
         ? '<p style="font-size:12px;color:#A0856A;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:1px;">\${poi.epoca}</p>'
         : '';
 
-    final String fechaLine = (poi.fechaInici != null && poi.fechaInici!.isNotEmpty)
+    final String fechaLine = (poi.fechaInici != null &&
+            poi.fechaInici!.isNotEmpty)
         ? '<p style="font-size:12px;color:#A0856A;margin:0 0 16px 0;">\${poi.fechaInici}\${poi.fechaFi != null && poi.fechaFi != poi.fechaInici ? " – \${poi.fechaFi}" : ""}</p>'
         : '';
 
-    final String descLine = (poi.description != null && poi.description!.isNotEmpty)
+    final String descLine = (poi.description != null &&
+            poi.description!.isNotEmpty)
         ? '<p style="font-size:14px;line-height:1.75;color:#E0D8CC;margin:0;">\${poi.description}</p>'
         : '';
 

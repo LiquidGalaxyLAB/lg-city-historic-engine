@@ -54,7 +54,8 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
       POI(
         name: 'Castell Templer de Gardeny',
         location: '41.6084°N, 0.6148°E',
-        image: 'assets/images_points_of_interest/Castell Templer de Gardeny.jpg',
+        image:
+            'assets/images_points_of_interest/Castell Templer de Gardeny.jpg',
         lat: 41.608434,
         lng: 0.614781,
         range: 191,
