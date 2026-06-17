@@ -3,7 +3,7 @@ import '../widgets/app_top_bar.dart';
 import '../widgets/m_superior.dart';
 import '../main.dart';
 import '../models/poi_model.dart';
-import 'pag_lanza_lg.dart'; // Import the launch page
+import 'pag_lanza_lg.dart';
 
 class PagHechosHistoricos extends StatefulWidget {
   const PagHechosHistoricos({super.key});
@@ -21,139 +21,115 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
     'Antigüedad': [
       POI(
         name: 'Revolta d\'Indíbil i Mandoni',
-        location: '41.6147° N, 0.6268° E',
-        image:
-            'assets/images_historical_events/Revolta d\'Indíbil i Mandoni.jpg',
-        lat: 41.6147,
-        lng: 0.6268,
-        range: 400,
+        location: '41.6191° N, 0.6232° E',
+        image: 'assets/images_historical_events/Revolta d\'Indíbil i Mandoni.jpg',
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
       ),
       POI(
         name: 'Batalla de Ilerda 49 aC',
-        location: '41.6147° N, 0.6268° E',
+        location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Batalla de Ilerda 49 aC.png',
-        lat: 41.6147,
-        lng: 0.6268,
-        range: 400,
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
       ),
     ],
     'Edad Media Temprana': [
       POI(
-        name: 'Invasio musulmana',
-        location: '41.6147° N, 0.6268° E',
+        name: 'Invasió musulmana',
+        location: '41.6180° N, 0.6258° E',
         image: 'assets/images_historical_events/Invasio musulmana.jpg',
-        lat: 41.6147,
-        lng: 0.6268,
+        lat: 41.6180451, lng: 0.6258326, range: 361.12, heading: 12.41, tilt: 0.0,
       ),
       POI(
-        name: 'Setge de lleida (800)',
-        location: '41.6147° N, 0.6268° E',
+        name: 'Setge de Lleida (800)',
+        location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Setge de lleida (800).png',
-        lat: 41.6147,
-        lng: 0.6268,
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
       ),
       POI(
-        name: 'Setge de lleida (884)',
-        location: '41.6147° N, 0.6268° E',
+        name: 'Setge de Lleida (884)',
+        location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Setge de lleida (884).png',
-        lat: 41.6147,
-        lng: 0.6268,
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
       ),
     ],
     'Reconquista / Alta Edad Media': [
       POI(
-        name: 'Reonquista Cristiana 1149',
-        location: '41.6147° N, 0.6268° E',
+        name: 'Reconquesta Cristiana 1149',
+        location: '41.6090° N, 0.6103° E',
         image: 'assets/images_historical_events/Reonquista Cristiana1149.jpg',
-        lat: 41.6147,
-        lng: 0.6268,
+        lat: 41.6089691, lng: 0.6103237, range: 1159.27, heading: -53.72, tilt: 56.84,
       ),
       POI(
-        name: 'Unio del regne de Arago i comtat de barcelona',
-        location: '41.6147° N, 0.6268° E',
-        image:
-            'assets/images_historical_events/Unio del regne de Arago i comtat de barcelona.jpg',
-        lat: 41.6147,
-        lng: 0.6268,
+        name: 'Unió del regne de Aragó i comtat de Barcelona',
+        location: '41.6168° N, 0.6255° E',
+        image: 'assets/images_historical_events/Unio del regne de Arago i comtat de barcelona.jpg',
+        lat: 41.6167910, lng: 0.6254991, range: 1480.59, heading: -25.26, tilt: 65.45,
       ),
     ],
     'Edad Media / Baja Edad Media': [
       POI(
         name: 'Jura de fidelitat a Jaume I',
-        location: '41.6147° N, 0.6268° E',
-        image:
-            'assets/images_historical_events/jura de fidelitat a Jaume I.jpg',
-        lat: 41.6147,
-        lng: 0.6268,
+        location: '41.6180° N, 0.6258° E',
+        image: 'assets/images_historical_events/jura de fidelitat a Jaume I.jpg',
+        lat: 41.6180451, lng: 0.6258326, range: 361.12, heading: 12.41, tilt: 0.0,
       ),
       POI(
-        name: 'Primera universitat del regne d\'arago',
-        location: '41.6147° N, 0.6268° E',
-        image:
-            'assets/images_historical_events/Primera universitat del regne d\'arago.jpg',
-        lat: 41.6147,
-        lng: 0.6268,
+        name: 'Primera universitat del regne d\'Aragó',
+        location: '41.6147° N, 0.6199° E',
+        image: 'assets/images_historical_events/Primera universitat del regne d\'arago.jpg',
+        lat: 41.6146803, lng: 0.6198760, range: 270.14, heading: -70.55, tilt: 47.35,
       ),
       POI(
-        name: 'Setge de lleida (1413)',
-        location: '41.6147° N, 0.6268° E',
+        name: 'Setge de Lleida (1413)',
+        location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Setge de lleida (1413).jpg',
-        lat: 41.6147,
-        lng: 0.6268,
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
       ),
     ],
     'Edad Moderna': [
       POI(
         name: 'La batalla de Lleida (1642)',
-        location: '41.6147° N, 0.6268° E',
-        image:
-            'assets/images_historical_events/La batalla de Lleida (1642).jpg',
-        lat: 41.6147,
-        lng: 0.6268,
+        location: '41.6100° N, 0.6367° E',
+        image: 'assets/images_historical_events/La batalla de Lleida (1642).jpg',
+        lat: 41.6100091, lng: 0.6367412, range: 2017.02, heading: -53.71, tilt: 56.85,
       ),
       POI(
-        name: 'Setge de lleida (1644)',
-        location: '41.6147° N, 0.6268° E',
+        name: 'Setge de Lleida (1644)',
+        location: '41.6149° N, 0.6204° E',
         image: 'assets/images_historical_events/Setge de lleida (1644).png',
-        lat: 41.6147,
-        lng: 0.6268,
+        lat: 41.6149206, lng: 0.6204228, range: 1229.41, heading: -52.03, tilt: 60.58,
       ),
       POI(
-        name: 'Setge de lleida (1646)',
-        location: '41.6147° N, 0.6268° E',
+        name: 'Setge de Lleida (1646)',
+        location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Setge de lleida (1646).jpg',
-        lat: 41.6147,
-        lng: 0.6268,
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
       ),
       POI(
-        name: 'Setge de lleida (1647)',
-        location: '41.6147° N, 0.6268° E',
+        name: 'Setge de Lleida (1647)',
+        location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Setge de lleida (1647).png',
-        lat: 41.6147,
-        lng: 0.6268,
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
       ),
       POI(
-        name: 'Setge de lleida (1707)',
-        location: '41.6147° N, 0.6268° E',
+        name: 'Setge de Lleida (1707)',
+        location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Setge de lleida (1707)png.png',
-        lat: 41.6147,
-        lng: 0.6268,
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
       ),
     ],
     'Edad Contemporánea': [
       POI(
-        name: 'Setge de lleida (1810)',
-        location: '41.6147° N, 0.6268° E',
+        name: 'Setge de Lleida (1810)',
+        location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Setge de lleida (1810).png',
-        lat: 41.6147,
-        lng: 0.6268,
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
       ),
       POI(
         name: 'Batalla de Lleida (1938)',
-        location: '41.6147° N, 0.6268° E',
+        location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Batalla de Lleida (1938).jpeg',
-        lat: 41.6147,
-        lng: 0.6268,
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
       ),
     ],
   };
@@ -556,8 +532,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) =>
-                          PagLanzaLG(poi: poi), // Navigate to the launch page
+                      builder: (_) => PagLanzaLG(poi: poi),
                     ),
                   ),
                   child: Container(
