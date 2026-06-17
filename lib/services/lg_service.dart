@@ -221,4 +221,48 @@ fi
       debugPrint('LGService: Error al resetear refresco: $e');
     }
   }
+  Future<void> sendBalloon(POI poi, String description) async {
+    final int slaveNo = _conn.screens == 5 ? 4 : 2;
+
+    final String kml = '''<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <Placemark>
+      <name>${poi.name}</name>
+      <description><![CDATA[
+        <html>
+        <body style="margin:0;padding:0;background:#1C1C1E;font-family:Georgia,serif;color:#F5F1E9;">
+          <div style="padding:24px;">
+            <h2 style="font-size:22px;font-weight:400;margin:0 0 8px 0;color:#F5F1E9;">
+              ${poi.name}
+            </h2>
+            <div style="width:40px;height:2px;background:#C8A96E;margin-bottom:16px;"></div>
+            <p style="font-size:13px;color:#C8A96E;margin:0 0 16px 0;">
+              ${poi.location}
+            </p>
+            <p style="font-size:14px;line-height:1.7;color:#E0D8CC;margin:0;">
+              $description
+            </p>
+          </div>
+        </body>
+        </html>
+      ]]></description>
+      <Point>
+        <coordinates>${poi.lng ?? 0.6268},${poi.lat ?? 41.6147},0</coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>''';
+
+    await _conn.execute(
+        "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$kml\nKMLEOF");
+  }
+
+  Future<void> clearBalloon() async {
+    final int slaveNo = _conn.screens == 5 ? 4 : 2;
+    const String blank = '''<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document></Document></kml>''';
+    await _conn.execute(
+        "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$blank\nKMLEOF");
+  }
 }

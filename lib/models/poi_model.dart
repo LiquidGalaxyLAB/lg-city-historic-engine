@@ -8,6 +8,10 @@ class POI {
   final double? tilt;
   final double? heading;
   final String? altitudeMode;
+  final String? description;
+  final String? epoca;
+  final String? fechaInici;
+  final String? fechaFi;
 
   POI({
     required this.name,
@@ -19,5 +23,9 @@ class POI {
     this.tilt,
     this.heading,
     this.altitudeMode,
+    this.description,
+    this.epoca,
+    this.fechaInici,
+    this.fechaFi,
   });
 }
