@@ -26,11 +26,14 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         lat: 41.6176,
         lng: 0.6267,
         range: 1000,
+<<<<<<< HEAD
         description:
             'La Seo Vieja de Lérida es el monumento más emblemático de la ciudad. Construida en estilo románico con bóvedas góticas, se alza en la colina de la seo Vieja, que domina Lérida y el Segriá. El claustro, con vistas a la ciudad, se construyó entre los siglos XIII y XIV. En el XV se añadieron el campanario y la puerta de los Apóstoles. En 1707, por su posición estratégica, el edificio pasó a ser cuartel militar.',
         epoca: 'Edad Media',
         fechaInici: '1203',
         fechaFi: '1431',
+=======
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
       POI(
         name: 'New Cathedral',
@@ -41,11 +44,14 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         range: 276,
         heading: -5.0,
         tilt: 51.0,
+<<<<<<< HEAD
         description:
             'Entre 1761 y 1781, tuvo lugar la construcción de la Catedral Nueva gracias a las aportaciones de los leridanos, del rey Carlos III y el obispo Joaquín Sánchez. De estilo barroco con gran tendencia al clasicismo academicista francés, se sitúa en pleno eje comercial, frente al antiguo Hospital de Santa María. El templo acoge la imagen de la Virgen de Montserrat (la Moreneta), patrona de Cataluña.',
         epoca: 'Edad Moderna',
         fechaInici: '1761',
         fechaFi: '1781',
+=======
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
     ],
     'Churches': [
@@ -58,11 +64,14 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         range: 240,
         heading: 0.0,
         tilt: 46.0,
+<<<<<<< HEAD
         description:
             'La que fue dos veces sede catedralicia, es una construcción de estilo románico, pero con ampliaciones y acabados góticos. Considerada la segunda iglesia en importancia después de la Sede Vieja, tiene tres naves de la misma altura, con tres ábsides. El edificio conserva cuatro importantes retablos góticos, el más grande dedicado en Sant Llorenç.',
         epoca: 'Edad Media',
         fechaInici: '1150',
         fechaFi: '1400',
+=======
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
       POI(
         name: 'Iglesia de San Juan',
@@ -73,11 +82,14 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         range: 194,
         heading: 28.0,
         tilt: 47.0,
+<<<<<<< HEAD
         description:
             'En una de las plazas más características de la ciudad encontramos la iglesia de Sant Joan. Esta construcción, de estilo neogótico, corresponde a finales del siglo XIX y el diseño fue obra de Julio de Saracíbar y Celestino Capmany. Del interior destacamos los vitrales de Jaume Bonet, y los tres rosetones representando el Asunción de María, la Epifanía y el Baptisterio de Jesús.',
         epoca: 'Edad Media',
         fechaInici: '1885',
         fechaFi: '1895',
+=======
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
       POI(
         name: 'Sant Pere',
@@ -88,11 +100,14 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         range: 205,
         heading: -107.0,
         tilt: 48.0,
+<<<<<<< HEAD
         description:
             'Situada en la plaza de San Francisco, la iglesia de San Pedro de Lérida nació en 1731. Era la iglesia del Convento de los Franciscanos (1217), y más adelante parroquia de los militares de Lérida, razón por la cual en 1786 fue enterrado Gaspar de Portolà, primer gobernador de California y benefactor de Lérida.',
         epoca: 'Edad Media',
         fechaInici: '1731',
         fechaFi: '1749',
+=======
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
       POI(
         name: 'Acadèmia Mariana',
@@ -103,11 +118,14 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         range: 339,
         heading: 120.0,
         tilt: 38.0,
+<<<<<<< HEAD
         description:
             'Desde su fundación en 1862, la Academia Mariana ha sido un auténtico símbolo para la ciudad. El Santuario de la Patrona de Lérida contiene varios tesoros artísticos únicos en el mundo. El más impactante lo constituyen los 300 metros cuadrados de pinturas al fresco, que daten de 1871 y que reproducen la vida de la Virgen. Este es el único lugar en el mundo donde se encuentra plasmada, artísticamente, la vida de la Virgen María.',
         epoca: 'Edad Contemporania',
         fechaInici: '1862',
         fechaFi: '1871',
+=======
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
       POI(
         name: 'Capella de la Sang',
@@ -118,11 +136,14 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         range: 280,
         heading: 0.0,
         tilt: 42.0,
+<<<<<<< HEAD
         description:
             'El Oratorio de la Sangre de Lérida recibe su nombre gracias a la congregación de la Purísima Sangre de nuestro Señor de Jesús de la misma ciudad. El año 1876 esta nueva sede se transformó cambiando totalmente el aspecto. Se derrocó el edificio y se erigió uno de nueva planta que solo conserva la antigua portalada renacentista del siglo XVI, de estilo plateresco. El Oratorio de la Sangre es la capilla desde donde salen los pasos de Semana Santa.',
         epoca: 'Edad Media',
         fechaInici: '1470',
         fechaFi: '1499',
+=======
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
       POI(
         name: 'Convent del Roser',
@@ -133,11 +154,14 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         range: 299,
         heading: 3.0,
         tilt: 36.0,
+<<<<<<< HEAD
         description:
             'En la Guerra de los Segadores, cuando Lérida estaba bajo la soberanía francesa el 1642, el Rosal se ubicaba bajo el cerro de la Sede Vieja. El año 1669 se reedificó en el centro de la ciudad, en la calle Caballeros, pero el 12 de octubre de 1707, durante el Asedio de Lérida de la Guerra de Sucesión Española, el Convento fue incendiado por las tropas borbónicas dirigidas por Felipe V.',
         epoca: 'Edad Moderna',
         fechaInici: '1669',
         fechaFi: '1707',
+=======
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
       POI(
         name: 'Ermita de Granyena',
@@ -148,11 +172,14 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         range: 192,
         heading: 52.0,
         tilt: 63.0,
+<<<<<<< HEAD
         description:
             'Es un gran edificio de planta baja y un nivel con un tejado a dos aguas. Fachada sencilla. Encima la puerta de entrada hay un óculo y una espadaña. Arquitectura popular de origen medieval, si bien la construcción actual puede ser datada en el siglo xiii. Primero fue una mezquita. Mencionada ya el 1308, se venera la Virgen María de Granyena, patrona de Alcoletge.',
         epoca: 'Edad Media',
         fechaInici: '1300',
         fechaFi: '1308',
+=======
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
       POI(
         name: 'Capella de Sant Jaume',
@@ -163,11 +190,14 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         range: 262,
         heading: -1.0,
         tilt: 34.0,
+<<<<<<< HEAD
         description:
             'Esta pequeña capilla, dedicada originalmente a la Virgen de las Nieves, se levantó en época musulmana en el que era el barrio cristiano y, en la actualidad, está dedicado al culto del apóstol Santiago (San Jaime). Es un edificio de planta cuadrangular, de pequeñas dimensiones, situado en plena calle Mayor. La capilla fue rehabilitada en el S. XIX gracias al obispo Tomás Costa y Fornaguera.',
         epoca: 'Edad Media',
         fechaInici: '1399',
         fechaFi: '1399',
+=======
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
       POI(
         name: 'Iglesia antigua de Sant Martí',
@@ -179,11 +209,14 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         range: 190,
         heading: 0.0,
         tilt: 43.0,
+<<<<<<< HEAD
         description:
             'Esta iglesia es una joya del románico situada en el centro de la ciudad. Construida en el siglo XII, esta iglesia románica se convirtió en 1300 en capilla del Estudi General. En 1648, durante la guerra de Los Segadores, se convirtió en cuartel y en el siglo XIX se utilizó como prisión municipal. En 1893, el obispo Messeguer Costa ordenó su restauración.',
         epoca: 'Edad Media',
         fechaInici: '1150',
         fechaFi: '1200',
+=======
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
     ],
   };

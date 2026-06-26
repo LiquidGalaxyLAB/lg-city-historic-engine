@@ -1,59 +1,58 @@
-import 'package:flutter/material.dart';
-import '../models/poi_model.dart';
-import '../services/lg_service.dart';
-import '../widgets/m_superior.dart';
+// ─────────────────────────────────────────────────────────────────────────────
+// PEGA ESTOS DOS MÉTODOS AL FINAL DE LA CLASE LGService, justo antes del } final
+// ─────────────────────────────────────────────────────────────────────────────
 
-class PagLanzaLG extends StatefulWidget {
-  final POI poi;
+Future<void> sendBalloon(POI poi) async {
+  final int slaveNo = _conn.screens == 5 ? 4 : 2;
 
-  const PagLanzaLG({super.key, required this.poi});
+  // Construye las líneas opcionales de época y fechas
+  final String epocaLine = (poi.epoca != null && poi.epoca!.isNotEmpty)
+      ? '<p style="font-size:12px;color:#A0856A;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:1px;">${poi.epoca}</p>'
+      : '';
 
-  @override
-  State<PagLanzaLG> createState() => _PagLanzaLGState();
-}
+  final String fechaLine = (poi.fechaInici != null && poi.fechaInici!.isNotEmpty)
+      ? '<p style="font-size:12px;color:#A0856A;margin:0 0 16px 0;">'
+      '${poi.fechaInici}'
+      '${poi.fechaFi != null && poi.fechaFi != poi.fechaInici ? " – ${poi.fechaFi}" : ""}'
+      '</p>'
+      : '';
 
-class _PagLanzaLGState extends State<PagLanzaLG> {
-  final LGService _lgService = LGService();
-  bool _isOrbiting = false;
+  final String descLine = (poi.description != null && poi.description!.isNotEmpty)
+      ? '<p style="font-size:14px;line-height:1.75;color:#E0D8CC;margin:0;">${poi.description}</p>'
+      : '';
 
-  @override
-  void initState() {
-    super.initState();
-    _initLG();
-  }
-
-  Future<void> _initLG() async {
-    await _sendToLG();
-    await _lgService.flyToPOI(widget.poi);
-    await _lgService.sendBalloon(widget.poi);
-  }
-
-  Future<void> _sendToLG() async {
-    final kml = '''<?xml version="1.0" encoding="UTF-8"?>
+  final String kml = '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document>
-    <LookAt>
-      <longitude>${widget.poi.lng ?? 0.6268}</longitude>
-      <latitude>${widget.poi.lat ?? 41.6147}</latitude>
-      <range>${widget.poi.range ?? 1000}</range>
-      <tilt>${widget.poi.tilt ?? 45}</tilt>
-      <heading>${widget.poi.heading ?? 0}</heading>
-      <altitudeMode>${widget.poi.altitudeMode ?? 'relativeToGround'}</altitudeMode>
-    </LookAt>
+    <Placemark>
+      <name>${poi.name}</name>
+      <description><![CDATA[
+        <html>
+        <body style="margin:0;padding:0;background:#1C1C1E;font-family:Georgia,serif;color:#F5F1E9;width:100%;height:100%;">
+          <div style="padding:28px 28px 24px 28px;">
+            <h2 style="font-size:24px;font-weight:400;margin:0 0 10px 0;color:#F5F1E9;line-height:1.3;">
+              ${poi.name}
+            </h2>
+            <div style="width:40px;height:2px;background:#C8A96E;margin-bottom:14px;"></div>
+            $epocaLine
+            $fechaLine
+            $descLine
+          </div>
+        </body>
+        </html>
+      ]]></description>
+      <Point>
+        <coordinates>${poi.lng ?? 0.6268},${poi.lat ?? 41.6147},0</coordinates>
+      </Point>
+    </Placemark>
   </Document>
 </kml>''';
-    await _lgService.sendKML(kml);
-  }
 
-  void _toggleOrbit() {
-    setState(() => _isOrbiting = !_isOrbiting);
-    if (_isOrbiting) {
-      _lgService.startOrbitPOI(widget.poi);
-    } else {
-      _lgService.stopOrbit();
-    }
-  }
+  await _conn.execute(
+      "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$kml\nKMLEOF");
+}
 
+<<<<<<< HEAD
   @override
   void dispose() {
     _lgService.stopOrbit();
@@ -271,3 +270,12 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
     );
   }
 }
+=======
+Future<void> clearBalloon() async {
+  final int slaveNo = _conn.screens == 5 ? 4 : 2;
+  const String blank = '''<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document></Document></kml>''';
+  await _conn.execute(
+      "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$blank\nKMLEOF");
+}
+>>>>>>> parent of fdca477 (17/06/2026)
