@@ -9,14 +9,12 @@ class AppTopBar extends StatefulWidget {
   final bool onDarkBackground;
   final bool wifiOnly;
   final String? currentTitle;
-  final String? menuKey;
 
   const AppTopBar({
     super.key,
     this.onDarkBackground = false,
     this.wifiOnly = false,
     this.currentTitle,
-    this.menuKey,
   });
 
   @override
@@ -57,7 +55,7 @@ class _AppTopBarState extends State<AppTopBar> {
           GestureDetector(
             onTap: () => MenuFlotante.mostrar(
               context,
-              menuKey: widget.menuKey,
+              currentTitle: widget.currentTitle,
             ),
             child: const Icon(Icons.menu, color: Colors.white, size: 32),
           ),
@@ -70,10 +68,8 @@ class _AppTopBarState extends State<AppTopBar> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
-          onTap: () => MenuFlotante.mostrar(
-            context,
-            menuKey: widget.menuKey,
-          ),
+          onTap: () =>
+              MenuFlotante.mostrar(context, currentTitle: widget.currentTitle),
           child: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(

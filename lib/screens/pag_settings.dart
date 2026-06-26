@@ -35,7 +35,7 @@ class _PagSettingsState extends State<PagSettings> {
                     horizontal: 16,
                     vertical: 12,
                   ),
-                  child: AppTopBar(menuKey: 'settings'),
+                  child: AppTopBar(currentTitle: T.s('settings')),
                 ),
 
                 // ── BACK + TITLE ──

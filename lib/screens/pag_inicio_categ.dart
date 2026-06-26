@@ -25,7 +25,7 @@ class PagCategorias extends StatelessWidget {
                     horizontal: 18,
                     vertical: 22,
                   ),
-                  child: AppTopBar(menuKey: 'home'),
+                  child: AppTopBar(currentTitle: T.s('home')),
                 ),
 
                 // ── LOGO NUEVO  ──
