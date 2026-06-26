@@ -141,11 +141,88 @@ fi
     }
   }
 
+<<<<<<< HEAD
   /// Muestra el globo de información en la pantalla derecha en el idioma actual
   Future<void> sendBalloon(POI poi) async {
     final int slaveNo = _conn.screens == 5 ? 4 : 2;
     final String lang = languageNotifier.value;
     final String desc = poi.getDescription(lang);
+=======
+  Future<void> setRefresh() async {
+    final password = _conn.password;
+    final sudo = _conn.sudoPassword;
+    final host = _conn.ip;
+    final screens = _conn.screens;
+    final user = _conn.username;
+
+    if (password == null || host.isEmpty) return;
+    try {
+      List<Future> ops = [];
+      for (var i = 1; i <= screens; i++) {
+        final paths = [
+          '/home/$user/earth/kml/myplaces.kml',
+          '/home/$user/earth/kml/slave/myplaces.kml',
+          '/home/$user/.googleearth/instance-1/myplaces.kml',
+        ];
+
+        final String effectiveHost = (i == 1) ? 'localhost' : host;
+        final globalUrl = 'http://$effectiveHost:81/kmls.txt';
+        final slaveUrl = 'http://$effectiveHost:81/kml/slave_$i.kml';
+
+        for (var path in paths) {
+          String script = """
+            if [ -f $path ]; then
+              sed -i '/kmls.txt/d' $path
+              sed -i '/slave_.*.kml/d' $path
+              sed -i '/<\\/Document>/i <NetworkLink><name>global_$i</name><Link><href>$globalUrl</href><refreshMode>onInterval</refreshMode><refreshInterval>2</refreshInterval></Link></NetworkLink>' $path
+              sed -i '/<\\/Document>/i <NetworkLink><name>slave_$i</name><Link><href>$slaveUrl</href><refreshMode>onInterval</refreshMode><refreshInterval>2</refreshInterval></Link></NetworkLink>' $path
+            fi
+          """;
+
+          String execCmd = "echo '$sudo' | sudo -S bash -c \"$script\"";
+          if (i == 1) {
+            ops.add(_conn.execute(execCmd));
+          } else {
+            ops.add(_conn.execute(
+                'sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@lg$i "$execCmd"'));
+          }
+        }
+      }
+      await Future.wait(ops);
+      debugPrint('LGService: Refresco configurado e inyectado correctamente.');
+    } catch (e) {
+      debugPrint('LGService: Error crítico en setRefresh: $e');
+    }
+  }
+
+  Future<void> resetRefresh() async {
+    final password = _conn.password;
+    final sudo = _conn.sudoPassword;
+    final user = _conn.username;
+    final screens = _conn.screens;
+    if (password == null) return;
+
+    try {
+      for (var i = 1; i <= screens; i++) {
+        String path = i == 1
+            ? '~/earth/kml/myplaces.kml'
+            : '~/earth/kml/slave/myplaces.kml';
+        final cmd =
+            "echo '$sudo' | sudo -S sed -i '/kmls.txt/d; /slave_.*.kml/d' $path";
+        if (i == 1) {
+          await _conn.execute(cmd);
+        } else {
+          await _conn.execute(
+              'sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@lg$i "$cmd"');
+        }
+      }
+    } catch (e) {
+      debugPrint('LGService: Error al resetear refresco: $e');
+    }
+  }
+  Future<void> sendBalloon(POI poi, String description) async {
+    final int slaveNo = _conn.screens == 5 ? 4 : 2;
+>>>>>>> parent of fdca477 (17/06/2026)
 
     final String kml = '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
@@ -154,6 +231,7 @@ fi
       <name>${poi.name}</name>
       <description><![CDATA[
         <html>
+<<<<<<< HEAD
         <body style="margin:0;padding:0;background:#1C1C1E;font-family:Georgia,serif;color:#F5F1E9;width:100%;height:100%;">
           <div style="padding:28px 28px 24px 28px;">
             <h2 style="font-size:24px;font-weight:400;margin:0 0 10px 0;color:#F5F1E9;line-height:1.3;">
@@ -161,6 +239,20 @@ fi
             </h2>
             <div style="width:40px;height:2px;background:#C8A96E;margin-bottom:14px;"></div>
             <p style="font-size:14px;line-height:1.75;color:#E0D8CC;margin:0;">$desc</p>
+=======
+        <body style="margin:0;padding:0;background:#1C1C1E;font-family:Georgia,serif;color:#F5F1E9;">
+          <div style="padding:24px;">
+            <h2 style="font-size:22px;font-weight:400;margin:0 0 8px 0;color:#F5F1E9;">
+              ${poi.name}
+            </h2>
+            <div style="width:40px;height:2px;background:#C8A96E;margin-bottom:16px;"></div>
+            <p style="font-size:13px;color:#C8A96E;margin:0 0 16px 0;">
+              ${poi.location}
+            </p>
+            <p style="font-size:14px;line-height:1.7;color:#E0D8CC;margin:0;">
+              $description
+            </p>
+>>>>>>> parent of fdca477 (17/06/2026)
           </div>
         </body>
         </html>
@@ -172,7 +264,12 @@ fi
   </Document>
 </kml>''';
 
+<<<<<<< HEAD
     await _conn.execute("cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$kml\nKMLEOF");
+=======
+    await _conn.execute(
+        "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$kml\nKMLEOF");
+>>>>>>> parent of fdca477 (17/06/2026)
   }
 
   Future<void> clearBalloon() async {

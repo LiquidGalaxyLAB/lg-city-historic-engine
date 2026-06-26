@@ -30,6 +30,7 @@ class POI {
     this.fechaInici,
     this.fechaFi,
   });
+<<<<<<< HEAD
 
   String getDescription(String langCode) {
     if (descriptions != null && descriptions!.containsKey(langCode)) {
@@ -37,4 +38,6 @@ class POI {
     }
     return description ?? '';
   }
+=======
+>>>>>>> parent of fdca477 (17/06/2026)
 }

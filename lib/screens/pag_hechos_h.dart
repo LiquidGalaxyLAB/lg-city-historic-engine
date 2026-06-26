@@ -23,6 +23,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         name: 'Revolta d\'Indíbil i Mandoni',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Revolta d\'Indíbil i Mandoni.jpg',
+<<<<<<< HEAD
         lat: 41.6147, lng: 0.6268, range: 1500, tilt: 45,
         descriptions: {
           'es': 'Indíbil y Mandoni, líderes íberos, se rebelaron contra Roma al comprender que Escipión no traería la independencia. En el 205 a.C. formaron una coalición para expulsar a los invasores.',
@@ -30,11 +31,16 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
           'ca': 'Indíbil i Mandoni, líders ibers, es van rebel·lar contra Roma en comprendre que Escipió no portaria la independència. L\'any 205 aC, van formar una coalició per expulsar els invasors.',
           'tr': 'İber liderleri Indibilis ve Mandonius Roma\'ya isyan ettiler. MÖ 205\'te işgalcileri kovmak için bir koalisyon kurdular.'
         },
+=======
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
+        description: item.description,
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
       POI(
         name: 'Batalla de Ilerda 49 aC',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Batalla de Ilerda 49 aC.png',
+<<<<<<< HEAD
         lat: 41.6147, lng: 0.6268, range: 2000, tilt: 30,
         descriptions: {
           'es': 'Julio César derrotó a los generales de Pompeyo en los alrededores de Lérida durante la Segunda Guerra Civil romana.',
@@ -42,11 +48,16 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
           'ca': 'Juli Cèsar va derrotar els generals de Pompeu als voltants de Lleida durant la Segona Guerra Civil romana.',
           'tr': 'Julius Caesar, Roma İç Savaşı sırasında Ilerda çevresinde Pompey\'in generallerini yendi.'
         },
+=======
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
+        description: item.description,
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
     ],
     'Edad Media Temprana': [
       POI(
         name: 'Invasió musulmana',
+<<<<<<< HEAD
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Invasio musulmana.jpg',
         lat: 41.6180, lng: 0.6258, range: 1000,
@@ -56,11 +67,18 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
           'ca': 'Ocupació de la ciutat per tropes àrabs i berbers entre 716 i 719. Es va transformar en una fortalesa estratègica anomenada Lārida.',
           'tr': 'Şehrin 716-719 yılları arasında Arap ve Berberi birlikleri tarafından işgali. Lārida adlı stratejik bir kale haline geldi.'
         },
+=======
+        location: '41.6180° N, 0.6258° E',
+        image: 'assets/images_historical_events/invasio_musulmana.jpg',
+        lat: 41.6180451, lng: 0.6258326, range: 361.12, heading: 12.41, tilt: 0.0,
+        description: item.description,
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
       POI(
         name: 'Setge de lleida (800)',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Setge de lleida (800).png',
+<<<<<<< HEAD
         lat: 41.6147, lng: 0.6268, range: 1500,
         descriptions: {
           'es': 'Las tropas carolingias de Luis el Piadoso sitiaron Lérida para expandir la Marca Hispánica.',
@@ -68,10 +86,22 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
           'ca': 'Les tropes carolíngies de Lluís el Pietós van assetjar Lleida amb l\'objectiu d\'expandir la Marca Hispànica.',
           'tr': 'Dindar Louis\'in Karolenj birlikleri, İspanyol Sınırı\'nı genişletmek için Ilerda\'yı kuşattı.'
         },
+=======
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
+        description: item.description,
+      ),
+      POI(
+        name: 'Setge de Lleida (884)',
+        location: '41.6191° N, 0.6232° E',
+        image: 'assets/images_historical_events/Setge de lleida (884).png',
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
+        description: item.description,
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
     ],
     'Reconquista': [
       POI(
+<<<<<<< HEAD
         name: 'Reonquista Cristiana 1149',
         location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Reonquista Cristiana1149.jpg',
@@ -82,6 +112,96 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
           'ca': 'Ramon Berenguer IV i Ermengol VI van conquerir la ciutat el 24 d\'octubre de 1149.',
           'tr': 'Ramon Berenguer IV ve Ermengol VI, 24 Ekim 1149\'da şehri fethetti.'
         },
+=======
+        name: 'Reconquesta Cristiana 1149',
+        location: '41.6090° N, 0.6103° E',
+        image: 'assets/images_historical_events/reconquista_cristiana_1149.jpg',
+        lat: 41.6089691, lng: 0.6103237, range: 1159.27, heading: -53.72, tilt: 56.84,
+        description: item.description,
+      ),
+      POI(
+        name: 'Unió del regne de Aragó i comtat de Barcelona',
+        location: '41.6168° N, 0.6255° E',
+        image: 'assets/images_historical_events/Unio del regne de Arago i comtat de barcelona.jpg',
+        lat: 41.6167910, lng: 0.6254991, range: 1480.59, heading: -25.26, tilt: 65.45,
+        description: item.description,
+      ),
+    ],
+    'Edad Media / Baja Edad Media': [
+      POI(
+        name: 'Jura de fidelitat a Jaume I',
+        location: '41.6180° N, 0.6258° E',
+        image: 'assets/images_historical_events/jura_fidelitat_jaume1.jpg',
+        lat: 41.6180451, lng: 0.6258326, range: 361.12, heading: 12.41, tilt: 0.0,
+        description: item.description,
+      ),
+      POI(
+        name: 'Primera universitat del regne d\'Aragó',
+        location: '41.6147° N, 0.6199° E',
+        image: 'assets/images_historical_events/Primera universitat del regne d\'arago.jpg',
+        lat: 41.6146803, lng: 0.6198760, range: 270.14, heading: -70.55, tilt: 47.35,
+        description: item.description,
+      ),
+      POI(
+        name: 'Setge de Lleida (1413)',
+        location: '41.6191° N, 0.6232° E',
+        image: 'assets/images_historical_events/Setge de lleida (1413).jpg',
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
+        description: item.description,
+      ),
+    ],
+    'Edad Moderna': [
+      POI(
+        name: 'La batalla de Lleida (1642)',
+        location: '41.6100° N, 0.6367° E',
+        image: 'assets/images_historical_events/La batalla de Lleida (1642).jpg',
+        lat: 41.6100091, lng: 0.6367412, range: 2017.02, heading: -53.71, tilt: 56.85,
+        description: item.description,
+      ),
+      POI(
+        name: 'Setge de Lleida (1644)',
+        location: '41.6149° N, 0.6204° E',
+        image: 'assets/images_historical_events/Setge de lleida (1644).png',
+        lat: 41.6149206, lng: 0.6204228, range: 1229.41, heading: -52.03, tilt: 60.58,
+        description: item.description,
+      ),
+      POI(
+        name: 'Setge de Lleida (1646)',
+        location: '41.6191° N, 0.6232° E',
+        image: 'assets/images_historical_events/Setge de lleida (1646).jpg',
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
+        description: item.description,
+      ),
+      POI(
+        name: 'Setge de Lleida (1647)',
+        location: '41.6191° N, 0.6232° E',
+        image: 'assets/images_historical_events/Setge de lleida (1647).png',
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
+        description: item.description,
+      ),
+      POI(
+        name: 'Setge de Lleida (1707)',
+        location: '41.6191° N, 0.6232° E',
+        image: 'assets/images_historical_events/Setge de lleida (1707)png.png',
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
+        description: item.description,
+      ),
+    ],
+    'Edad Contemporánea': [
+      POI(
+        name: 'Setge de Lleida (1810)',
+        location: '41.6191° N, 0.6232° E',
+        image: 'assets/images_historical_events/Setge de lleida (1810).png',
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
+        description: item.description,
+      ),
+      POI(
+        name: 'Batalla de Lleida (1938)',
+        location: '41.6191° N, 0.6232° E',
+        image: 'assets/images_historical_events/Batalla de Lleida (1938).jpeg',
+        lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
+        description: item.description,
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
     ],
   };
@@ -204,12 +324,45 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
               const SizedBox(height: 45),
               Expanded(
                 child: pois.isEmpty
+<<<<<<< HEAD
                     ? Center(child: Text(T.s('no_results_found')))
                     : ListView.builder(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         physics: const BouncingScrollPhysics(),
                         itemCount: pois.length,
                         itemBuilder: (context, index) => _cardPunto(pois[index]),
+=======
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.search_off_rounded,
+                              size: 80,
+                              color: Colors.grey[300],
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              T.s('no_results_found'),
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 0,
+                        ),
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: pois.length,
+                        itemBuilder: (context, index) =>
+                            _cardPunto(pois[index]),
+>>>>>>> parent of fdca477 (17/06/2026)
                       ),
               ),
             ],
@@ -247,6 +400,69 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
     );
   }
 
+<<<<<<< HEAD
+=======
+  Widget _buildCategoryDropdown() {
+    return PopupMenuButton<String>(
+      onSelected: (String value) {
+        setState(() {
+          _selectedCategory = value;
+        });
+      },
+      offset: const Offset(0, 60),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 12,
+      itemBuilder: (context) {
+        List<String> categories = ['All', ..._data.keys];
+        return categories
+            .map(
+              (cat) => PopupMenuItem<String>(
+                value: cat,
+                child: Text(
+                  cat == 'All' ? T.s('show_all') : cat,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: _selectedCategory == cat
+                        ? FontWeight.w800
+                        : FontWeight.w500,
+                    color: const Color(0xFF1C1C1E),
+                  ),
+                ),
+              ),
+            )
+            .toList();
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF2F2F7),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              T.s('categories'),
+              style: const TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: 13,
+                color: Color(0xFF1C1C1E),
+                letterSpacing: 0.5,
+              ),
+            ),
+            const SizedBox(width: 4),
+            const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: Color(0xFF1C1C1E),
+              size: 18,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+>>>>>>> parent of fdca477 (17/06/2026)
   Widget _cardPunto(POI poi) {
     return Container(
       margin: const EdgeInsets.only(bottom: 24),
