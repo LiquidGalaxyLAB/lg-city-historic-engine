@@ -299,7 +299,7 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
                         children: [
                           GestureDetector(
                             onTap: () => MenuFlotante.mostrar(context,
-                                currentTitle: T.s('poi')),
+                                menuKey: 'poi'),
                             child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
@@ -512,7 +512,7 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
               (cat) => PopupMenuItem<String>(
                 value: cat,
                 child: Text(
-                  cat == 'All' ? T.s('show_all') : cat,
+                  cat == 'All' ? T.s('show_all') : T.category(cat),
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: _selectedCategory == cat

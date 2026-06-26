@@ -8,7 +8,8 @@ class POI {
   final double? tilt;
   final double? heading;
   final String? altitudeMode;
-  final String? description;
+  final String? description; // Mantener por compatibilidad si es necesario
+  final Map<String, String>? descriptions; // Mapa de idiomas: {'en': '...', 'es': '...', ...}
   final String? epoca;
   final String? fechaInici;
   final String? fechaFi;
@@ -24,8 +25,16 @@ class POI {
     this.heading,
     this.altitudeMode,
     this.description,
+    this.descriptions,
     this.epoca,
     this.fechaInici,
     this.fechaFi,
   });
+
+  String getDescription(String langCode) {
+    if (descriptions != null && descriptions!.containsKey(langCode)) {
+      return descriptions![langCode]!;
+    }
+    return description ?? '';
+  }
 }
