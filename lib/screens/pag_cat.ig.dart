@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/app_top_bar.dart';
 import '../widgets/m_superior.dart';
 import '../main.dart';
-import '../models/poi_model.dart';
+import '../models/poi_model.dart'; // Usa el modelo global
 import 'pag_lanza_lg.dart';
 
 class PagCatedralesIglesias extends StatefulWidget {
