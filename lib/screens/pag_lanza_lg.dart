@@ -21,10 +21,11 @@ Future<void> sendBalloon(POI poi) async {
       ? '<p style="font-size:14px;line-height:1.75;color:#E0D8CC;margin:0;">${poi.description}</p>'
       : '';
 
+  
   final String kml = '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document>
-    <Placemark>
+    <Placemark>   
       <name>${poi.name}</name>
       <description><![CDATA[
         <html>
