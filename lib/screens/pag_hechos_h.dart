@@ -21,31 +21,72 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
     'Antigüedad': [
       POI(
         name: 'Revolta d\'Indíbil i Mandoni',
-        location: '41.6191° N, 0.6232° E',
+        location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Revolta d\'Indíbil i Mandoni.jpg',
+<<<<<<< HEAD
+        lat: 41.6147, lng: 0.6268, range: 1500, tilt: 45,
+        descriptions: {
+          'es': 'Indíbil y Mandoni, líderes íberos, se rebelaron contra Roma al comprender que Escipión no traería la independencia. En el 205 a.C. formaron una coalición para expulsar a los invasores.',
+          'en': 'Indibilis and Mandonius, Iberian leaders, rebelled against Rome. In 205 BC, they formed a coalition to expel the invaders.',
+          'ca': 'Indíbil i Mandoni, líders ibers, es van rebel·lar contra Roma en comprendre que Escipió no portaria la independència. L\'any 205 aC, van formar una coalició per expulsar els invasors.',
+          'tr': 'İber liderleri Indibilis ve Mandonius Roma\'ya isyan ettiler. MÖ 205\'te işgalcileri kovmak için bir koalisyon kurdular.'
+        },
+=======
         lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
         description: item.description,
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
       POI(
         name: 'Batalla de Ilerda 49 aC',
-        location: '41.6191° N, 0.6232° E',
+        location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Batalla de Ilerda 49 aC.png',
+<<<<<<< HEAD
+        lat: 41.6147, lng: 0.6268, range: 2000, tilt: 30,
+        descriptions: {
+          'es': 'Julio César derrotó a los generales de Pompeyo en los alrededores de Lérida durante la Segunda Guerra Civil romana.',
+          'en': 'Julius Caesar defeated Pompey\'s generals around Ilerda during the Roman Civil War.',
+          'ca': 'Juli Cèsar va derrotar els generals de Pompeu als voltants de Lleida durant la Segona Guerra Civil romana.',
+          'tr': 'Julius Caesar, Roma İç Savaşı sırasında Ilerda çevresinde Pompey\'in generallerini yendi.'
+        },
+=======
         lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
         description: item.description,
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
     ],
     'Edad Media Temprana': [
       POI(
         name: 'Invasió musulmana',
+<<<<<<< HEAD
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Invasio musulmana.jpg',
+        lat: 41.6180, lng: 0.6258, range: 1000,
+        descriptions: {
+          'es': 'Ocupación de la ciudad por tropas árabes y bereberes entre 716 y 719. Se convirtió en una fortaleza estratégica llamada Lārida.',
+          'en': 'Occupation of the city by Arab and Berber troops between 716 and 719. It became a strategic fortress called Lārida.',
+          'ca': 'Ocupació de la ciutat per tropes àrabs i berbers entre 716 i 719. Es va transformar en una fortalesa estratègica anomenada Lārida.',
+          'tr': 'Şehrin 716-719 yılları arasında Arap ve Berberi birlikleri tarafından işgali. Lārida adlı stratejik bir kale haline geldi.'
+        },
+=======
         location: '41.6180° N, 0.6258° E',
         image: 'assets/images_historical_events/invasio_musulmana.jpg',
         lat: 41.6180451, lng: 0.6258326, range: 361.12, heading: 12.41, tilt: 0.0,
         description: item.description,
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
       POI(
-        name: 'Setge de Lleida (800)',
-        location: '41.6191° N, 0.6232° E',
+        name: 'Setge de lleida (800)',
+        location: '41.6147° N, 0.6268° E',
         image: 'assets/images_historical_events/Setge de lleida (800).png',
+<<<<<<< HEAD
+        lat: 41.6147, lng: 0.6268, range: 1500,
+        descriptions: {
+          'es': 'Las tropas carolingias de Luis el Piadoso sitiaron Lérida para expandir la Marca Hispánica.',
+          'en': 'Carolingian troops of Louis the Pious besieged Ilerda to expand the Spanish March.',
+          'ca': 'Les tropes carolíngies de Lluís el Pietós van assetjar Lleida amb l\'objectiu d\'expandir la Marca Hispànica.',
+          'tr': 'Dindar Louis\'in Karolenj birlikleri, İspanyol Sınırı\'nı genişletmek için Ilerda\'yı kuşattı.'
+        },
+=======
         lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
         description: item.description,
       ),
@@ -55,10 +96,23 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         image: 'assets/images_historical_events/Setge de lleida (884).png',
         lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
         description: item.description,
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
     ],
-    'Reconquista / Alta Edad Media': [
+    'Reconquista': [
       POI(
+<<<<<<< HEAD
+        name: 'Reonquista Cristiana 1149',
+        location: '41.6147° N, 0.6268° E',
+        image: 'assets/images_historical_events/Reonquista Cristiana1149.jpg',
+        lat: 41.6176, lng: 0.6267, range: 800,
+        descriptions: {
+          'es': 'Ramón Berenguer IV y Ermengol VI conquistaron la ciudad el 24 de octubre de 1149.',
+          'en': 'Ramon Berenguer IV and Ermengol VI conquered the city on October 24, 1149.',
+          'ca': 'Ramon Berenguer IV i Ermengol VI van conquerir la ciutat el 24 d\'octubre de 1149.',
+          'tr': 'Ramon Berenguer IV ve Ermengol VI, 24 Ekim 1149\'da şehri fethetti.'
+        },
+=======
         name: 'Reconquesta Cristiana 1149',
         location: '41.6090° N, 0.6103° E',
         image: 'assets/images_historical_events/reconquista_cristiana_1149.jpg',
@@ -147,6 +201,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         image: 'assets/images_historical_events/Batalla de Lleida (1938).jpeg',
         lat: 41.6191230, lng: 0.6232056, range: 1480.59, heading: -25.26, tilt: 65.45,
         description: item.description,
+>>>>>>> parent of fdca477 (17/06/2026)
       ),
     ],
   };
@@ -203,42 +258,28 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                   ),
                   SafeArea(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: () => MenuFlotante.mostrar(
-                              context,
-                              currentTitle: T.s('events'),
-                            ),
+                            onTap: () => MenuFlotante.mostrar(context),
                             child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 color: Colors.white.withOpacity(0.15),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(
-                                Icons.menu,
-                                color: Colors.white,
-                                size: 26,
-                              ),
+                              child: const Icon(Icons.menu, color: Colors.white, size: 26),
                             ),
                           ),
-                          const AppTopBar(
-                            onDarkBackground: true,
-                            wifiOnly: true,
-                          ),
+                          const AppTopBar(onDarkBackground: true, wifiOnly: true),
                         ],
                       ),
                     ),
                   ),
                   Positioned(
-                    left: 16,
-                    top: 90,
+                    left: 16, top: 90,
                     child: GestureDetector(
                       onTap: () => Navigator.pop(context),
                       child: Container(
@@ -247,37 +288,27 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                           color: Colors.black.withOpacity(0.15),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          Icons.arrow_back_ios_new,
-                          color: Colors.white,
-                          size: 22,
-                        ),
+                        child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
                       ),
                     ),
                   ),
                   Positioned(
-                    left: 20,
-                    bottom: 70,
+                    left: 20, bottom: 70,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           T.s('events').toUpperCase(),
                           style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.5,
-                            fontFamily: 'serif',
+                            color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900,
+                            letterSpacing: 1.5, fontFamily: 'serif',
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           T.s('events_subtitle'),
                           style: const TextStyle(
-                            color: Colors.white70,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w300,
+                            color: Colors.white70, fontSize: 15, fontWeight: FontWeight.w300,
                             letterSpacing: 0.5,
                           ),
                         ),
@@ -285,43 +316,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                     ),
                   ),
                   Positioned(
-                    left: 20,
-                    bottom: 35,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.18),
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: Colors.white24),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.history_edu_outlined,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '${pois.length} ${T.s('events_available')}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: -28,
-                    left: 16,
-                    right: 16,
+                    bottom: -28, left: 16, right: 16,
                     child: _buildFilterBar(),
                   ),
                 ],
@@ -329,6 +324,14 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
               const SizedBox(height: 45),
               Expanded(
                 child: pois.isEmpty
+<<<<<<< HEAD
+                    ? Center(child: Text(T.s('no_results_found')))
+                    : ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: pois.length,
+                        itemBuilder: (context, index) => _cardPunto(pois[index]),
+=======
                     ? Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -359,6 +362,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                         itemCount: pois.length,
                         itemBuilder: (context, index) =>
                             _cardPunto(pois[index]),
+>>>>>>> parent of fdca477 (17/06/2026)
                       ),
               ),
             ],
@@ -374,13 +378,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 20)],
       ),
       child: Row(
         children: [
@@ -390,48 +388,20 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
           Expanded(
             child: TextField(
               controller: _searchController,
-              onChanged: (value) {
-                setState(() {
-                  _searchQuery = value;
-                });
-              },
+              onChanged: (value) => setState(() => _searchQuery = value),
               decoration: InputDecoration(
                 hintText: T.s('search_events'),
-                hintStyle: const TextStyle(
-                  color: Color(0xFF8E8E93),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: -0.2,
-                ),
                 border: InputBorder.none,
-                isDense: true,
-                contentPadding: EdgeInsets.zero,
               ),
-              style: const TextStyle(fontSize: 16, color: Color(0xFF1C1C1E)),
             ),
           ),
-          if (_searchQuery.isNotEmpty)
-            GestureDetector(
-              onTap: () {
-                _searchController.clear();
-                setState(() {
-                  _searchQuery = '';
-                });
-              },
-              child: const Icon(
-                Icons.close_rounded,
-                color: Color(0xFF8E8E93),
-                size: 20,
-              ),
-            ),
-          const SizedBox(width: 10),
-          _buildCategoryDropdown(),
-          const SizedBox(width: 8),
         ],
       ),
     );
   }
 
+<<<<<<< HEAD
+=======
   Widget _buildCategoryDropdown() {
     return PopupMenuButton<String>(
       onSelected: (String value) {
@@ -492,42 +462,20 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
     );
   }
 
+>>>>>>> parent of fdca477 (17/06/2026)
   Widget _cardPunto(POI poi) {
     return Container(
       margin: const EdgeInsets.only(bottom: 24),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 16)],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            child: Image.asset(
-              poi.image,
-              height: 180,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  height: 180,
-                  color: Colors.grey[300],
-                  child: const Icon(
-                    Icons.image_not_supported,
-                    size: 50,
-                    color: Colors.grey,
-                  ),
-                );
-              },
-            ),
+            child: Image.asset(poi.image, height: 180, width: double.infinity, fit: BoxFit.cover),
           ),
           Padding(
             padding: const EdgeInsets.all(20),
@@ -535,40 +483,22 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(
-                    poi.name,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      fontFamily: 'serif',
-                      color: Color(0xFF1C1C1E),
-                    ),
-                  ),
+                  child: Text(poi.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
                 GestureDetector(
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => PagLanzaLG(poi: poi),
-                    ),
+                    MaterialPageRoute(builder: (_) => PagLanzaLG(poi: poi)),
                   ),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     decoration: BoxDecoration(
                       color: const Color(0xFFF2F2F7),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
                       T.s('send_lg'),
-                      style: const TextStyle(
-                        color: Color(0xFF6B5B45),
-                        fontWeight: FontWeight.w900,
-                        fontSize: 13,
-                        letterSpacing: 0.6,
-                      ),
+                      style: const TextStyle(color: Color(0xFF6B5B45), fontWeight: FontWeight.w900),
                     ),
                   ),
                 ),
