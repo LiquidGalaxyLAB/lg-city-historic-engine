@@ -27,10 +27,13 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         lng: 0.6267,
         range: 1000,
 <<<<<<< HEAD
+<<<<<<< HEAD
         epoca: 'Edad Media',
         description: 'La catedral antigua de Lleida es el monumento más emblemático de la ciudad.',
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> parent of 8c98f4c (mal1)
         description:
             'La Seo Vieja de Lérida es el monumento más emblemático de la ciudad. Construida en estilo románico con bóvedas góticas, se alza en la colina de la seo Vieja, que domina Lérida y el Segriá. El claustro, con vistas a la ciudad, se construyó entre los siglos XIII y XIV. En el XV se añadieron el campanario y la puerta de los Apóstoles. En 1707, por su posición estratégica, el edificio pasó a ser cuartel militar.',
         epoca: 'Edad Media',
@@ -38,6 +41,9 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         fechaFi: '1431',
 =======
 >>>>>>> parent of fdca477 (17/06/2026)
+<<<<<<< HEAD
+>>>>>>> parent of 8c98f4c (mal1)
+=======
 >>>>>>> parent of 8c98f4c (mal1)
       ),
       POI(
@@ -64,6 +70,9 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         fechaFi: '1781',
 =======
 >>>>>>> parent of fdca477 (17/06/2026)
+<<<<<<< HEAD
+>>>>>>> parent of 8c98f4c (mal1)
+=======
 >>>>>>> parent of 8c98f4c (mal1)
       ),
     ],
@@ -235,6 +244,9 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         fechaFi: '1200',
 =======
 >>>>>>> parent of fdca477 (17/06/2026)
+<<<<<<< HEAD
+>>>>>>> parent of 8c98f4c (mal1)
+=======
 >>>>>>> parent of 8c98f4c (mal1)
       ),
     ],
@@ -302,6 +314,9 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
 =======
                             onTap: () => MenuFlotante.mostrar(context,
                                 menuKey: 'cathedrals'),
+<<<<<<< HEAD
+>>>>>>> parent of 8c98f4c (mal1)
+=======
 >>>>>>> parent of 8c98f4c (mal1)
                             child: Container(
                               padding: const EdgeInsets.all(8),

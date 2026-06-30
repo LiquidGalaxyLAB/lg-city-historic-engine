@@ -9,7 +9,12 @@ class POI {
   final double? heading;
   final String? altitudeMode;
 <<<<<<< HEAD
+<<<<<<< HEAD
   final String? description;
+=======
+  final String? description; // Mantener por compatibilidad si es necesario
+  final Map<String, String>? descriptions; // Mapa de idiomas: {'en': '...', 'es': '...', ...}
+>>>>>>> parent of 8c98f4c (mal1)
 =======
   final String? description; // Mantener por compatibilidad si es necesario
   final Map<String, String>? descriptions; // Mapa de idiomas: {'en': '...', 'es': '...', ...}
@@ -30,6 +35,10 @@ class POI {
     this.altitudeMode,
     this.description,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    this.descriptions,
+>>>>>>> parent of 8c98f4c (mal1)
 =======
     this.descriptions,
 >>>>>>> parent of 8c98f4c (mal1)
