@@ -28,10 +28,13 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         range: 1000,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         epoca: 'Edad Media',
         description: 'La catedral antigua de Lleida es el monumento más emblemático de la ciudad.',
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> parent of 8c98f4c (mal1)
 =======
 >>>>>>> parent of 8c98f4c (mal1)
         description:
@@ -42,6 +45,9 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
 =======
 >>>>>>> parent of fdca477 (17/06/2026)
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 8c98f4c (mal1)
+=======
 >>>>>>> parent of 8c98f4c (mal1)
 =======
 >>>>>>> parent of 8c98f4c (mal1)
@@ -71,6 +77,9 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
 =======
 >>>>>>> parent of fdca477 (17/06/2026)
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 8c98f4c (mal1)
+=======
 >>>>>>> parent of 8c98f4c (mal1)
 =======
 >>>>>>> parent of 8c98f4c (mal1)
@@ -245,6 +254,9 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
 =======
 >>>>>>> parent of fdca477 (17/06/2026)
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 8c98f4c (mal1)
+=======
 >>>>>>> parent of 8c98f4c (mal1)
 =======
 >>>>>>> parent of 8c98f4c (mal1)
@@ -315,6 +327,9 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                             onTap: () => MenuFlotante.mostrar(context,
                                 menuKey: 'cathedrals'),
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 8c98f4c (mal1)
+=======
 >>>>>>> parent of 8c98f4c (mal1)
 =======
 >>>>>>> parent of 8c98f4c (mal1)

@@ -15,6 +15,10 @@ class LGService {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  /// Mueve la cámara al punto de interés
+>>>>>>> parent of 8c98f4c (mal1)
 =======
   /// Mueve la cámara al punto de interés
 >>>>>>> parent of 8c98f4c (mal1)
@@ -35,6 +39,10 @@ class LGService {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  /// Inicia una órbita alrededor del punto
+>>>>>>> parent of 8c98f4c (mal1)
 =======
   /// Inicia una órbita alrededor del punto
 >>>>>>> parent of 8c98f4c (mal1)
@@ -64,6 +72,10 @@ class LGService {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  /// Limpia los KMLs principales
+>>>>>>> parent of 8c98f4c (mal1)
 =======
   /// Limpia los KMLs principales
 >>>>>>> parent of 8c98f4c (mal1)
@@ -81,6 +93,10 @@ class LGService {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  /// Limpia los logos en las pantallas esclavas
+>>>>>>> parent of 8c98f4c (mal1)
 =======
   /// Limpia los logos en las pantallas esclavas
 >>>>>>> parent of 8c98f4c (mal1)
@@ -146,6 +162,9 @@ fi
       }
       await _conn.execute(relaunchCommand);
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 8c98f4c (mal1)
+=======
 >>>>>>> parent of 8c98f4c (mal1)
 =======
 >>>>>>> parent of 8c98f4c (mal1)
@@ -170,9 +189,12 @@ fi
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   Future<void> sendBalloon(POI poi) async {
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> parent of 8c98f4c (mal1)
 =======
 >>>>>>> parent of 8c98f4c (mal1)
   /// Muestra el globo de información en la pantalla derecha en el idioma actual
@@ -258,6 +280,7 @@ fi
     final int slaveNo = _conn.screens == 5 ? 4 : 2;
 >>>>>>> parent of fdca477 (17/06/2026)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     // Construye las líneas opcionales de época y fechas
     final String epocaLine = (poi.epoca != null && poi.epoca!.isNotEmpty)
@@ -276,6 +299,8 @@ fi
         : '';
 =======
 >>>>>>> parent of 8c98f4c (mal1)
+=======
+>>>>>>> parent of 8c98f4c (mal1)
 
     final String kml = '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
@@ -292,6 +317,7 @@ fi
             </h2>
             <div style="width:40px;height:2px;background:#C8A96E;margin-bottom:14px;"></div>
 <<<<<<< HEAD
+<<<<<<< HEAD
             $epocaLine
             $fechaLine
             $descLine
@@ -303,6 +329,8 @@ fi
               ${poi.name}
             </h2>
             <div style="width:40px;height:2px;background:#C8A96E;margin-bottom:14px;"></div>
+=======
+>>>>>>> parent of 8c98f4c (mal1)
 =======
 >>>>>>> parent of 8c98f4c (mal1)
             <p style="font-size:14px;line-height:1.75;color:#E0D8CC;margin:0;">$desc</p>
@@ -321,6 +349,9 @@ fi
             </p>
 >>>>>>> parent of fdca477 (17/06/2026)
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 8c98f4c (mal1)
+=======
 >>>>>>> parent of 8c98f4c (mal1)
 =======
 >>>>>>> parent of 8c98f4c (mal1)
