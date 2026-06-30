@@ -129,7 +129,7 @@ class _PagMuseosState extends State<PagMuseos> {
                         children: [
                           GestureDetector(
                             onTap: () => MenuFlotante.mostrar(context,
-                                menuKey: 'museums'),
+                                currentTitle: T.s('museums')),
                             child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
@@ -342,7 +342,7 @@ class _PagMuseosState extends State<PagMuseos> {
               (cat) => PopupMenuItem<String>(
                 value: cat,
                 child: Text(
-                  cat == 'All' ? T.s('show_all') : T.category(cat),
+                  cat == 'All' ? T.s('show_all') : cat,
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: _selectedCategory == cat

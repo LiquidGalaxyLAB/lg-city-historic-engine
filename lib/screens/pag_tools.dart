@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/app_top_bar.dart';
 import '../services/lg_service.dart';
-import '../main.dart';
 
 class PagTools extends StatefulWidget {
   const PagTools({super.key});
@@ -18,168 +17,147 @@ class _PagToolsState extends State<PagTools> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return ValueListenableBuilder<String>(
-      valueListenable: languageNotifier,
-      builder: (context, _, __) {
-        return Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          body: SafeArea(
-            child: Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
-                  child: AppTopBar(menuKey: 'tools'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: Icon(
-                          Icons.arrow_back,
-                          size: 28,
-                          color: isDark ? Colors.white : Colors.black87,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  T.s('tools'),
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                    color: isDark ? Colors.white : Colors.black87,
-                  ),
-                ),
-                Text(
-                  T.s('tools_subtitle'),
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: isDark ? Colors.white70 : Colors.black54,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
-                    child: Column(
-                      children: [
-                        _ToolCard(
-                          title: T.s('relaunch_lg'),
-                          description: '',
-                          buttonLabel: T.s('execute_relaunch_lg'),
-                          backgroundColor: const Color(0xFFEEF3FA),
-                          buttonColor: const Color(0xFF1D61E7),
-                          isFullWidth: true,
-                          onConfirm: () => _ejecutar(
-                            context,
-                            T.s('relaunch_lg'),
-                            () => _lgService.relaunch(),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        _ToolCard(
-                          title: T.s('shutdown_lg'),
-                          description: '',
-                          buttonLabel: T.s('execute_shutdown_lg'),
-                          backgroundColor: const Color(0xFFFEEEEE),
-                          buttonColor: const Color(0xFFE21111),
-                          isFullWidth: true,
-                          onConfirm: () => _ejecutar(
-                            context,
-                            T.s('shutdown_lg'),
-                            () => _lgService.shutdown(),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        _ToolCard(
-                          title: T.s('reboot_lg'),
-                          description: '',
-                          buttonLabel: T.s('execute_reboot_lg'),
-                          backgroundColor: const Color(0xFFFEF7EE),
-                          buttonColor: const Color(0xFFD4730A),
-                          isFullWidth: true,
-                          onConfirm: () => _ejecutar(
-                            context,
-                            T.s('reboot_lg'),
-                            () => _lgService.reboot(),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        _ToolCard(
-                          title: T.s('clean_kmls'),
-                          description: '',
-                          buttonLabel: T.s('execute_clean_kmls'),
-                          backgroundColor: const Color(0xFFE5E5E5),
-                          buttonColor: const Color(0xFF454545),
-                          isFullWidth: true,
-                          onConfirm: () => _ejecutar(
-                            context,
-                            T.s('clean_kmls'),
-                            () => _lgService.clearKMLs(),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        _ToolCard(
-                          title: T.s('clean_logos'),
-                          description: '',
-                          buttonLabel: T.s('execute_clean_logos'),
-                          backgroundColor: const Color(0xFFE5E5E5),
-                          buttonColor: const Color(0xFF454545),
-                          isFullWidth: true,
-                          onConfirm: () => _ejecutar(
-                            context,
-                            T.s('clean_logos'),
-                            () => _lgService.clearLogos(),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        _ToolCard(
-                          title: T.s('show_hide_logos'),
-                          description: '',
-                          buttonLabel: T.s('execute_show_hide'),
-                          backgroundColor: const Color(0xFFFDE7FF),
-                          buttonColor: const Color(0xFFA50DBA),
-                          isFullWidth: true,
-                          onConfirm: () => _ejecutar(
-                            context,
-                            T.s('show_hide_logos'),
-                            () async {
-                              if (_isLogosVisible) {
-                                await _lgService.clearLogos();
-                              } else {
-                                await _lgService.showLogos();
-                              }
-                              setState(() {
-                                _isLogosVisible = !_isLogosVisible;
-                              });
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                      ],
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // ── TOP BAR ──
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: AppTopBar(currentTitle: 'Tools'),
+            ),
+
+            // ── BACK + TITLE ──
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Icon(
+                      Icons.arrow_back,
+                      size: 28,
+                      color: isDark ? Colors.white : Colors.black87,
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
+
+            const SizedBox(height: 5),
+
+            Text(
+              'Tools',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
+                color: isDark ? Colors.white : Colors.black87,
+              ),
+            ),
+
+            Text(
+              'Liquid Galaxy system management tools',
+              style: TextStyle(
+                fontSize: 16,
+                color: isDark ? Colors.white70 : Colors.black54,
+              ),
+            ),
+
+            const SizedBox(height: 5),
+
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Column(
+                  children: [
+                    _ToolCard(
+                      title: 'Relaunch LG',
+                      description: '',
+                      buttonLabel: 'Execute Relaunch LG',
+                      backgroundColor: const Color(0xFFEEF3FA),
+                      buttonColor: const Color(0xFF1D61E7),
+                      isFullWidth: true,
+                      onConfirm: () => _ejecutar(
+                          context, 'Relaunch LG', _lgService.relaunch),
+                    ),
+                    const SizedBox(height: 8),
+                    _ToolCard(
+                      title: 'Shutdown LG',
+                      description: '',
+                      buttonLabel: 'Execute Shutdown LG',
+                      backgroundColor: const Color(0xFFFEEEEE),
+                      buttonColor: const Color(0xFFE21111),
+                      isFullWidth: true,
+                      onConfirm: () => _ejecutar(
+                          context, 'Shutdown LG', _lgService.shutdown),
+                    ),
+                    const SizedBox(height: 8),
+                    _ToolCard(
+                      title: 'Reboot LG',
+                      description: '',
+                      buttonLabel: 'Execute Reboot LG',
+                      backgroundColor: const Color(0xFFFEF7EE),
+                      buttonColor: const Color(0xFFD4730A),
+                      isFullWidth: true,
+                      onConfirm: () =>
+                          _ejecutar(context, 'Reboot LG', _lgService.reboot),
+                    ),
+                    const SizedBox(height: 8),
+                    _ToolCard(
+                      title: 'Clean KMLs',
+                      description: '',
+                      buttonLabel: 'Execute Clean KMLs',
+                      backgroundColor: const Color(0xFFE5E5E5),
+                      buttonColor: const Color(0xFF454545),
+                      isFullWidth: true,
+                      onConfirm: () => _ejecutar(
+                          context, 'Clean KMLs', _lgService.clearKMLs),
+                    ),
+                    const SizedBox(height: 8),
+                    _ToolCard(
+                      title: 'Clean Logos',
+                      description: '',
+                      buttonLabel: 'Execute Clean Logos',
+                      backgroundColor: const Color(0xFFE5E5E5),
+                      buttonColor: const Color(0xFF454545),
+                      isFullWidth: true,
+                      onConfirm: () => _ejecutar(
+                          context, 'Clean Logos', _lgService.clearLogos),
+                    ),
+                    const SizedBox(height: 8),
+                    _ToolCard(
+                      title: 'Show/Hide Logos',
+                      description: '',
+                      buttonLabel: 'Execute Show/Hide',
+                      backgroundColor: const Color(0xFFFDE7FF),
+                      buttonColor: const Color(0xFFA50DBA),
+                      isFullWidth: true,
+                      onConfirm: () =>
+                          _ejecutar(context, 'Show/Hide Logos', () async {
+                        if (_isLogosVisible) {
+                          await _lgService.clearLogos();
+                        } else {
+                          await _lgService.showLogos();
+                        }
+                        setState(() {
+                          _isLogosVisible = !_isLogosVisible;
+                        });
+                      }),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   void _ejecutar(
-    BuildContext context,
-    String accion,
-    Future<void> Function() callback,
-  ) {
+      BuildContext context, String accion, Future<void> Function() callback) {
     showDialog(
       context: context,
       builder: (_) => _ConfirmDialog(
@@ -189,19 +167,13 @@ class _PagToolsState extends State<PagTools> {
             await callback();
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    '$accion ${T.s('executed_successfully')}',
-                  ),
-                ),
+                SnackBar(content: Text('$accion executed successfully')),
               );
             }
           } catch (e) {
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('${T.s('error_executing')} $accion: $e'),
-                ),
+                SnackBar(content: Text('Error executing $accion: $e')),
               );
             }
           }
@@ -245,9 +217,7 @@ class _ToolCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: isDark
             ? Border.all(
-                color: backgroundColor.withValues(alpha: 0.3),
-                width: 1,
-              )
+                color: backgroundColor.withValues(alpha: 0.3), width: 1)
             : null,
       ),
       child: Column(
@@ -338,9 +308,9 @@ class _ConfirmDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 14),
-            Text(
-              T.s('confirm_action'),
-              style: const TextStyle(
+            const Text(
+              'Confirm Action',
+              style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -348,7 +318,7 @@ class _ConfirmDialog extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              '${T.s('confirm_execute')}\n$accion?',
+              'Are you sure you want to execute\n$accion?',
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.white70,
@@ -368,10 +338,10 @@ class _ConfirmDialog extends StatelessWidget {
                         color: const Color(0xFF5A5A5A),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Text(
-                        T.s('cancel'),
+                      child: const Text(
+                        'Cancel',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
                         ),
@@ -392,10 +362,10 @@ class _ConfirmDialog extends StatelessWidget {
                         color: const Color(0xFF8B7355),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Text(
-                        T.s('confirm'),
+                      child: const Text(
+                        'Confirm',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
                         ),
