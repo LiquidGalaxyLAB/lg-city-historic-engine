@@ -54,10 +54,6 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         fechaInici: '49 aC',
         fechaFi: '49 aC',
         descriptions: {
-          'ca':
-              'La Batalla d\'Ilerda (49 aC) va ser un enfrontament magistral de la Segona Guerra Civil romana en què Juli Cèsar va derrotar els generals de Pompeu, Afrani i Petreu, als voltants de l\'actual Lleida. Malgrat quedar aïllat i sense subministraments per una gran crescuda del riu Segre, Cèsar va capgirar la situació amb una brillant maniobra d\'enginyeria. En lloc de buscar una massacre, Cèsar va optar per una estratègia de desgast que va envoltar les legions pompeianes.',
-          'es':
-              'La Batalla de Ilerda (49 a. C.) fue un enfrentamiento magistral de la Segunda Guerra Civil romana donde Julio César derrotó a los generales de Pompeyo, Afranio y Petreyo, en los alrededores de la actual Lleida. A pesar de quedar aislado y sin suministros por una gran crecida del río Segre, César dio la vuelta a la situación con una brillante maniobra de ingeniería. En lugar de buscar una masacre, César optó por una estrategia de desgaste.',
           'en':
               'The Battle of Ilerda (49 BC) was a masterful engagement of the Second Roman Civil War in which Julius Caesar defeated Pompey\'s generals Afranius and Petreius in the area surrounding present-day Lleida. Despite being isolated and cut off from supplies after a major flood of the Segre River, Caesar reversed the situation through a brilliant engineering maneuver. Instead of seeking a massacre, Caesar chose a strategy of attrition.',
         },

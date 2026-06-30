@@ -29,7 +29,10 @@ class _PagMuseosState extends State<PagMuseos> {
         range: 242,
         heading: 0.0,
         tilt: 43.0,
-      ),
+        epoca: 'Edad Contemporania',
+        fechaInici: '1914',
+        fechaFi: '1917',
+        description: 'The museum was founded in 1914 through the initiative of painter Jaume Morera and the City Council of Lleida. Its initial goal was to provide the city with a space dedicated to contemporary art of the time. Morera himself donated his personal collection, including works by masters such as Carlos de Haes. After decades of moving between temporary locations, the museum inaugurated its permanent location in 2024 in the former Courthouse on Rambla de Ferran.',      ),
     ],
     'Historia/Patrimonio': [
       POI(
@@ -41,7 +44,10 @@ class _PagMuseosState extends State<PagMuseos> {
         range: 205,
         heading: -5.0,
         tilt: 45.0,
-      ),
+        epoca: 'Edad Contemporania',
+        fechaInici: '1893',
+        fechaFi: '1893',
+        description: 'The Museum of Lleida, formerly known as the Diocesan and Regional Museum of Lleida, is a museum consortium created on August 1, 1997, made up of the Government of Catalonia, the Provincial Council and City Council of Lleida, the Segrià Regional Council, and the Bishopric of Lleida. The museum’s permanent headquarters was inaugurated in November 2007. In the autumn of 2020, the museum and its collection were declared of National Interest.',      ),
     ],
     'Ciencia/Tecnología': [
       POI(
@@ -53,7 +59,10 @@ class _PagMuseosState extends State<PagMuseos> {
         range: 218,
         heading: 40.0,
         tilt: 48.0,
-      ),
+        epoca: 'Edad Contemporania',
+        fechaInici: '2004',
+        fechaFi: '2004',
+        description: 'The Water Museum is made up of different spaces distributed throughout the city and the agricultural area of Lleida. Its central site is the “La Canadiense Camp,” followed by the Water Plan Reservoir, the Ice Wells, the Sant Anastasi Mill Mill, the monumental fountains, and the Piñana and Seròs canals. Lleida was founded on the banks of the Ebro River and has developed an extensive network of canals and irrigation channels.',      ),
     ],
     'Automoción': [
       POI(
@@ -65,7 +74,10 @@ class _PagMuseosState extends State<PagMuseos> {
         range: 270,
         heading: -179.0,
         tilt: 45.0,
-      ),
+        epoca: 'Edad Contemporania',
+        fechaInici: '2002',
+        fechaFi: '2002',
+        description: 'The Automotive Museum of Lleida is a municipal museum dedicated to the world of automotive engineering in general, with a specialization in vintage vehicles. Inaugurated in September 2002, the project is linked to the Foundation for Industrial Archaeological Heritage. The museum is structured into five main sections: automobiles, motorcycles, the workshop, engines, and miniatures.',      ),
     ],
   };
 

@@ -2,7 +2,6 @@ import 'dart:async';
 import '../models/connection_state.dart';
 import '../models/poi_model.dart';
 import '../kmls/logos_kml.dart';
-import '../main.dart'; // Para acceder a languageNotifier
 
 class LGService {
   final LGConnectionState _conn = LGConnectionState();
@@ -135,9 +134,8 @@ fi
   Future<void> sendBalloon(POI poi) async {
     const int slaveNo = 3;
 
-    // Obtener descripción localizada según el idioma de la app
-    final String currentLang = languageNotifier.value;
-    final String localizedDescription = poi.getDescription(currentLang);
+    // De momento mostramos siempre la descripción en español
+    final String localizedDescription = poi.getDescription('es');
 
     final String epocaLine = (poi.epoca != null && poi.epoca!.isNotEmpty)
         ? '<p style="font-size:18px;color:#C8A96E;margin:0 0 10px 0;text-transform:uppercase;font-weight:bold;">${poi.epoca}</p>'
@@ -151,7 +149,7 @@ fi
         : '';
 
     final String descLine = localizedDescription.isNotEmpty
-        ? '<p style="font-size:22px;line-height:1.6;color:#F5F1E9;margin:0;text-align:justify;">$localizedDescription</p>'
+        ? '<p style="font-size:24px;line-height:1.6;color:#F5F1E9;margin:0;text-align:justify;">$localizedDescription</p>'
         : '';
 
     final String kml = '''<?xml version="1.0" encoding="UTF-8"?>
@@ -160,11 +158,13 @@ fi
     <Placemark>
       <name>${poi.name}</name>
       <gx:balloonVisibility>1</gx:balloonVisibility>
-      <description><![CDATA[
+      <Style>
+        <BalloonStyle>
+          <text><![CDATA[
         <html>
-        <body style="margin:0;padding:0;background-color:#1C1C1E;font-family:Georgia,serif;color:#F5F1E9;width:100%;height:100%;overflow-y:auto;">
-          <div style="padding:40px;">
-            <h1 style="font-size:42px;font-weight:bold;margin:0 0 15px 0;color:#FFFFFF;border-bottom:2px solid #C8A96E;padding-bottom:10px;">
+        <body style="margin:0;padding:0;background-color:#1C1C1E;font-family:Georgia,serif;color:#F5F1E9;width:700px;min-height:500px;overflow-y:auto;">
+          <div style="padding:45px;">
+            <h1 style="font-size:40px;font-weight:bold;margin:0 0 18px 0;color:#FFFFFF;border-bottom:2px solid #C8A96E;padding-bottom:12px;">
               ${poi.name}
             </h1>
             $epocaLine
@@ -173,7 +173,9 @@ fi
           </div>
         </body>
         </html>
-      ]]></description>
+          ]]></text>
+        </BalloonStyle>
+      </Style>
       <Point>
         <coordinates>${poi.lng ?? 0.6268},${poi.lat ?? 41.6147},0</coordinates>
       </Point>

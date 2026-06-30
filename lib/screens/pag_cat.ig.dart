@@ -27,9 +27,9 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         lng: 0.6267,
         range: 1000,
         epoca: 'Edad Media',
-        description:
-            'La catedral antigua de Lleida es el monumento más emblemático de la ciudad.',
-      ),
+        fechaInici: '1203',
+        fechaFi: '1431',
+        description: 'La Seu Vella is the most iconic monument of Lleida. Built in the Romanesque style with Gothic vaults, it stands on the hill of the Old Cathedral, overlooking Lleida and the Segrià region. The cloister, with views over the city, was built between the 13th and 14th centuries. In the 15th century, the bell tower and the Apostles’ Gate were added. In 1707, due to its strategic position, the building was converted into a military barracks.',      ),
       POI(
         name: 'New Cathedral',
         location: '41.6130° N, 0.6232° E',
@@ -38,8 +38,9 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         lng: 0.6232,
         range: 400,
         epoca: 'Edad Moderna',
-        description: 'Construida en estilo barroco entre 1761 y 1781.',
-      ),
+        fechaInici: '1761',
+        fechaFi: '1781',
+        description: 'Between 1761 and 1781, the construction of the New Cathedral of Lleida took place thanks to contributions from the people of Lleida, King Charles III of Spain, and Bishop Joaquín Sánchez. Baroque in style, with a strong tendency toward French academic classicism, it is located in the heart of the commercial axis, opposite the former Hospital of Santa Maria. The temple houses the image of the Virgin of Montserrat (La Moreneta), patron saint of Catalonia.',      ),
     ],
     'Churches': [
       POI(
@@ -49,7 +50,9 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         lat: 41.6144,
         lng: 0.6219,
         epoca: 'Edad Media',
-      ),
+        fechaInici: '1150',
+        fechaFi: '1400',
+        description: 'What was twice the seat of a cathedral is a Romanesque-style construction with Gothic extensions and finishes. Considered the second most important church after the La Seu Vella, it has three naves of equal height and three apses. The building preserves four important Gothic altarpieces, the largest of which is dedicated to Saint Lawrence.',      ),
     ],
   };
 
