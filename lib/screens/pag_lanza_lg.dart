@@ -27,6 +27,8 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
     await _sendToLG();
     // Luego hacemos el Fly To para que la cámara se mueva al sitio
     await _lgService.flyToPOI(widget.poi);
+    // Finalmente enviamos el balloon con la descripción a la pantalla LG3
+    await _lgService.sendBalloon(widget.poi);
   }
 
   Future<void> _sendToLG() async {
@@ -60,8 +62,9 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
 
   @override
   void dispose() {
-    // Aseguramos que la órbita se detenga al salir de la pantalla
+    // Aseguramos que la órbita se detenga y el balloon se limpie al salir de la pantalla
     _lgService.stopOrbit();
+    _lgService.clearBalloon();
     super.dispose();
   }
 
@@ -118,6 +121,7 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
                       color: Color(0xFF6B5B45), size: 30),
                   onPressed: () {
                     _lgService.stopOrbit();
+                    _lgService.clearBalloon();
                     Navigator.pop(context);
                   },
                 ),

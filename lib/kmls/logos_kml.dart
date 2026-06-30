@@ -1,11 +1,11 @@
 class LogoOverlayManager {
   static String screenOverlayImage(
-    String imageUrl,
-    double top,
-    double left,
-    double width,
-    double height,
-  ) {
+      String imageUrl,
+      double top,
+      double left,
+      double width,
+      double height,
+      ) {
     final double y = 1.0 - top;
     return '''
     <ScreenOverlay>
@@ -22,7 +22,7 @@ class LogoOverlayManager {
     ''';
   }
 
-  static String generate() {
+  static String generate({bool wrapDocument = true}) {
     const String baseUrl = "http://lg1:81/logos";
     // Posición y tamaño ajustados: bajado un poco, desplazado a la derecha y más ancho.
     final String content = screenOverlayImage(
@@ -33,14 +33,21 @@ class LogoOverlayManager {
       0.33,
     );
 
+    final String folder = '''
+    <Folder>
+      <name>Images</name>
+      $content
+    </Folder>''';
+
+    if (!wrapDocument) {
+      return folder;
+    }
+
     return '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
   <Document>
     <name>Logos Panel</name>
-    <Folder>
-      <name>Images</name>
-      $content
-    </Folder>
+    $folder
   </Document>
 </kml>''';
   }
