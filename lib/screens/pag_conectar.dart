@@ -117,7 +117,8 @@ class _PagConectarState extends State<PagConectar> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: AppTopBar(currentTitle: T.s('connect')),
                 ),
                 Padding(
@@ -210,7 +211,8 @@ class _PagConectarState extends State<PagConectar> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _campo(T.s('user_lg'), _userController),
-                        _campo(T.s('password_lg'), _passController, obscure: true),
+                        _campo(T.s('password_lg'), _passController,
+                            obscure: true),
                         _campo(T.s('ip_label'), _ipController),
                         _campo(T.s('port_lg'), _portController),
                         _campo(

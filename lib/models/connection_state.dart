@@ -77,10 +77,15 @@ class LGConnectionState extends ChangeNotifier {
   }
 
   Future<void> reconnect() async {
-    if (_host == null || _port == null || _username == null || _password == null) return;
+    if (_host == null ||
+        _port == null ||
+        _username == null ||
+        _password == null) return;
     try {
-      final socket = await SSHSocket.connect(_host!, _port!, timeout: const Duration(seconds: 10));
-      _client = SSHClient(socket, username: _username!, onPasswordRequest: () => _password);
+      final socket = await SSHSocket.connect(_host!, _port!,
+          timeout: const Duration(seconds: 10));
+      _client = SSHClient(socket,
+          username: _username!, onPasswordRequest: () => _password);
       await _client!.authenticated.timeout(const Duration(seconds: 15));
       _isConnected = true;
       notifyListeners();
@@ -115,7 +120,8 @@ class LGConnectionState extends ChangeNotifier {
   Future<void> sendLogoKML(String kml) async {
     // Logo en LG4 (slave_4)
     const int slaveNo = 4;
-    await execute("cat <<'EOF' > /var/www/html/kml/slave_$slaveNo.kml\n$kml\nEOF");
+    await execute(
+        "cat <<'EOF' > /var/www/html/kml/slave_$slaveNo.kml\n$kml\nEOF");
   }
 
   Future<void> uploadAssets() async {
@@ -125,10 +131,13 @@ class LGConnectionState extends ChangeNotifier {
       final byteData = await rootBundle.load('assets/images/KMLs/logos.png');
       final bytes = byteData.buffer.asUint8List();
       final file = await sftp.open('/var/www/html/logos/logos.png',
-          mode: SftpFileOpenMode.create | SftpFileOpenMode.write | SftpFileOpenMode.truncate);
+          mode: SftpFileOpenMode.create |
+              SftpFileOpenMode.write |
+              SftpFileOpenMode.truncate);
       await file.writeBytes(bytes);
       await file.close();
-      await execute("echo '$sudoPassword' | sudo -S chmod 644 /var/www/html/logos/logos.png");
+      await execute(
+          "echo '$sudoPassword' | sudo -S chmod 644 /var/www/html/logos/logos.png");
     } catch (e) {
       debugPrint('LGService SFTP Error: $e');
     }

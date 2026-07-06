@@ -9,7 +9,8 @@ class POI {
   final double? heading;
   final String? altitudeMode;
   final String? description;
-  final Map<String, String>? descriptions; // Mapa de idiomas: {'en': '...', 'es': '...', ...}
+  final Map<String, String>?
+      descriptions; // Mapa de idiomas: {'en': '...', 'es': '...', ...}
   final String? epoca;
   final String? fechaInici;
   final String? fechaFi;

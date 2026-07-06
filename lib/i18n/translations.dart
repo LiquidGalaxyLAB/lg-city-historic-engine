@@ -159,9 +159,11 @@ const _es = {
   'poi': 'Puntos de Interés',
   'poi_subtitle': 'Descubre monumentos y lugares históricos en Lleida',
   'cathedrals': 'Catedrales e Iglesias',
-  'cathedrals_subtitle': 'Explora la arquitectura sagrada y el patrimonio religioso',
+  'cathedrals_subtitle':
+      'Explora la arquitectura sagrada y el patrimonio religioso',
   'museums': 'Museos',
-  'museums_subtitle': 'Visita instituciones culturales y espacios de exposición',
+  'museums_subtitle':
+      'Visita instituciones culturales y espacios de exposición',
   'events': 'Eventos Históricos',
   'events_subtitle': 'Momentos significativos de la historia de Lleida',
   'categories': 'Categorías',
@@ -271,7 +273,8 @@ const _ca = {
   'poi': 'Punts d\'Interès',
   'poi_subtitle': 'Descobreix monuments i llocs històrics a Lleida',
   'cathedrals': 'Catedrals i Esglésies',
-  'cathedrals_subtitle': 'Explora l\'arquitectura sagrada i el patrimoni religiós',
+  'cathedrals_subtitle':
+      'Explora l\'arquitectura sagrada i el patrimoni religiós',
   'museums': 'Museus',
   'museums_subtitle': 'Visita institucions culturals i espais d\'exposició',
   'events': 'Esdeveniments Històrics',
@@ -304,7 +307,8 @@ const _ca = {
   'help_welcome':
       'Benvingut a la secció d\'ajuda. Aquí trobaràs orientació sobre com utilitzar l\'aplicació.',
   'help_nav_title': 'Com navegar',
-  'help_nav_1': 'Utilitza el menú principal per explorar les diferents seccions.',
+  'help_nav_1':
+      'Utilitza el menú principal per explorar les diferents seccions.',
   'help_nav_2':
       'Selecciona una categoria per veure ubicacions o esdeveniments històrics disponibles.',
   'help_nav_3': 'Fes clic en qualsevol element per mostrar-lo al mapa.',

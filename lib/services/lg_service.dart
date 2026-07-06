@@ -64,8 +64,8 @@ class LGService {
     final sudo = _conn.sudoPassword;
     final screens = _conn.screens;
     for (var i = 1; i <= screens; i++) {
-      await _conn
-          .execute("echo '$sudo' | sudo -S sh -c \"cat <<'EOF' > /var/www/html/kml/slave_$i.kml\n$blank\nEOF\"");
+      await _conn.execute(
+          "echo '$sudo' | sudo -S sh -c \"cat <<'EOF' > /var/www/html/kml/slave_$i.kml\n$blank\nEOF\"");
     }
   }
 
@@ -98,7 +98,8 @@ fi
 " && sshpass -p $password ssh -o StrictHostKeyChecking=no -x -t $user@$hostname "\$RELAUNCH_CMD\"""";
 
       if (i == 1) {
-        await _conn.execute('"/home/$user/bin/lg-relaunch" > /home/$user/log.txt 2>&1');
+        await _conn.execute(
+            '"/home/$user/bin/lg-relaunch" > /home/$user/log.txt 2>&1');
       }
       await _conn.execute(relaunchCommand);
     }
@@ -134,18 +135,18 @@ fi
   Future<void> sendBalloon(POI poi) async {
     const int slaveNo = 3;
 
-    // De momento mostramos siempre la descripción en español
     final String localizedDescription = poi.getDescription('es');
 
     final String epocaLine = (poi.epoca != null && poi.epoca!.isNotEmpty)
         ? '<p style="font-size:18px;color:#C8A96E;margin:0 0 10px 0;text-transform:uppercase;font-weight:bold;">${poi.epoca}</p>'
         : '';
 
-    final String fechaLine = (poi.fechaInici != null && poi.fechaInici!.isNotEmpty)
+    final String fechaLine = (poi.fechaInici != null &&
+            poi.fechaInici!.isNotEmpty)
         ? '<p style="font-size:16px;color:#A0856A;margin:0 0 20px 0;">'
-        '${poi.fechaInici}'
-        '${poi.fechaFi != null && poi.fechaFi != poi.fechaInici ? " – ${poi.fechaFi}" : ""}'
-        '</p>'
+            '${poi.fechaInici}'
+            '${poi.fechaFi != null && poi.fechaFi != poi.fechaInici ? " – ${poi.fechaFi}" : ""}'
+            '</p>'
         : '';
 
     final String descLine = localizedDescription.isNotEmpty

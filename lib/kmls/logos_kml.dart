@@ -1,11 +1,11 @@
 class LogoOverlayManager {
   static String screenOverlayImage(
-      String imageUrl,
-      double top,
-      double left,
-      double width,
-      double height,
-      ) {
+    String imageUrl,
+    double top,
+    double left,
+    double width,
+    double height,
+  ) {
     final double y = 1.0 - top;
     return '''
     <ScreenOverlay>
