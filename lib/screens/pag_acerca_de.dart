@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/app_top_bar.dart';
 
-class PagAcercaDe extends StatelessWidget {
-  const PagAcercaDe({super.key});
+class AboutPage extends StatelessWidget {
+  const AboutPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +38,12 @@ class PagAcercaDe extends StatelessWidget {
                 child: Column(
                   children: [
                     const Text(
-                      'Nombre del autor - Yasmina Ramadan\n'
-                      'Nombre del mentor - Claudia \n'
-                      'Nombre del administrador de la organización - Andreu Ibáñez\n\n'
-                      'Información de contacto del autor - \n'
+                      'Author name - Yasmina Ramadan\n'
+                      'Mentor name - Claudia \n'
+                      'Organization administrator name - Andreu Ibáñez\n\n'
+                      'Author contact information - \n'
                       'yasiramadan@gmail.com\n'
-                      'Soporte - Lleida Liquid Galaxy LAB',
+                      'Support - Lleida Liquid Galaxy LAB',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 15,

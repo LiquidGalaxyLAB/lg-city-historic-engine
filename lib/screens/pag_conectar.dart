@@ -4,14 +4,14 @@ import '../models/connection_state.dart';
 import '../widgets/app_top_bar.dart';
 import '../main.dart';
 
-class PagConectar extends StatefulWidget {
-  const PagConectar({super.key});
+class ConnectPage extends StatefulWidget {
+  const ConnectPage({super.key});
 
   @override
-  State<PagConectar> createState() => _PagConectarState();
+  State<ConnectPage> createState() => _ConnectPageState();
 }
 
-class _PagConectarState extends State<PagConectar> {
+class _ConnectPageState extends State<ConnectPage> {
   final _conn = LGConnectionState();
   final _userController = TextEditingController();
   final _passController = TextEditingController();
@@ -22,7 +22,7 @@ class _PagConectarState extends State<PagConectar> {
 
   bool _isLoading = false;
 
-  bool get _conectado => _conn.conectado;
+  bool get _connected => _conn.isConnected;
 
   @override
   void initState() {
@@ -69,10 +69,10 @@ class _PagConectarState extends State<PagConectar> {
     await prefs.setString('lg_screens', _screensController.text);
   }
 
-  Future<void> _conectar() async {
+  Future<void> _connect() async {
     setState(() => _isLoading = true);
 
-    bool success = await _conn.conectar(
+    bool success = await _conn.connect(
       ip: _ipController.text,
       user: _userController.text,
       password: _passController.text,
@@ -145,7 +145,7 @@ class _PagConectarState extends State<PagConectar> {
                     color: isDark ? Colors.white : Colors.black87,
                   ),
                 ),
-                if (_conectado) ...[
+                if (_connected) ...[
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -178,7 +178,7 @@ class _PagConectarState extends State<PagConectar> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () => _conn.desconectar(),
+                            onTap: () => _conn.disconnect(),
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 10,
@@ -210,17 +210,17 @@ class _PagConectarState extends State<PagConectar> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _campo(T.s('user_lg'), _userController),
-                        _campo(T.s('password_lg'), _passController,
+                        _field(T.s('user_lg'), _userController),
+                        _field(T.s('password_lg'), _passController,
                             obscure: true),
-                        _campo(T.s('ip_label'), _ipController),
-                        _campo(T.s('port_lg'), _portController),
-                        _campo(
+                        _field(T.s('ip_label'), _ipController),
+                        _field(T.s('port_lg'), _portController),
+                        _field(
                           T.s('password_admin'),
                           _passAdminController,
                           obscure: true,
                         ),
-                        _campo(
+                        _field(
                           T.s('screens'),
                           _screensController,
                           suffix: const Icon(
@@ -231,7 +231,7 @@ class _PagConectarState extends State<PagConectar> {
                         ),
                         const SizedBox(height: 24),
                         GestureDetector(
-                          onTap: _isLoading ? null : _conectar,
+                          onTap: _isLoading ? null : _connect,
                           child: Container(
                             width: double.infinity,
                             padding: const EdgeInsets.symmetric(vertical: 15),
@@ -276,7 +276,7 @@ class _PagConectarState extends State<PagConectar> {
     );
   }
 
-  Widget _campo(
+  Widget _field(
     String label,
     TextEditingController controller, {
     bool obscure = false,

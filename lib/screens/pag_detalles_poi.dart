@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../models/poi_model.dart';
 import '../main.dart';
 
-class PagDetallesPOI extends StatelessWidget {
+class POIDetailsPage extends StatelessWidget {
   final POI poi;
 
-  const PagDetallesPOI({super.key, required this.poi});
+  const POIDetailsPage({super.key, required this.poi});
 
   @override
   Widget build(BuildContext context) {

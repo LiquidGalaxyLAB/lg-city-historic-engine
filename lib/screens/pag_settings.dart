@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import '../widgets/app_top_bar.dart';
 import '../main.dart';
 
-class PagSettings extends StatefulWidget {
-  const PagSettings({super.key});
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
 
   @override
-  State<PagSettings> createState() => _PagSettingsState();
+  State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _PagSettingsState extends State<PagSettings> {
+class _SettingsPageState extends State<SettingsPage> {
   final List<Map<String, String>> _languages = const [
     {'code': 'en', 'flag': 'GB', 'name': 'English'},
     {'code': 'es', 'flag': 'ES', 'name': 'Español'},

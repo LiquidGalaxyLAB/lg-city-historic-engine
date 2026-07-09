@@ -5,14 +5,14 @@ import '../main.dart';
 import '../models/poi_model.dart';
 import 'pag_lanza_lg.dart';
 
-class PagUbicInteres extends StatefulWidget {
-  const PagUbicInteres({super.key});
+class POILocationsPage extends StatefulWidget {
+  const POILocationsPage({super.key});
 
   @override
-  State<PagUbicInteres> createState() => _PagUbicInteresState();
+  State<POILocationsPage> createState() => _POILocationsPageState();
 }
 
-class _PagUbicInteresState extends State<PagUbicInteres> {
+class _POILocationsPageState extends State<POILocationsPage> {
   String _selectedCategory = 'All';
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
@@ -20,7 +20,7 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
   final Map<String, List<POI>> _data = {
     'SCIENCE / TECHNOLOGY': [
       POI(
-        name: 'Parc Científic',
+        name: 'Science Park',
         location: '41.6051°N, 0.6071°E',
         image: 'assets/images_points_of_interest/parc_cientific.jpg',
         lat: 41.605135,
@@ -28,9 +28,9 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 434,
         heading: -9.0,
         tilt: 51.0,
-        epoca: 'Edad Contemporánea',
-        fechaInici: '2004',
-        fechaFi: '2009',
+        era: 'Contemporary Age',
+        startDate: '2004',
+        endDate: '2009',
         description:
             'The Agri-Food Science and Technology Park of Lleida was inaugurated in 2005 and is the result of collaboration between the City Council of Lleida and the University of Lleida, with the aim of boosting the local economy and improving business competitiveness. Its history is marked by the transformation of a former military complex on Gardeny Hill, which belonged to the Spanish army until the late 1990s. The City Council of Lleida purchased the land to promote an economic development project, and in 2005 the Consortium of the Agri-Food Science and Technology Park of Lleida was established together with the University of Lleida. The park has become a key hub for research and development in the agri-food sector, while also covering other areas such as ICT, health, biotechnology, and audiovisual industries.',
       ),
@@ -45,9 +45,9 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 111,
         heading: 19.0,
         tilt: 47.0,
-        epoca: 'Edad Contemporánea',
-        fechaInici: '1947',
-        fechaFi: '1948',
+        era: 'Contemporary Age',
+        startDate: '1947',
+        endDate: '1948',
         description:
             'Sicoris Club was founded in 1947 by two youth groups and became a cultural, sports, and leisure association. It has stood out in sports such as canoeing (with Olympians like Saül Craviotto and Damián Vindel) and rhythmic gymnastics. The futsal section was created in 1973. Since its beginnings, it has aimed to promote both sports and culture at all levels. In 2003, it renovated its facilities to offer new services such as an indoor swimming pool, fitness room, and games room.',
       ),
@@ -58,9 +58,9 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         lat: 41.6231,
         lng: 0.6138,
         range: 1000,
-        epoca: 'Edad Contemporánea',
-        fechaInici: '1918',
-        fechaFi: '1919',
+        era: 'Contemporary Age',
+        startDate: '1918',
+        endDate: '1919',
         description:
             'Lleida Sports Field was inaugurated on January 1, 1919, and was designed by architect Adolf Florensa. In 1920, the football field received official certification. Throughout its history, it has been home to multiple teams such as Juventud FC and UE Lleida, and it has undergone several renovations, the most significant of which took place between 1993 and 1994 following the team’s promotion to the First Division.',
       ),
@@ -76,9 +76,9 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 191,
         heading: -3.0,
         tilt: 62.0,
-        epoca: 'Edad Media',
-        fechaInici: '1150',
-        fechaFi: '1200',
+        era: 'Middle Ages',
+        startDate: '1150',
+        endDate: '1200',
         description:
             'During the 17th and 18th centuries, the old medieval enclosure was expanded and transformed into a new military fortress. Following the conquest of the city of Lleida in 1149, the Knights Templar received several properties, including Gardeny Hill. The monumental complex of Gardeny is one of the most outstanding examples of Templar architecture built in Catalonia during the second half of the 12th century. The castle played a very important role during the Reapers'
             ' War (1641–1647) and the War of the Spanish Succession (1700–1714).',
@@ -93,9 +93,9 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 168,
         heading: -56.0,
         tilt: 52.0,
-        epoca: 'Edad Contemporánea',
-        fechaInici: '1945',
-        fechaFi: '1946',
+        era: 'Contemporary Age',
+        startDate: '1945',
+        endDate: '1946',
         description:
             'The statue of Indíbil (Atabeles) and Mandoni (Balduin) is a bronze sculptural group located in Agelet i Garriga Square in Lleida, beneath the Pont Arch. The work was originally titled Cry of Independence and was created in plaster by the Barcelona sculptor Medardo Sanmartí in 1884. In 1946, a bronze replica was made, which currently commemorates the Iberian Ilergetes warriors.',
       ),
@@ -109,9 +109,9 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 258,
         heading: 14.0,
         tilt: 50.0,
-        epoca: 'Edad Moderna',
-        fechaInici: '1454',
-        fechaFi: '1461',
+        era: 'Modern Age',
+        startDate: '1454',
+        endDate: '1461',
         description:
             'A Gothic-Plateresque style building from the 15th and 16th centuries, whose main façade faces the New Cathedral of Lleida, it housed a hospital for many years. The former healthcare facility is a magnificent construction, notable for its central courtyard, where an impressive stone staircase rises and leads to a gallery of pointed arches. Today, this historic building serves as the headquarters of the Institute of Ilerdenc Studies.',
       ),
@@ -124,9 +124,9 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 279,
         heading: -51.0,
         tilt: 55.0,
-        epoca: 'Edad Contemporánea',
-        fechaInici: '1150',
-        fechaFi: '1208',
+        era: 'Contemporary Age',
+        startDate: '1150',
+        endDate: '1208',
         description:
             'The Palace of La Paeria is the seat of the municipal government of Lleida and is located in the heart of the Commercial Axis. The word "paer" comes from the Latin paciari, meaning "man of peace," and originates from a privilege granted by James I of Aragon in 1264. It is a building with two façades: one in the civil Romanesque style facing Paeria Square, and the other, in Neoclassical style with a neo-medieval renovation from 1929, facing the Segre River.',
       ),
@@ -139,9 +139,9 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 167,
         heading: -48.0,
         tilt: 57.0,
-        epoca: 'Edad Contemporánea',
-        fechaInici: '1789',
-        fechaFi: '1789',
+        era: 'Contemporary Age',
+        startDate: '1789',
+        endDate: '1789',
         description:
             'The Governor’s Fountain is a Neoclassical work in Lleida, protected as a Cultural Asset of Local Interest. The fountain is composed of projecting pilasters framing the structure, topped with an eclectic-style pediment containing the city’s coat of arms. The fountain was gifted to the city by Governor Blondel, from whom it takes its name.',
       ),
@@ -154,11 +154,11 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 272,
         heading: 38.0,
         tilt: 42.0,
-        epoca: 'Edad Contemporánea',
-        fechaInici: '1802',
-        fechaFi: '1802',
+        era: 'Contemporary Age',
+        startDate: '1802',
+        endDate: '1802',
         description:
-            'Fuente pública con tratamiento monumentalista enmarcada por pilastras laterales y que aguantan un friso con triglifos. Rematado por un frontón barroco encima de un alero que enmarca una inscripción conmemorativa. Fue construida al mismo tiempo que uno de los añadidos en el hospital de Santa Maria. Hoy se encuentra apoyada a la medianera del casal de la Juventud Republicana.',
+            'A public fountain with a monumental treatment, framed by lateral pilasters that support a frieze with triglyphs. It is topped by a Baroque pediment above a cornice that frames a commemorative inscription. It was built at the same time as one of the additions to the Hospital of Santa Maria. Today it stands against the party wall of the Republican Youth clubhouse.',
       ),
       POI(
         name: 'La Mitjana (natural heritage)',
@@ -170,11 +170,11 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 513,
         heading: 49.0,
         tilt: 44.0,
-        epoca: 'Edad Contemporánea',
-        fechaInici: '1979',
-        fechaFi: '1986',
+        era: 'Contemporary Age',
+        startDate: '1979',
+        endDate: '1986',
         description:
-            'La Mediana de Lérida es una zona húmeda del curso bajo del Ebro, de una superficie de unas 100 hectáreas. Es un parque municipal constituido por tres islas formadas por el canal de Balaguer y dos ramales del río Ebro. Declarada al BOE como zona de interés natural en febrero de 1980 e incluida al P.O.Uno. del 1979.',
+            'La Mitjana de Lleida is a wetland area in the lower course of the Ebro River, covering about 100 hectares. It is a municipal park made up of three islands formed by the Balaguer Canal and two branches of the Ebro River. It was declared a zone of natural interest in the Spanish Official State Gazette (BOE) in February 1980 and was included in the 1979 General Urban Development Plan.',
       ),
       POI(
         name: 'General’s Pillar',
@@ -185,11 +185,11 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 262,
         heading: -102.0,
         tilt: 43.0,
-        epoca: 'Edad Moderna',
-        fechaInici: '1573',
-        fechaFi: '1573',
+        era: 'Modern Age',
+        startDate: '1573',
+        endDate: '1573',
         description:
-            'Hecho en Siglo XVI Alterado en los siglo XVIII. La representación escultórica del ángel lleva la fecha 1759. Pilastra utilizada hasta 1707 para fijar bandos o edictos de la Paheria y la Diputación del General de Cataluña. También para Exponer a la Vindicta Pública los reos del Tribunal del corte o Vegué Real.',
+            'Made in the 16th century and altered in the 18th century. The sculptural representation of the angel bears the date 1759. The pillar was used until 1707 to post proclamations or edicts from the Paeria and the Diputació del General de Catalunya. It was also used to publicly expose prisoners sentenced by the Royal Court or the Veguer\'s Tribunal.',
       ),
       POI(
         name: 'La Suda of Lleida',
@@ -198,11 +198,11 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         lat: 41.6181,
         lng: 0.6272,
         range: 1000,
-        epoca: 'Edad Media',
-        fechaInici: '1150',
-        fechaFi: '1200',
+        era: 'Middle Ages',
+        startDate: '1150',
+        endDate: '1200',
         description:
-            'El castillo de la Suda está situado junto a la sede vieja de Lérida. Su existencia está documentada desde aproximadamente en 883. A partir de la conquista cristiana, el castillo de la Suda fue participe de algunos hechos históricos remarcables. El 1150, se celebró el casamiento entre el conde Ramon Berenguer IV y Peronella, hija del rey Ramiro de Aragón.',
+            'The Suda Castle is located next to the Seu Vella of Lleida. Its existence has been documented since approximately 883. Following the Christian conquest, the Suda Castle took part in several notable historical events. In 1150, the wedding of Count Ramon Berenguer IV and Petronila, daughter of King Ramiro of Aragon, was celebrated there.',
       ),
       POI(
         name: 'Sant Joan Square',
@@ -213,11 +213,11 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 431,
         heading: 78.0,
         tilt: 38.0,
-        epoca: 'Edad Media',
-        fechaInici: '1149',
-        fechaFi: '1149',
+        era: 'Middle Ages',
+        startDate: '1149',
+        endDate: '1149',
         description:
-            'Desde el 1168, el templo ha sido denominado San Juan de la Plaza, la cual ya existía el 1149. Desde el año 1553 al 1640 se celebraron justas, concursos y fiestas cortesanas. A finales del siglo xviii, el corregidor Lluís Blondel feudo construir, en medio de la plaza, la monumental fuente de las sirenas.',
+            'Since 1168, the church has been known as Sant Joan de la Plaça, which already existed in 1149. Between 1553 and 1640, jousts, contests, and courtly festivities were held here. At the end of the 18th century, the magistrate Lluís Blondel had the monumental Fountain of the Mermaids built in the middle of the square.',
       ),
       POI(
         name: 'Sant Anastasi Mill',
@@ -228,11 +228,11 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 155,
         heading: 0.0,
         tilt: 53.0,
-        epoca: 'Edad Moderna',
-        fechaInici: '1190',
-        fechaFi: '1210',
+        era: 'Modern Age',
+        startDate: '1190',
+        endDate: '1210',
         description:
-            'Para poder moler trigo de la Bladeria Municipal, la Paeria disponía del molino de Cervià, el molino de Casa Gualda y el molino de Vilanova de l\'Horta. Este último recibirá el nombre posteriormente de Santo Anastasi. El 1995 la Paeria adquirió el molino. Después de obras de rehabilitación, el 2022 abrió como parte del Museo del Agua.',
+            'To grind wheat for the Municipal Granary, the Paeria had the Cervià mill, the Casa Gualda mill, and the Vilanova de l\'Horta mill. The latter would later be named Sant Anastasi. In 1995, the Paeria acquired the mill. After restoration works, it opened in 2022 as part of the Water Museum.',
       ),
       POI(
         name: 'La Cuirassa',
@@ -243,11 +243,11 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 294,
         heading: 158.0,
         tilt: 28.0,
-        epoca: 'Edad Media',
-        fechaInici: '1150',
-        fechaFi: '1391',
+        era: 'Middle Ages',
+        startDate: '1150',
+        endDate: '1391',
         description:
-            'Hace 500 años fueron expulsados los últimos judíos de la Lérida medieval. Siendo conocedores que la "Coraza" llegó a ser una de las comunidades judías más importantes de la antigua Corona de Aragón, con privilegios reales equivalentes y una comunidad científica con escuela de medicina propia. Después de años de trabajo de arqueólogos, historiadores y arquitectos, podemos confirmar la presencia judía en la "Coraza" en forma de calles, talleres de pergamineros e incluso la casa de un rico prohombre judío: la Casa del Pogromo.',
+            '500 years ago, the last Jews were expelled from medieval Lleida. It is known that the "Cuirassa" became one of the most important Jewish communities of the former Crown of Aragon, with royal privileges equivalent to other communities and a scholarly tradition that included its own school of medicine. After years of work by archaeologists, historians, and architects, the Jewish presence in the "Cuirassa" can be confirmed through streets, parchment-makers\' workshops, and even the house of a wealthy Jewish notable: the House of the Pogrom.',
       ),
       POI(
         name: 'Tanneries',
@@ -258,11 +258,11 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 180,
         heading: -20.0,
         tilt: 37.0,
-        epoca: 'Edad Media',
-        fechaInici: '1200',
-        fechaFi: '1299',
+        era: 'Middle Ages',
+        startDate: '1200',
+        endDate: '1299',
         description:
-            'Las Curtiduirías, situadas en el número 9 de la Rambla de Ferran, son las más antiguas de España y las que mejor se han conservado. Se trata de dos obradores, ahora restaurados, que forman parte de un complejo de siete tenerías del siglo XIII. Las dos que se han recuperado contienen aún la canalización que utilizaban en la Edad Media, con el curso del agua restablecido.',
+            'The Tanneries, located at number 9 Rambla de Ferran, are the oldest in Spain and the best preserved. They consist of two workshops, now restored, that are part of a complex of seven 13th-century tanneries. The two that have been restored still contain the water channels used in the Middle Ages, with the watercourse now reinstated.',
       ),
     ],
     'URBAN / CITY LANDMARKS': [
@@ -275,11 +275,11 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 368,
         heading: -25.0,
         tilt: 56.0,
-        epoca: 'Edad Contemporánea',
-        fechaInici: '2007',
-        fechaFi: '2010',
+        era: 'Contemporary Age',
+        startDate: '2007',
+        endDate: '2010',
         description:
-            'La Lonja de Lérida es un palacio de congresos y teatro de titularidad municipal ubicado en la ciudad de Lérida (Cataluña, España). El edificio ocupa la explanada donde se celebraba el antiguo mercado de frutas y verduras, conocido popularmente como el mercado de los campesinos, en el barrio de Pardiñas. El proyecto se financiará gracias a la construcción de dos torres de viviendas de 24 y 16 plantas situadas en el mismo terreno que la Lonja. Las obras del palacio se iniciaron en la primavera de 2007 y la inauguración oficial tuvo lugar el 21 de enero de 2010 con la representación de El trovador de Giuseppe Verdi, aunque ya fue estrenada en diciembre del 2009.',
+            'La Llotja de Lleida is a municipally owned congress hall and theater located in the city of Lleida (Catalonia, Spain). The building occupies the esplanade where the old fruit and vegetable market, popularly known as the farmers\' market, used to be held, in the Pardiñas neighborhood. The project was financed through the construction of two residential towers of 24 and 16 storeys built on the same plot as La Llotja. Construction of the building began in the spring of 2007, and the official inauguration took place on 21 January 2010 with a performance of Giuseppe Verdi\'s Il Trovatore, although it had already opened to the public in December 2009.',
       ),
       POI(
         name: 'Europa Square',
@@ -290,11 +290,11 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 611,
         heading: -136.0,
         tilt: 34.0,
-        epoca: 'Edad Contemporánea',
-        fechaInici: '1982',
-        fechaFi: '1983',
+        era: 'Contemporary Age',
+        startDate: '1982',
+        endDate: '1983',
         description:
-            'El origen de la Plaza Europa de Lérida están relacionados con la expansión urbana moderna de la ciudad, particularmente en la zona de los antiguos Campos del Obispo y su transformación en un espacio público moderno. La plaza fue proyectada y construida en la década de 1970 y principios de 1980, marcando el inicio de la urbanización del área. La plaza, con una superficie de más de 26.000 metros cuadrados, fue diseñada como un gran espacio público moderno, con áreas verdes, fuentes, zonas de juegos y un gran aparcamiento subterráneo.',
+            'The origins of Europa Square in Lleida are linked to the city\'s modern urban expansion, particularly in the area of the former Bishop\'s Fields and its transformation into a modern public space. The square was designed and built in the 1970s and early 1980s, marking the start of the area\'s urban development. Covering more than 26,000 square meters, the square was designed as a large modern public space with green areas, fountains, play areas, and a large underground car park.',
       ),
       POI(
         name: 'Lleida Courthouse',
@@ -305,11 +305,11 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 564,
         heading: -42.0,
         tilt: 46.0,
-        epoca: 'Edad Contemporánea',
-        fechaInici: '1981',
-        fechaFi: '1985',
+        era: 'Contemporary Age',
+        startDate: '1981',
+        endDate: '1985',
         description:
-            'El Palacio de Justicia es el edificio que acoge hoy en día los juzgados de Lérida (Segrià) incluida al Inventario del Patrimonio Arquitectónico de Cataluña. Edificio con un despliegue lineal y horizontal vinculado a la geografía. El edificio es capaz de resolver la necesidad de ubicar una torre de telecomunicaciones que fuera respetuosa con el campanario de la Sede Vieja, que domina la ciudad y todo el Plan de Lérida.',
+            'The Courthouse is the building that today houses the courts of Lleida (Segrià) and is included in the Inventory of Architectural Heritage of Catalonia. It is a building with a linear, horizontal layout tied to the surrounding geography. The building successfully addressed the need to place a telecommunications tower in a way that was respectful of the bell tower of the Seu Vella, which overlooks the city and the entire Pla de Lleida.',
       ),
       POI(
         name: 'Lleida–Pirineus Train Station',
@@ -321,11 +321,11 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 420,
         heading: 42.0,
         tilt: 44.0,
-        epoca: 'Edad Contemporánea',
-        fechaInici: '1925',
-        fechaFi: '1929',
+        era: 'Contemporary Age',
+        startDate: '1925',
+        endDate: '1929',
         description:
-            'Es una obra de protegida como bien cultural de interés local construido el 1926. El 2003 con la llegada del Tren de gran velocidad, la estación pasó a denominarse Lérida Pirineos, y entre las modificaciones que se hizo figura la instalación de una gran estructura de acero y vidrio que protege los andenes de las inclemencias del tiempo. La estación de Lérida Pirineos es considerada una de las más bonitas de España.',
+            'It is a work protected as a local cultural heritage asset, built in 1926. In 2003, with the arrival of the high-speed train, the station was renamed Lleida-Pirineus, and among the changes made was the installation of a large steel-and-glass structure that shelters the platforms from the weather. Lleida-Pirineus station is considered one of the most beautiful in Spain.',
       ),
       POI(
         name: 'Camps Elisis Park',
@@ -336,11 +336,11 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
         range: 282,
         heading: 1.0,
         tilt: 46.0,
-        epoca: 'Edad Contemporánea',
-        fechaInici: '1861',
-        fechaFi: '1864',
+        era: 'Contemporary Age',
+        startDate: '1861',
+        endDate: '1864',
         description:
-            'Los Campos Eliseos es un parque urbano de la ciudad de Lérida, situado a Cappont, dividido en áreas de jardines de estilo francés y romántico inglés, construidos en base a terrenos boscosos. El Parque de los Campos Eliseos de Lérida se inauguró el 1864. La Feria de San Miguel que, desde el siglo xiii y hasta el siglo xix, había estado anual en la ciudad, volvió a celebrarse a partir de 1954.',
+            'Camps Elisis Park is an urban park in the city of Lleida, located in Cappont, divided into garden areas in the French and English Romantic styles, built on former wooded land. The Camps Elisis Park in Lleida was inaugurated in 1864. The Saint Michael\'s Fair, which had been held annually in the city from the 13th to the 19th century, began to be held again from 1954 onward.',
       ),
     ],
   };
@@ -404,7 +404,7 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: () => MenuFlotante.mostrar(context,
+                            onTap: () => FloatingMenu.show(context,
                                 currentTitle: T.s('poi')),
                             child: Container(
                               padding: const EdgeInsets.all(8),
@@ -730,7 +730,7 @@ class _PagUbicInteresState extends State<PagUbicInteres> {
                     GestureDetector(
                       onTap: () => Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => PagLanzaLG(poi: poi)),
+                        MaterialPageRoute(builder: (_) => LaunchLGPage(poi: poi)),
                       ),
                       child: Container(
                         padding: const EdgeInsets.symmetric(

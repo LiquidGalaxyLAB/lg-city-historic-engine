@@ -11,7 +11,7 @@ class LGService {
     await _conn.execute("cat <<'EOF' > /var/www/html/kmls.kml\n$kml\nEOF");
   }
 
-  /// Mueve la cámara sin borrar el logo ni otros KMLs.
+  /// Moves the camera without deleting the logo or other KMLs.
   Future<void> flyToPOI(POI poi) async {
     final lat = poi.lat ?? 41.6147;
     final lng = poi.lng ?? 0.6268;
@@ -55,7 +55,7 @@ class LGService {
     await _conn.execute("cat <<'EOF' > /var/www/html/kmls.kml\n$blank\nEOF");
   }
 
-  /// Limpia todas las pantallas esclavas (incluyendo logos y balloons).
+  /// Clears all slave screens (including logos and balloons).
   Future<void> clearLogos() async {
     const String blank = '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
@@ -64,12 +64,12 @@ class LGService {
     final sudo = _conn.sudoPassword;
     final screens = _conn.screens;
     for (var i = 1; i <= screens; i++) {
-      await _conn.execute(
-          "echo '$sudo' | sudo -S sh -c \"cat <<'EOF' > /var/www/html/kml/slave_$i.kml\n$blank\nEOF\"");
+      await _conn
+          .execute("echo '$sudo' | sudo -S sh -c \"cat <<'EOF' > /var/www/html/kml/slave_$i.kml\n$blank\nEOF\"");
     }
   }
 
-  /// Muestra los logos únicamente en la pantalla izquierda (LG4 / slave_4).
+  /// Shows the logos only on the left screen (LG4 / slave_4).
   Future<void> showLogos() async {
     await _conn.sendLogoKML(LogoOverlayManager.generate());
   }
@@ -98,8 +98,7 @@ fi
 " && sshpass -p $password ssh -o StrictHostKeyChecking=no -x -t $user@$hostname "\$RELAUNCH_CMD\"""";
 
       if (i == 1) {
-        await _conn.execute(
-            '"/home/$user/bin/lg-relaunch" > /home/$user/log.txt 2>&1');
+        await _conn.execute('"/home/$user/bin/lg-relaunch" > /home/$user/log.txt 2>&1');
       }
       await _conn.execute(relaunchCommand);
     }
@@ -131,22 +130,22 @@ fi
     }
   }
 
-  /// Envía el balloon con la descripción únicamente a la pantalla derecha (LG3 / slave_3).
+  /// Sends the balloon with the description only to the right screen (LG3 / slave_3).
   Future<void> sendBalloon(POI poi) async {
     const int slaveNo = 3;
 
-    final String localizedDescription = poi.getDescription('es');
+    // Force English for all the balloon content
+    final String localizedDescription = poi.getDescription('en');
 
-    final String epocaLine = (poi.epoca != null && poi.epoca!.isNotEmpty)
-        ? '<p style="font-size:18px;color:#C8A96E;margin:0 0 10px 0;text-transform:uppercase;font-weight:bold;">${poi.epoca}</p>'
+    final String eraLine = (poi.era != null && poi.era!.isNotEmpty)
+        ? '<p style="font-size:18px;color:#C8A96E;margin:0 0 10px 0;text-transform:uppercase;font-weight:bold;">${poi.era}</p>'
         : '';
 
-    final String fechaLine = (poi.fechaInici != null &&
-            poi.fechaInici!.isNotEmpty)
+    final String dateLine = (poi.startDate != null && poi.startDate!.isNotEmpty)
         ? '<p style="font-size:16px;color:#A0856A;margin:0 0 20px 0;">'
-            '${poi.fechaInici}'
-            '${poi.fechaFi != null && poi.fechaFi != poi.fechaInici ? " – ${poi.fechaFi}" : ""}'
-            '</p>'
+        '${poi.startDate}'
+        '${poi.endDate != null && poi.endDate != poi.startDate ? " – ${poi.endDate}" : ""}'
+        '</p>'
         : '';
 
     final String descLine = localizedDescription.isNotEmpty
@@ -168,8 +167,8 @@ fi
             <h1 style="font-size:40px;font-weight:bold;margin:0 0 18px 0;color:#FFFFFF;border-bottom:2px solid #C8A96E;padding-bottom:12px;">
               ${poi.name}
             </h1>
-            $epocaLine
-            $fechaLine
+            $eraLine
+            $dateLine
             $descLine
           </div>
         </body>
@@ -188,7 +187,7 @@ fi
         "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$kml\nKMLEOF");
   }
 
-  /// Limpia únicamente la pantalla derecha (LG3 / slave_3).
+  /// Clears only the right screen (LG3 / slave_3).
   Future<void> clearBalloon() async {
     const int slaveNo = 3;
     const String blank = '''<?xml version="1.0" encoding="UTF-8"?>

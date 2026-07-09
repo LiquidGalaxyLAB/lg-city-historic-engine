@@ -23,43 +23,43 @@ class DatabaseHelper {
       version: 1,
       onCreate: (db, version) async {
         await db.execute('''
-          CREATE TABLE lugares (
+          CREATE TABLE places (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            categoria TEXT NOT NULL,
-            nom TEXT NOT NULL,
-            latitud REAL NOT NULL,
-            longitud REAL NOT NULL,
-            altitud REAL NOT NULL,
+            category TEXT NOT NULL,
+            name TEXT NOT NULL,
+            latitude REAL NOT NULL,
+            longitude REAL NOT NULL,
+            altitude REAL NOT NULL,
             heading REAL NOT NULL,
             tilt REAL NOT NULL,
             range REAL NOT NULL,
             altitude_mode TEXT NOT NULL,
-            epoca TEXT NOT NULL,
-            fecha_inici TEXT,
-            fecha_fi TEXT,
-            descripcio_ca TEXT NOT NULL,
-            descripcio_es TEXT NOT NULL,
-            descripcio_en TEXT NOT NULL
+            era TEXT NOT NULL,
+            start_date TEXT,
+            end_date TEXT,
+            description_ca TEXT NOT NULL,
+            description_es TEXT NOT NULL,
+            description_en TEXT NOT NULL
           )
         ''');
-        await insertarDades(db);
+        await insertData(db);
       },
     );
   }
 
-  Future<List<Lloc>> getLugaresByCategoria(String categoria) async {
+  Future<List<Place>> getPlacesByCategory(String category) async {
     final db = await database;
     final maps = await db.query(
-      'Lugares',
-      where: 'categoria = ?',
-      whereArgs: [categoria],
+      'Places',
+      where: 'category = ?',
+      whereArgs: [category],
     );
-    return maps.map((m) => Lloc.fromMap(m)).toList();
+    return maps.map((m) => Place.fromMap(m)).toList();
   }
 
-  Future<List<Lloc>> getAllLugares() async {
+  Future<List<Place>> getAllPlaces() async {
     final db = await database;
-    final maps = await db.query('lugares');
-    return maps.map((m) => Lloc.fromMap(m)).toList();
+    final maps = await db.query('places');
+    return maps.map((m) => Place.fromMap(m)).toList();
   }
 }

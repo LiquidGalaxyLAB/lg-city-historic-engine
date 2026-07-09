@@ -5,22 +5,22 @@ import '../main.dart';
 import '../models/poi_model.dart';
 import 'pag_lanza_lg.dart';
 
-class PagMuseos extends StatefulWidget {
-  const PagMuseos({super.key});
+class MuseumsPage extends StatefulWidget {
+  const MuseumsPage({super.key});
 
   @override
-  State<PagMuseos> createState() => _PagMuseosState();
+  State<MuseumsPage> createState() => _MuseumsPageState();
 }
 
-class _PagMuseosState extends State<PagMuseos> {
+class _MuseumsPageState extends State<MuseumsPage> {
   String _selectedCategory = 'All';
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
   final Map<String, List<POI>> _data = {
-    'Arte': [
+    'Art': [
       POI(
-        name: 'Museu d’Art Modern i Contemporani de Lleida',
+        name: 'Museum of Modern and Contemporary Art of Lleida',
         location: '41.6175° N, 0.6295° E',
         image:
             'assets/images_museums/Museu d’Art Modern i Contemporani de Lleida.jpg',
@@ -29,16 +29,16 @@ class _PagMuseosState extends State<PagMuseos> {
         range: 242,
         heading: 0.0,
         tilt: 43.0,
-        epoca: 'Edad Contemporania',
-        fechaInici: '1914',
-        fechaFi: '1917',
+        era: 'Contemporary Age',
+        startDate: '1914',
+        endDate: '1917',
         description:
             'The museum was founded in 1914 through the initiative of painter Jaume Morera and the City Council of Lleida. Its initial goal was to provide the city with a space dedicated to contemporary art of the time. Morera himself donated his personal collection, including works by masters such as Carlos de Haes. After decades of moving between temporary locations, the museum inaugurated its permanent location in 2024 in the former Courthouse on Rambla de Ferran.',
       ),
     ],
-    'Historia/Patrimonio': [
+    'History/Heritage': [
       POI(
-        name: 'Museu Diocesà',
+        name: 'Diocesan Museum',
         location: '41.6138° N, 0.6210° E',
         image: 'assets/images_museums/museonoche.jpg',
         lat: 41.613836,
@@ -46,16 +46,16 @@ class _PagMuseosState extends State<PagMuseos> {
         range: 205,
         heading: -5.0,
         tilt: 45.0,
-        epoca: 'Edad Contemporania',
-        fechaInici: '1893',
-        fechaFi: '1893',
+        era: 'Contemporary Age',
+        startDate: '1893',
+        endDate: '1893',
         description:
             'The Museum of Lleida, formerly known as the Diocesan and Regional Museum of Lleida, is a museum consortium created on August 1, 1997, made up of the Government of Catalonia, the Provincial Council and City Council of Lleida, the Segrià Regional Council, and the Bishopric of Lleida. The museum’s permanent headquarters was inaugurated in November 2007. In the autumn of 2020, the museum and its collection were declared of National Interest.',
       ),
     ],
-    'Ciencia/Tecnología': [
+    'Science/Technology': [
       POI(
-        name: 'Museu de l’Aigua',
+        name: 'Water Museum',
         location: '41.6031° N, 0.6360° E',
         image: 'assets/images_museums/Museu de l’Aigua.jpg',
         lat: 41.603122,
@@ -63,16 +63,16 @@ class _PagMuseosState extends State<PagMuseos> {
         range: 218,
         heading: 40.0,
         tilt: 48.0,
-        epoca: 'Edad Contemporania',
-        fechaInici: '2004',
-        fechaFi: '2004',
+        era: 'Contemporary Age',
+        startDate: '2004',
+        endDate: '2004',
         description:
             'The Water Museum is made up of different spaces distributed throughout the city and the agricultural area of Lleida. Its central site is the “La Canadiense Camp,” followed by the Water Plan Reservoir, the Ice Wells, the Sant Anastasi Mill Mill, the monumental fountains, and the Piñana and Seròs canals. Lleida was founded on the banks of the Ebro River and has developed an extensive network of canals and irrigation channels.',
       ),
     ],
-    'Automoción': [
+    'Automotive': [
       POI(
-        name: 'Museu de l’Automoció',
+        name: 'Automotive Museum',
         location: '41.6134° N, 0.6328° E',
         image: 'assets/images_museums/Museu de l’Automoció.jpg',
         lat: 41.613377,
@@ -80,9 +80,9 @@ class _PagMuseosState extends State<PagMuseos> {
         range: 270,
         heading: -179.0,
         tilt: 45.0,
-        epoca: 'Edad Contemporania',
-        fechaInici: '2002',
-        fechaFi: '2002',
+        era: 'Contemporary Age',
+        startDate: '2002',
+        endDate: '2002',
         description:
             'The Automotive Museum of Lleida is a municipal museum dedicated to the world of automotive engineering in general, with a specialization in vintage vehicles. Inaugurated in September 2002, the project is linked to the Foundation for Industrial Archaeological Heritage. The museum is structured into five main sections: automobiles, motorcycles, the workshop, engines, and miniatures.',
       ),
@@ -148,7 +148,7 @@ class _PagMuseosState extends State<PagMuseos> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: () => MenuFlotante.mostrar(context,
+                            onTap: () => FloatingMenu.show(context,
                                 currentTitle: T.s('museums')),
                             child: Container(
                               padding: const EdgeInsets.all(8),
@@ -474,7 +474,7 @@ class _PagMuseosState extends State<PagMuseos> {
                     GestureDetector(
                       onTap: () => Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => PagLanzaLG(poi: poi)),
+                        MaterialPageRoute(builder: (_) => LaunchLGPage(poi: poi)),
                       ),
                       child: Container(
                         padding: const EdgeInsets.symmetric(

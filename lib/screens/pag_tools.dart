@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import '../widgets/app_top_bar.dart';
 import '../services/lg_service.dart';
 
-class PagTools extends StatefulWidget {
-  const PagTools({super.key});
+class ToolsPage extends StatefulWidget {
+  const ToolsPage({super.key});
 
   @override
-  State<PagTools> createState() => _PagToolsState();
+  State<ToolsPage> createState() => _ToolsPageState();
 }
 
-class _PagToolsState extends State<PagTools> {
+class _ToolsPageState extends State<ToolsPage> {
   final LGService _lgService = LGService();
   bool _isLogosVisible = true;
 
@@ -78,7 +78,7 @@ class _PagToolsState extends State<PagTools> {
                       backgroundColor: const Color(0xFFEEF3FA),
                       buttonColor: const Color(0xFF1D61E7),
                       isFullWidth: true,
-                      onConfirm: () => _ejecutar(
+                      onConfirm: () => _execute(
                           context, 'Relaunch LG', _lgService.relaunch),
                     ),
                     const SizedBox(height: 8),
@@ -89,7 +89,7 @@ class _PagToolsState extends State<PagTools> {
                       backgroundColor: const Color(0xFFFEEEEE),
                       buttonColor: const Color(0xFFE21111),
                       isFullWidth: true,
-                      onConfirm: () => _ejecutar(
+                      onConfirm: () => _execute(
                           context, 'Shutdown LG', _lgService.shutdown),
                     ),
                     const SizedBox(height: 8),
@@ -101,7 +101,7 @@ class _PagToolsState extends State<PagTools> {
                       buttonColor: const Color(0xFFD4730A),
                       isFullWidth: true,
                       onConfirm: () =>
-                          _ejecutar(context, 'Reboot LG', _lgService.reboot),
+                          _execute(context, 'Reboot LG', _lgService.reboot),
                     ),
                     const SizedBox(height: 8),
                     _ToolCard(
@@ -111,7 +111,7 @@ class _PagToolsState extends State<PagTools> {
                       backgroundColor: const Color(0xFFE5E5E5),
                       buttonColor: const Color(0xFF454545),
                       isFullWidth: true,
-                      onConfirm: () => _ejecutar(
+                      onConfirm: () => _execute(
                           context, 'Clean KMLs', _lgService.clearKMLs),
                     ),
                     const SizedBox(height: 8),
@@ -122,7 +122,7 @@ class _PagToolsState extends State<PagTools> {
                       backgroundColor: const Color(0xFFE5E5E5),
                       buttonColor: const Color(0xFF454545),
                       isFullWidth: true,
-                      onConfirm: () => _ejecutar(
+                      onConfirm: () => _execute(
                           context, 'Clean Logos', _lgService.clearLogos),
                     ),
                     const SizedBox(height: 8),
@@ -134,7 +134,7 @@ class _PagToolsState extends State<PagTools> {
                       buttonColor: const Color(0xFFA50DBA),
                       isFullWidth: true,
                       onConfirm: () =>
-                          _ejecutar(context, 'Show/Hide Logos', () async {
+                          _execute(context, 'Show/Hide Logos', () async {
                         if (_isLogosVisible) {
                           await _lgService.clearLogos();
                         } else {
@@ -156,24 +156,24 @@ class _PagToolsState extends State<PagTools> {
     );
   }
 
-  void _ejecutar(
-      BuildContext context, String accion, Future<void> Function() callback) {
+  void _execute(
+      BuildContext context, String action, Future<void> Function() callback) {
     showDialog(
       context: context,
       builder: (_) => _ConfirmDialog(
-        accion: accion,
+        action: action,
         onConfirm: () async {
           try {
             await callback();
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('$accion executed successfully')),
+                SnackBar(content: Text('$action executed successfully')),
               );
             }
           } catch (e) {
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Error executing $accion: $e')),
+                SnackBar(content: Text('Error executing $action: $e')),
               );
             }
           }
@@ -277,10 +277,10 @@ class _ToolCard extends StatelessWidget {
 }
 
 class _ConfirmDialog extends StatelessWidget {
-  final String accion;
+  final String action;
   final VoidCallback onConfirm;
 
-  const _ConfirmDialog({required this.accion, required this.onConfirm});
+  const _ConfirmDialog({required this.action, required this.onConfirm});
 
   @override
   Widget build(BuildContext context) {
@@ -318,7 +318,7 @@ class _ConfirmDialog extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              'Are you sure you want to execute\n$accion?',
+              'Are you sure you want to execute\n$action?',
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.white70,

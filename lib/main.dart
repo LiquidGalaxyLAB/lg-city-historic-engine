@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
                   onSurface: Colors.white,
                 ),
               ),
-              home: const PagSplashScreen(),
+              home: const SplashPage(),
             );
           },
         );

@@ -18,14 +18,14 @@ class LGConnectionState extends ChangeNotifier {
   int _screens = 5;
   SSHClient? _client;
 
-  bool get conectado => _isConnected;
+  bool get isConnected => _isConnected;
   String get ip => _host ?? '';
   String? get username => _username;
   String? get password => _password;
   String? get sudoPassword => _sudoPassword ?? _password;
   int get screens => _screens;
 
-  Future<bool> conectar({
+  Future<bool> connect({
     required String ip,
     required String user,
     required String password,
@@ -64,12 +64,12 @@ class LGConnectionState extends ChangeNotifier {
       await execute("echo '$sudo' | sudo -S chmod -R 777 /var/www/html");
 
       await uploadAssets();
-      // Enviar el logo a la pantalla izquierda (LG4)
+      // Send the logo to the left screen (LG4)
       await sendLogoKML(LogoOverlayManager.generate());
 
       return true;
     } catch (e) {
-      debugPrint('LGService: Error de conexión: $e');
+      debugPrint('LGService: Connection error: $e');
       _isConnected = false;
       notifyListeners();
       return false;
@@ -102,7 +102,6 @@ class LGConnectionState extends ChangeNotifier {
     _client = null;
   }
 
-  void desconectar() => disconnect();
 
   Future<String?> execute(String command) async {
     if (_client == null || _client?.isClosed == true) await reconnect();
@@ -118,7 +117,7 @@ class LGConnectionState extends ChangeNotifier {
   }
 
   Future<void> sendLogoKML(String kml) async {
-    // Logo en LG4 (slave_4)
+    // Logo on LG4 (slave_4)
     const int slaveNo = 4;
     await execute(
         "cat <<'EOF' > /var/www/html/kml/slave_$slaveNo.kml\n$kml\nEOF");

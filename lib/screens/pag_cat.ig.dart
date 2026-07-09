@@ -5,14 +5,14 @@ import '../main.dart';
 import '../models/poi_model.dart';
 import 'pag_lanza_lg.dart';
 
-class PagCatedralesIglesias extends StatefulWidget {
-  const PagCatedralesIglesias({super.key});
+class CathedralsChurchesPage extends StatefulWidget {
+  const CathedralsChurchesPage({super.key});
 
   @override
-  State<PagCatedralesIglesias> createState() => _PagCatedralesIglesiasState();
+  State<CathedralsChurchesPage> createState() => _CathedralsChurchesPageState();
 }
 
-class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
+class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
   String _selectedCategory = 'All';
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
@@ -26,9 +26,9 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         lat: 41.6176,
         lng: 0.6267,
         range: 1000,
-        epoca: 'Edad Media',
-        fechaInici: '1203',
-        fechaFi: '1431',
+        era: 'Middle Ages',
+        startDate: '1203',
+        endDate: '1431',
         description:
             'La Seu Vella is the most iconic monument of Lleida. Built in the Romanesque style with Gothic vaults, it stands on the hill of the Old Cathedral, overlooking Lleida and the Segrià region. The cloister, with views over the city, was built between the 13th and 14th centuries. In the 15th century, the bell tower and the Apostles’ Gate were added. In 1707, due to its strategic position, the building was converted into a military barracks.',
       ),
@@ -39,23 +39,23 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
         lat: 41.6129,
         lng: 0.6232,
         range: 400,
-        epoca: 'Edad Moderna',
-        fechaInici: '1761',
-        fechaFi: '1781',
+        era: 'Modern Age',
+        startDate: '1761',
+        endDate: '1781',
         description:
             'Between 1761 and 1781, the construction of the New Cathedral of Lleida took place thanks to contributions from the people of Lleida, King Charles III of Spain, and Bishop Joaquín Sánchez. Baroque in style, with a strong tendency toward French academic classicism, it is located in the heart of the commercial axis, opposite the former Hospital of Santa Maria. The temple houses the image of the Virgin of Montserrat (La Moreneta), patron saint of Catalonia.',
       ),
     ],
     'Churches': [
       POI(
-        name: 'Iglesia de Sant Llorenç',
+        name: 'Church of Sant Llorenç',
         location: '41.6144° N, 0.6219° E',
         image: 'assets/images_churches_cathedrals/Iglesia de Sant Llorenç.jpg',
         lat: 41.6144,
         lng: 0.6219,
-        epoca: 'Edad Media',
-        fechaInici: '1150',
-        fechaFi: '1400',
+        era: 'Middle Ages',
+        startDate: '1150',
+        endDate: '1400',
         description:
             'What was twice the seat of a cathedral is a Romanesque-style construction with Gothic extensions and finishes. Considered the second most important church after the La Seu Vella, it has three naves of equal height and three apses. The building preserves four important Gothic altarpieces, the largest of which is dedicated to Saint Lawrence.',
       ),
@@ -121,7 +121,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: () => MenuFlotante.mostrar(context,
+                            onTap: () => FloatingMenu.show(context,
                                 currentTitle: T.s('cathedrals')),
                             child: Container(
                               padding: const EdgeInsets.all(8),
@@ -193,7 +193,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   itemCount: pois.length,
-                  itemBuilder: (context, index) => _cardPunto(pois[index]),
+                  itemBuilder: (context, index) => _placeCard(pois[index]),
                 ),
               ),
             ],
@@ -256,7 +256,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
     );
   }
 
-  Widget _cardPunto(POI poi) {
+  Widget _placeCard(POI poi) {
     return Container(
       margin: const EdgeInsets.only(bottom: 24),
       decoration: BoxDecoration(
@@ -290,7 +290,7 @@ class _PagCatedralesIglesiasState extends State<PagCatedralesIglesias> {
                             fontFamily: 'serif'))),
                 GestureDetector(
                   onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => PagLanzaLG(poi: poi))),
+                      MaterialPageRoute(builder: (_) => LaunchLGPage(poi: poi))),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 10),

@@ -16,7 +16,7 @@ class LogoOverlayManager {
       <overlayXY x="0" y="1" xunits="fraction" yunits="fraction"/>
       <screenXY x="$left" y="$y" xunits="fraction" yunits="fraction"/>
       <rotationXY x="0" y="0" xunits="fraction" yunits="fraction"/>
-      <!-- Al usar y=0, Google Earth mantiene automáticamente el aspect ratio original de la imagen basado en el ancho (x) -->
+      <!-- When using y=0, Google Earth automatically keeps the image's original aspect ratio based on the width (x) -->
       <size x="$width" y="0" xunits="fraction" yunits="fraction"/>
     </ScreenOverlay>
     ''';
@@ -24,7 +24,7 @@ class LogoOverlayManager {
 
   static String generate({bool wrapDocument = true}) {
     const String baseUrl = "http://lg1:81/logos";
-    // Posición y tamaño ajustados: bajado un poco, desplazado a la derecha y más ancho.
+    // Position and size adjusted: moved down slightly, shifted to the right, and wider.
     final String content = screenOverlayImage(
       '$baseUrl/logos.png',
       0.02,

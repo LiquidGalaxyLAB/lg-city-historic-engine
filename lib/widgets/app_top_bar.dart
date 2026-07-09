@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import '../models/connection_state.dart';
 import 'm_superior.dart';
 
-/// Top bar reutilizable para todas las páginas.
-/// [onDarkBackground]: true = sobre imagen oscura (solo muestra el icono wifi en blanco)
-/// [wifiOnly]: true = solo muestra el icono wifi (sin botón menú), útil cuando el menú se gestiona aparte
+/// Reusable top bar for all pages.
+/// [onDarkBackground]: true = over a dark image (shows only the white wifi icon)
+/// [wifiOnly]: true = shows only the wifi icon (no menu button), useful when the menu is managed separately
 class AppTopBar extends StatefulWidget {
   final bool onDarkBackground;
   final bool wifiOnly;
@@ -40,20 +40,20 @@ class _AppTopBarState extends State<AppTopBar> {
 
   @override
   Widget build(BuildContext context) {
-    final connected = _conn.conectado;
+    final connected = _conn.isConnected;
 
-    // Modo solo wifi (para headers con imagen oscura)
+    // Wifi-only mode (for headers with a dark image)
     if (widget.wifiOnly) {
       return _WifiIcon(connected: connected, onDark: widget.onDarkBackground);
     }
 
-    // Modo completo: menú + wifi
+    // Full mode: menu + wifi
     if (widget.onDarkBackground) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onTap: () => MenuFlotante.mostrar(
+            onTap: () => FloatingMenu.show(
               context,
               currentTitle: widget.currentTitle,
             ),
@@ -69,7 +69,7 @@ class _AppTopBarState extends State<AppTopBar> {
       children: [
         GestureDetector(
           onTap: () =>
-              MenuFlotante.mostrar(context, currentTitle: widget.currentTitle),
+              FloatingMenu.show(context, currentTitle: widget.currentTitle),
           child: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(

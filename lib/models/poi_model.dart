@@ -10,10 +10,10 @@ class POI {
   final String? altitudeMode;
   final String? description;
   final Map<String, String>?
-      descriptions; // Mapa de idiomas: {'en': '...', 'es': '...', ...}
-  final String? epoca;
-  final String? fechaInici;
-  final String? fechaFi;
+      descriptions; // Language map: {'en': '...', 'es': '...', ...}
+  final String? era;
+  final String? startDate;
+  final String? endDate;
 
   POI({
     required this.name,
@@ -27,9 +27,9 @@ class POI {
     this.altitudeMode,
     this.description,
     this.descriptions,
-    this.epoca,
-    this.fechaInici,
-    this.fechaFi,
+    this.era,
+    this.startDate,
+    this.endDate,
   });
 
   String getDescription(String langCode) {

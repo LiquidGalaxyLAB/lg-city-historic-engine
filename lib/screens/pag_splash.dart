@@ -2,23 +2,23 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'pag_inicio_categ.dart';
 
-class PagSplashScreen extends StatefulWidget {
-  const PagSplashScreen({super.key});
+class SplashPage extends StatefulWidget {
+  const SplashPage({super.key});
 
   @override
-  State<PagSplashScreen> createState() => _PagSplashScreenState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
-class _PagSplashScreenState extends State<PagSplashScreen> {
+class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    // Temporizador de 2 segundos para la transición a la pantalla principal
+    // 2-second timer for the transition to the main screen
     Timer(const Duration(seconds: 2), () {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const PagCategorias()),
+          MaterialPageRoute(builder: (context) => const CategoriesHomePage()),
         );
       }
     });
@@ -27,7 +27,7 @@ class _PagSplashScreenState extends State<PagSplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Usamos el mismo beige que el resto de la app para evitar el color negro
+      // We use the same beige as the rest of the app to avoid the black color
       backgroundColor: const Color(0xFFF0EBE0),
       body: Center(
         child: Padding(
@@ -36,7 +36,7 @@ class _PagSplashScreenState extends State<PagSplashScreen> {
             'assets/images/KMLs/logos.png',
             fit: BoxFit.contain,
             width: MediaQuery.of(context).size.width * 0.7,
-            // Si la imagen fallara, mostramos un indicador de carga en lugar de nada
+            // If the image fails to load, show a loading indicator instead of nothing
             errorBuilder: (context, error, stackTrace) {
               return const CircularProgressIndicator(
                 color: Color(0xFF8B7355),

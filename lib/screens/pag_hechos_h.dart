@@ -5,22 +5,22 @@ import '../main.dart';
 import '../models/poi_model.dart';
 import 'pag_lanza_lg.dart';
 
-class PagHechosHistoricos extends StatefulWidget {
-  const PagHechosHistoricos({super.key});
+class HistoricalEventsPage extends StatefulWidget {
+  const HistoricalEventsPage({super.key});
 
   @override
-  State<PagHechosHistoricos> createState() => _PagHechosHistoricosState();
+  State<HistoricalEventsPage> createState() => _HistoricalEventsPageState();
 }
 
-class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
+class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
   String _selectedCategory = 'All';
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
   final Map<String, List<POI>> _data = {
-    'Antigüedad': [
+    'Antiquity': [
       POI(
-        name: 'Revolta d\'Indíbil i Mandoni',
+        name: 'Revolt of Indibilis and Mandonius',
         location: '41.6191° N, 0.6232° E',
         image:
             'assets/images_historical_events/Revolta d\'Indíbil i Mandoni.jpg',
@@ -29,9 +29,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 1480.59,
         heading: -25.26,
         tilt: 65.45,
-        epoca: 'Edad antigua',
-        fechaInici: '206 aC',
-        fechaFi: '205 aC',
+        era: 'Ancient Age',
+        startDate: '206 BC',
+        endDate: '205 BC',
         descriptions: {
           'ca':
               'Indíbil i Mandonio, líders ibers, es van rebel·lar contra Roma en comprendre que Escipió no portaria la independència, sinó una nova ocupació. L\'any 205 aC, van formar una gran coalició de pobles de la vall de l\'Ebre per expulsar els invasors. Tanmateix, es van enfrontar a la superioritat tàctica de les legions en una batalla decisiva. Indíbil va morir en combat lluitant heroicament, cosa que va desmuntar la resistència de les seves tropes.',
@@ -42,7 +42,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         },
       ),
       POI(
-        name: 'Batalla de Ilerda 49 aC',
+        name: 'Battle of Ilerda, 49 BC',
         location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Batalla de Ilerda 49 aC.png',
         lat: 41.6191230,
@@ -50,18 +50,18 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 1480.59,
         heading: -25.26,
         tilt: 65.45,
-        epoca: 'Edad antigua',
-        fechaInici: '49 aC',
-        fechaFi: '49 aC',
+        era: 'Ancient Age',
+        startDate: '49 BC',
+        endDate: '49 BC',
         descriptions: {
           'en':
               'The Battle of Ilerda (49 BC) was a masterful engagement of the Second Roman Civil War in which Julius Caesar defeated Pompey\'s generals Afranius and Petreius in the area surrounding present-day Lleida. Despite being isolated and cut off from supplies after a major flood of the Segre River, Caesar reversed the situation through a brilliant engineering maneuver. Instead of seeking a massacre, Caesar chose a strategy of attrition.',
         },
       ),
     ],
-    'Edad Media Temprana': [
+    'Early Middle Ages': [
       POI(
-        name: 'Invasió musulmana',
+        name: 'Muslim Invasion',
         location: '41.6180° N, 0.6258° E',
         image: 'assets/images_historical_events/Invasio musulmana.jpg',
         lat: 41.6180451,
@@ -69,9 +69,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 361.12,
         heading: 12.41,
         tilt: 0.0,
-        epoca: 'Edad Media',
-        fechaInici: '716',
-        fechaFi: '719',
+        era: 'Middle Ages',
+        startDate: '716',
+        endDate: '719',
         descriptions: {
           'ca':
               'La ciutat va ser ocupada per les tropes àrabs i berbers entre els anys 716 i 719, aprofitant la ràpida descomposició del regne visigot. Sota el nom de Lārida, es va transformar en una fortalesa estratègica de la Marca Superior que protegia la frontera davant els regnes cristians del nord. Durant aquest període, els musulmans van desenvolupar un avançat sistema de regadiu a l\'horta i van erigir la Suda, una impressionant alcassaba sobre la roca sobirana.',
@@ -82,7 +82,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         },
       ),
       POI(
-        name: 'Setge de Lleida (800)',
+        name: 'Siege of Lleida (800)',
         location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Setge de lleida (800).png',
         lat: 41.6191230,
@@ -90,9 +90,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 1480.59,
         heading: -25.26,
         tilt: 65.45,
-        epoca: 'Edad Media',
-        fechaInici: '800',
-        fechaFi: '800',
+        era: 'Middle Ages',
+        startDate: '800',
+        endDate: '800',
         descriptions: {
           'ca':
               'L\'any 800, les tropes carolíngies de Lluís el Pietós van assetjar Lleida amb l\'objectiu d\'expandir la Marca Hispànica cap al sud dels Pirineus. L\'exèrcit franc va devastar els voltants de la ciutat per ofegar-la econòmicament. Davant l\'assetjament, el valí de Lleida no es va rendir del tot, però va pactar una treva de tres anys i el pagament de tributs (paries) als francs.',
@@ -103,7 +103,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         },
       ),
       POI(
-        name: 'Setge de Lleida (884)',
+        name: 'Siege of Lleida (884)',
         location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Setge de lleida (884).png',
         lat: 41.6191230,
@@ -111,9 +111,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 1480.59,
         heading: -25.26,
         tilt: 65.45,
-        epoca: 'Edad Media',
-        fechaInici: '884',
-        fechaFi: '884',
+        era: 'Middle Ages',
+        startDate: '884',
+        endDate: '884',
         descriptions: {
           'ca':
               'El comte Guifré el Pilós va atacar Lleida l\'any 884 com a resposta a la fortificació de la ciutat per part dels musulmans, que considerava una amenaça per als seus dominis. La ciutat estava governada pel valí Ismaïl ibn Mussa, membre de la poderosa família dels Banu Qasi. A diferència d\'altres incursions, l\'atac de Guifré va ser un fracàs militar. Les cròniques àrabs de l\'època parlen d\'una gran mortaldat entre les tropes catalanes.',
@@ -124,9 +124,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         },
       ),
     ],
-    'Reconquista / Alta Edad Media': [
+    'Reconquest / High Middle Ages': [
       POI(
-        name: 'Reconquesta Cristiana 1149',
+        name: 'Christian Reconquest, 1149',
         location: '41.6090° N, 0.6103° E',
         image: 'assets/images_historical_events/Reonquista Cristiana1149.jpg',
         lat: 41.6089691,
@@ -134,9 +134,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 1159.27,
         heading: -53.72,
         tilt: 56.84,
-        epoca: 'Edad Media',
-        fechaInici: '1149',
-        fechaFi: '1149',
+        era: 'Middle Ages',
+        startDate: '1149',
+        endDate: '1149',
         descriptions: {
           'ca':
               'Les hostes de Ramon Berenguer IV i Ermengol VI d\'Urgell van establir el seu campament estratègic al turó de Gardeny durant la primavera de 1149 per iniciar el setge definitiu de la ciutat. La resistència musulmana finalment es va trencar el 24 d\'octubre de 1149, quan la guarnició almoràvit va capitular. Aquesta victòria no només va suposar la presa de Lleida, sinó que va provocar la caiguda immediata de Fraga i Mequinensa.',
@@ -147,7 +147,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         },
       ),
       POI(
-        name: 'Unió del regne de Aragó i comtat de Barcelona',
+        name: 'Union of the Kingdom of Aragon and the County of Barcelona',
         location: '41.6168° N, 0.6255° E',
         image:
             'assets/images_historical_events/Unio del regne de Arago i comtat de barcelona.jpg',
@@ -156,9 +156,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 1480.59,
         heading: -25.26,
         tilt: 65.45,
-        epoca: 'Edad Media',
-        fechaInici: '1150',
-        fechaFi: '1150',
+        era: 'Middle Ages',
+        startDate: '1150',
+        endDate: '1150',
         descriptions: {
           'ca':
               'A l\'agost de 1150, el Castell de la Suda de Lleida va acollir el casament entre Peronella d\'Aragó i Ramon Berenguer IV. La reina tenia 14 anys, complint així el compromís pactat quan era un nadó. Aquest enllaç va ser l\'acte fundacional de la Corona d\'Aragó. Va unir el Regne d\'Aragó amb el Comtat de Barcelona, creant una potència política que respectava les lleis i els furs de cada territori.',
@@ -169,9 +169,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         },
       ),
     ],
-    'Edad Media / Baja Edad Media': [
+    'Middle Ages / Late Middle Ages': [
       POI(
-        name: 'Jura de fidelitat a Jaume I',
+        name: 'Oath of Allegiance to James I',
         location: '41.6180° N, 0.6258° E',
         image:
             'assets/images_historical_events/jura de fidelitat a Jaume I.jpg',
@@ -180,9 +180,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 361.12,
         heading: 12.41,
         tilt: 0.0,
-        epoca: 'Edad Media',
-        fechaInici: '1214',
-        fechaFi: '1214',
+        era: 'Middle Ages',
+        startDate: '1214',
+        endDate: '1214',
         descriptions: {
           'ca':
               'Les Corts de Lleida de 1214 es consideren les primeres de la història catalana amb participació dels tres estaments, convocades amb urgència per jurar fidelitat al nen Jaume I i estabilitzar la Corona d\'Aragó després de la catastròfica mort de Pere el Catòlic a la batalla de Muret. Davant la minoria d\'edat del nou monarca, l\'assemblea va designar el comte Sanç de Rosselló com a procurador general per governar el territori.',
@@ -193,7 +193,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         },
       ),
       POI(
-        name: 'Primera universitat del regne d\'Aragó',
+        name: 'First University of the Kingdom of Aragon',
         location: '41.6147° N, 0.6199° E',
         image:
             'assets/images_historical_events/Primera universitat del regne d\'arago.jpg',
@@ -202,9 +202,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 270.14,
         heading: -70.55,
         tilt: 47.35,
-        epoca: 'Edad Media',
-        fechaInici: '1300',
-        fechaFi: '1300',
+        era: 'Middle Ages',
+        startDate: '1300',
+        endDate: '1300',
         descriptions: {
           'ca':
               'Fundat l\'any 1300 per Jaume II després d\'una butlla papal de 1297, l\'Estudi General de Lleida va ser la primera universitat de Catalunya i de la Corona d\'Aragó. Durant segles va destacar com a centre de referència en Dret, Medicina i Filosofia, seguint el prestigiós model organitzatiu de la Universitat de Bolonya. L\'any 1717, Felip V va clausurar la institució mitjançant el Decret de Nova Planta. La Universitat de Lleida actual es va refundar el 1991.',
@@ -215,7 +215,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         },
       ),
       POI(
-        name: 'Setge de Lleida (1413)',
+        name: 'Siege of Lleida (1413)',
         location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Setge de lleida (1413).jpg',
         lat: 41.6191230,
@@ -223,9 +223,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 1480.59,
         heading: -25.26,
         tilt: 65.45,
-        epoca: 'Edad Media',
-        fechaInici: '1413',
-        fechaFi: '1414',
+        era: 'Middle Ages',
+        startDate: '1413',
+        endDate: '1414',
         descriptions: {
           'ca':
               'Després del Compromís de Casp, Jaume II d\'Urgell es va alçar contra el nou rei Ferran I. El juny de 1413, les tropes del comte van intentar prendre Lleida per sorpresa. Tanmateix, la ciutat es va mantenir fidel a Ferran I i les seves defenses van repel·lir l\'atac inicial. El fracàs a Lleida va deixar el comte d\'Urgell en una posició desesperada, forçant-lo a retirar-se cap a Balaguer.',
@@ -236,9 +236,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         },
       ),
     ],
-    'Edad Moderna': [
+    'Modern Age': [
       POI(
-        name: 'La batalla de Lleida (1642)',
+        name: 'The Battle of Lleida (1642)',
         location: '41.6100° N, 0.6367° E',
         image:
             'assets/images_historical_events/La batalla de Lleida (1642).jpg',
@@ -247,9 +247,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 2017.02,
         heading: -53.71,
         tilt: 56.85,
-        epoca: 'Edad Moderna',
-        fechaInici: '1642',
-        fechaFi: '1642',
+        era: 'Modern Age',
+        startDate: '1642',
+        endDate: '1642',
         descriptions: {
           'ca':
               'El 7 d\'octubre de 1642, en plena Guerra dels Segadors, l\'exèrcit espanyol va intentar recuperar Lleida per frenar l\'avanç francès a Catalunya. Les tropes de la Monarquia Hispànica, dirigides pel marquès de Leganés, van topar amb l\'exèrcit franco-català del mariscal La Mothe-Houdancourt. Malgrat la seva superioritat numèrica, les forces espanyoles van patir una derrota estrepitosa.',
@@ -260,7 +260,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         },
       ),
       POI(
-        name: 'Setge de Lleida (1644)',
+        name: 'Siege of Lleida (1644)',
         location: '41.6149° N, 0.6204° E',
         image: 'assets/images_historical_events/Setge de lleida (1644).png',
         lat: 41.6149206,
@@ -268,9 +268,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 1229.41,
         heading: -52.03,
         tilt: 60.58,
-        epoca: 'Edad Moderna',
-        fechaInici: '1644',
-        fechaFi: '1644',
+        era: 'Modern Age',
+        startDate: '1644',
+        endDate: '1644',
         descriptions: {
           'ca':
               'El maig de 1644, l\'exèrcit de Felip IV, liderat per Felip de Silva, va posar setge a la ciutat de Lleida després d\'haver recuperat Montsó. Les tropes de la Monarquia Hispànica van aconseguir derrotar l\'exèrcit francès de La Mothe-Houdancourt. La ciutat va capitular a finals de juliol de 1644, fet que va representar una de les victòries militars i estratègiques més importants per a Espanya durant la Guerra dels Segadors.',
@@ -281,7 +281,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         },
       ),
       POI(
-        name: 'Setge de Lleida (1646)',
+        name: 'Siege of Lleida (1646)',
         location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Setge de lleida (1646).jpg',
         lat: 41.6191230,
@@ -289,9 +289,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 1480.59,
         heading: -25.26,
         tilt: 65.45,
-        epoca: 'Edad Moderna',
-        fechaInici: '1646',
-        fechaFi: '1646',
+        era: 'Modern Age',
+        startDate: '1646',
+        endDate: '1646',
         descriptions: {
           'ca':
               'El maig de 1646, les tropes franceses sota el comandament del comte d\'Harcourt van assetjar Lleida amb l\'objectiu de recuperar-la per al bàndol franco-català. L\'exèrcit espanyol, dirigit pel marquès de Leganés, va aconseguir trencar el setge francès mitjançant un audaciós atac sorpresa nocturn. La derrota francesa va ser tan contundent que Harcourt es va veure obligat a fugir abandonant artilleria i subministraments.',
@@ -302,7 +302,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         },
       ),
       POI(
-        name: 'Setge de Lleida (1647)',
+        name: 'Siege of Lleida (1647)',
         location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Setge de lleida (1647).png',
         lat: 41.6191230,
@@ -310,9 +310,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 1480.59,
         heading: -25.26,
         tilt: 65.45,
-        epoca: 'Edad Moderna',
-        fechaInici: '1647',
-        fechaFi: '1647',
+        era: 'Modern Age',
+        startDate: '1647',
+        endDate: '1647',
         descriptions: {
           'ca':
               'El maig de 1647, el prestigiós príncep de Condé, heroi francès de Rocroi, va iniciar un nou setge sobre Lleida amb la intenció d\'esmenar el fracàs de l\'any anterior. La defensa de la ciutat va recaure en el governador Gregorio Brito, que va resistir amb tenacitat els assalts. Davant l\'impossibilitat de trencar les muralles, Condé es va veure obligat a aixecar el setge al juny, patint una de les poques derrotes de la seva carrera militar.',
@@ -323,7 +323,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         },
       ),
       POI(
-        name: 'Setge de Lleida (1707)',
+        name: 'Siege of Lleida (1707)',
         location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Setge de lleida (1707)png.png',
         lat: 41.6191230,
@@ -331,9 +331,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 1480.59,
         heading: -25.26,
         tilt: 65.45,
-        epoca: 'Edad Moderna',
-        fechaInici: '1707',
-        fechaFi: '1707',
+        era: 'Modern Age',
+        startDate: '1707',
+        endDate: '1707',
         descriptions: {
           'ca':
               'El setembre de 1707, després de la derrota austriacista a Almansa, les tropes borbòniques del duc d\'Orleans van assetjar Lleida. Després d\'un mes d\'intensos bombardejos, els borbònics van assaltar la ciutat el 12 d\'octubre. La victòria borbònica va suposar un càstig sever per a Lleida: la ciutat va ser saquejada, va perdre els seus furs i la seva universitat fou clausurada.',
@@ -344,9 +344,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         },
       ),
     ],
-    'Edad Contemporánea': [
+    'Contemporary Age': [
       POI(
-        name: 'Setge de Lleida (1810)',
+        name: 'Siege of Lleida (1810)',
         location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Setge de lleida (1810).png',
         lat: 41.6191230,
@@ -354,9 +354,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 1480.59,
         heading: -25.26,
         tilt: 65.45,
-        epoca: 'Edad Contemporánea',
-        fechaInici: '1810',
-        fechaFi: '1810',
+        era: 'Contemporary Age',
+        startDate: '1810',
+        endDate: '1810',
         descriptions: {
           'ca':
               'El maig de 1810, durant la Guerra del Francès, les tropes napoleòniques del mariscal Suchet van assetjar Lleida després de la seva victòria a la batalla de Margalef. La guarnició espanyola, liderada pel general Jaime García-Conde, va resistir un violent bombardeig fins que els francesos van aconseguir obrir bretxes a les muralles de la ciutat. La capitulació final, el 14 de maig, va permetre als francesos controlar una plaça estratègica clau.',
@@ -367,7 +367,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         },
       ),
       POI(
-        name: 'Batalla de Lleida (1938)',
+        name: 'Battle of Lleida (1938)',
         location: '41.6191° N, 0.6232° E',
         image: 'assets/images_historical_events/Batalla de Lleida (1938).jpeg',
         lat: 41.6191230,
@@ -375,9 +375,9 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
         range: 1480.59,
         heading: -25.26,
         tilt: 65.45,
-        epoca: 'Edad Contemporánea',
-        fechaInici: '1938',
-        fechaFi: '1938',
+        era: 'Contemporary Age',
+        startDate: '1938',
+        endDate: '1938',
         descriptions: {
           'ca':
               'La Batalla de Lleida, culminada el 3 d\'abril de 1938, va marcar l\'entrada definitiva de les tropes de Franco a Catalunya després de trencar el front d\'Aragó. El general Yagüe va liderar l\'assalt contra una defensa republicana que, encapçalada per "El Campesino", va resistir ferotgement al nucli urbà sota intensos bombardejos. La caiguda de Lleida va tenir un impacte polític immediat, ja que va permetre a Franco derogar l\'Estatut d\'Autonomia de Catalunya.',
@@ -450,7 +450,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: () => MenuFlotante.mostrar(
+                            onTap: () => FloatingMenu.show(
                               context,
                               currentTitle: T.s('events'),
                             ),
@@ -788,7 +788,7 @@ class _PagHechosHistoricosState extends State<PagHechosHistoricos> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => PagLanzaLG(poi: poi),
+                      builder: (_) => LaunchLGPage(poi: poi),
                     ),
                   ),
                   child: Container(

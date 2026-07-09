@@ -1,75 +1,75 @@
-class Lloc {
+class Place {
   final int? id;
-  final String categoria; // 'ubicacions', 'catedrals', 'museus', 'fets'
-  final String nom;
-  final double latitud;
-  final double longitud;
-  final double altitud;
+  final String category; // 'locations', 'cathedrals', 'museums', 'events'
+  final String name;
+  final double latitude;
+  final double longitude;
+  final double altitude;
   final double heading;
   final double tilt;
   final double range;
   final String altitudeMode;
-  final String epoca;
-  final String? fechaInici;
-  final String? fechaFi;
-  final String descripcioCa; // Català
-  final String descripcioEs; // Español
-  final String descripcioEn; // English
+  final String era;
+  final String? startDate;
+  final String? endDate;
+  final String descriptionCa; // Catalan
+  final String descriptionEs; // Spanish
+  final String descriptionEn; // English
 
-  Lloc({
+  Place({
     this.id,
-    required this.categoria,
-    required this.nom,
-    required this.latitud,
-    required this.longitud,
-    required this.altitud,
+    required this.category,
+    required this.name,
+    required this.latitude,
+    required this.longitude,
+    required this.altitude,
     required this.heading,
     required this.tilt,
     required this.range,
     required this.altitudeMode,
-    required this.epoca,
-    this.fechaInici,
-    this.fechaFi,
-    required this.descripcioCa,
-    required this.descripcioEs,
-    required this.descripcioEn,
+    required this.era,
+    this.startDate,
+    this.endDate,
+    required this.descriptionCa,
+    required this.descriptionEs,
+    required this.descriptionEn,
   });
 
   Map<String, dynamic> toMap() => {
         'id': id,
-        'categoria': categoria,
-        'nom': nom,
-        'latitud': latitud,
-        'longitud': longitud,
-        'altitud': altitud,
+        'category': category,
+        'name': name,
+        'latitude': latitude,
+        'longitude': longitude,
+        'altitude': altitude,
         'heading': heading,
         'tilt': tilt,
         'range': range,
         'altitude_mode': altitudeMode,
-        'epoca': epoca,
-        'fecha_inici': fechaInici,
-        'fecha_fi': fechaFi,
-        'descripcio_ca': descripcioCa,
-        'descripcio_es': descripcioEs,
-        'descripcio_en': descripcioEn,
+        'era': era,
+        'start_date': startDate,
+        'end_date': endDate,
+        'description_ca': descriptionCa,
+        'description_es': descriptionEs,
+        'description_en': descriptionEn,
       };
 
-  factory Lloc.fromMap(Map<String, dynamic> m) => Lloc(
+  factory Place.fromMap(Map<String, dynamic> m) => Place(
         id: m['id'] as int?,
-        categoria: m['categoria'] as String,
-        nom: m['nom'] as String,
-        latitud: (m['latitud'] as num).toDouble(),
-        longitud: (m['longitud'] as num).toDouble(),
-        altitud: (m['altitud'] as num).toDouble(),
+        category: m['category'] as String,
+        name: m['name'] as String,
+        latitude: (m['latitude'] as num).toDouble(),
+        longitude: (m['longitude'] as num).toDouble(),
+        altitude: (m['altitude'] as num).toDouble(),
         heading: (m['heading'] as num).toDouble(),
         tilt: (m['tilt'] as num).toDouble(),
         range: (m['range'] as num).toDouble(),
         altitudeMode: m['altitude_mode'] as String,
-        epoca: m['epoca'] as String,
-        fechaInici: m['fecha_inici'] as String?,
-        fechaFi: m['fecha_fi'] as String?,
-        descripcioCa: m['descripcio_ca'] as String,
-        descripcioEs: m['descripcio_es'] as String,
-        descripcioEn: m['descripcio_en'] as String,
+        era: m['era'] as String,
+        startDate: m['start_date'] as String?,
+        endDate: m['end_date'] as String?,
+        descriptionCa: m['description_ca'] as String,
+        descriptionEs: m['description_es'] as String,
+        descriptionEn: m['description_en'] as String,
       );
 }

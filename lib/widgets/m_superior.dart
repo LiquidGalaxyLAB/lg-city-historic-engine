@@ -7,11 +7,11 @@ import '../screens/pag_tools.dart';
 import '../screens/pag_inicio_categ.dart';
 import '../screens/pag_settings.dart';
 
-class MenuFlotante extends StatelessWidget {
+class FloatingMenu extends StatelessWidget {
   final String? currentTitle;
-  const MenuFlotante({super.key, this.currentTitle});
+  const FloatingMenu({super.key, this.currentTitle});
 
-  static void mostrar(BuildContext context, {String? currentTitle}) {
+  static void show(BuildContext context, {String? currentTitle}) {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -19,7 +19,7 @@ class MenuFlotante extends StatelessWidget {
       barrierColor: Colors.transparent,
       transitionDuration: const Duration(milliseconds: 200),
       pageBuilder: (context, anim1, anim2) =>
-          MenuFlotante(currentTitle: currentTitle),
+          FloatingMenu(currentTitle: currentTitle),
       transitionBuilder: (context, anim1, anim2, child) {
         return FadeTransition(opacity: anim1, child: child);
       },
@@ -80,7 +80,7 @@ class MenuFlotante extends StatelessWidget {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const PagCategorias(),
+                            builder: (_) => const CategoriesHomePage(),
                           ),
                           (route) => false,
                         );
@@ -97,7 +97,7 @@ class MenuFlotante extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const PagConectar(),
+                            builder: (_) => const ConnectPage(),
                           ),
                         );
                       },
@@ -112,7 +112,7 @@ class MenuFlotante extends StatelessWidget {
                         Navigator.pop(context);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const PagTools()),
+                          MaterialPageRoute(builder: (_) => const ToolsPage()),
                         );
                       },
                     ),
@@ -127,7 +127,7 @@ class MenuFlotante extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const PagSettings(),
+                            builder: (_) => const SettingsPage(),
                           ),
                         );
                       },
@@ -143,7 +143,7 @@ class MenuFlotante extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const PagAcercaDe(),
+                            builder: (_) => const AboutPage(),
                           ),
                         );
                       },
@@ -158,7 +158,7 @@ class MenuFlotante extends StatelessWidget {
                         Navigator.pop(context);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const PagAyuda()),
+                          MaterialPageRoute(builder: (_) => const HelpPage()),
                         );
                       },
                     ),

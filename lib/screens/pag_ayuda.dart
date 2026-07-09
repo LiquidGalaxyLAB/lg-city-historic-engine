@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/app_top_bar.dart';
 
-class PagAyuda extends StatelessWidget {
-  const PagAyuda({super.key});
+class HelpPage extends StatelessWidget {
+  const HelpPage({super.key});
 
   @override
   Widget build(BuildContext context) {

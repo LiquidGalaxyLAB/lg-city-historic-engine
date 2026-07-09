@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PagPrincipal extends StatelessWidget {
-  const PagPrincipal({super.key});
+class MainPage extends StatelessWidget {
+  const MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class PagPrincipal extends StatelessWidget {
               children: [
                 const SizedBox(height: 40),
 
-                // 🏷️ TÍTULO
+                // 🏷️ TITLE
                 const Text(
                   'City Historic Engine\nCHE',
                   textAlign: TextAlign.center,
@@ -24,9 +24,9 @@ class PagPrincipal extends StatelessWidget {
 
                 const SizedBox(height: 25),
 
-                // 🖼️ LOGO PRINCIPAL
+                // 🖼️ MAIN LOGO
                 Image.asset(
-                  'assets/images/che.png', // 👈 tu imagen
+                  'assets/images/che.png', // 👈 your image
                   height: 180,
                 ),
 
@@ -59,7 +59,7 @@ class PagPrincipal extends StatelessWidget {
     );
   }
 
-  // 🔹 WIDGET LOGO
+  // 🔹 LOGO WIDGET
   Widget _logo(String path) {
     return Image.asset(path, height: 60, fit: BoxFit.contain);
   }
