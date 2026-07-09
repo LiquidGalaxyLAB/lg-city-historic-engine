@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -124,21 +125,36 @@ class LGConnectionState extends ChangeNotifier {
   }
 
   Future<void> uploadAssets() async {
+    await uploadImageAsset('assets/images/KMLs/logos.png', 'logos.png');
+  }
+
+  /// Uploads a bundled Flutter asset image to the LG rig so it can be
+  /// referenced from a KML (e.g. via http://lg1:81/logos/<remoteFileName>).
+  Future<void> uploadImageAsset(String assetPath, String remoteFileName) async {
+    if (!_isConnected || _client == null) return;
+    try {
+      final byteData = await rootBundle.load(assetPath);
+      await uploadImageBytes(byteData.buffer.asUint8List(), remoteFileName);
+    } catch (e) {
+      debugPrint('LGService SFTP Error uploading $assetPath: $e');
+    }
+  }
+
+  /// Uploads raw image bytes (e.g. a slice cropped in memory) to the LG rig.
+  Future<void> uploadImageBytes(Uint8List bytes, String remoteFileName) async {
     if (!_isConnected || _client == null) return;
     try {
       final sftp = await _client!.sftp();
-      final byteData = await rootBundle.load('assets/images/KMLs/logos.png');
-      final bytes = byteData.buffer.asUint8List();
-      final file = await sftp.open('/var/www/html/logos/logos.png',
+      final file = await sftp.open('/var/www/html/logos/$remoteFileName',
           mode: SftpFileOpenMode.create |
               SftpFileOpenMode.write |
               SftpFileOpenMode.truncate);
       await file.writeBytes(bytes);
       await file.close();
       await execute(
-          "echo '$sudoPassword' | sudo -S chmod 644 /var/www/html/logos/logos.png");
+          "echo '$sudoPassword' | sudo -S chmod 644 /var/www/html/logos/$remoteFileName");
     } catch (e) {
-      debugPrint('LGService SFTP Error: $e');
+      debugPrint('LGService SFTP Error uploading bytes to $remoteFileName: $e');
     }
   }
 }

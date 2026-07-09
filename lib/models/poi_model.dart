@@ -15,6 +15,11 @@ class POI {
   final String? startDate;
   final String? endDate;
 
+  /// Optional path to a still image (e.g. 'assets/3d_points_of_interest/xxx.png')
+  /// that, when set, gets sent centered and intact to the three middle
+  /// Liquid Galaxy screens (LG1, LG2, LG4) when this POI is sent to LG.
+  final String? panoramaImage;
+
   POI({
     required this.name,
     required this.location,
@@ -30,6 +35,7 @@ class POI {
     this.era,
     this.startDate,
     this.endDate,
+    this.panoramaImage,
   });
 
   String getDescription(String langCode) {

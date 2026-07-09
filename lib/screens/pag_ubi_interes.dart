@@ -205,6 +205,22 @@ class _POILocationsPageState extends State<POILocationsPage> {
             'The Suda Castle is located next to the Seu Vella of Lleida. Its existence has been documented since approximately 883. Following the Christian conquest, the Suda Castle took part in several notable historical events. In 1150, the wedding of Count Ramon Berenguer IV and Petronila, daughter of King Ramiro of Aragon, was celebrated there.',
       ),
       POI(
+        name: 'Seu Vella',
+        location: '41.6183°N, 0.6222°E',
+        image: 'assets/images_points_of_interest/La_Seu.jpg',
+        panoramaImage: 'assets/3d_points_of_interest/la_seu_vella.png',
+        lat: 41.6183,
+        lng: 0.6222,
+        range: 400,
+        heading: -20.0,
+        tilt: 55.0,
+        era: 'Middle Ages',
+        startDate: '1203',
+        endDate: '1278',
+        description:
+            'The Old Cathedral of Lleida, known as the Seu Vella, stands atop Turó de la Seu Vella overlooking the city. Built between 1203 and 1278 in a transitional Romanesque-Gothic style, it was used as a military barracks for over 200 years after the War of the Spanish Succession, which unintentionally preserved much of its original structure. Today it is one of the most emblematic monuments of Catalonia, admired for its cloister, bell tower and panoramic views over Lleida and the Segre valley.',
+      ),
+      POI(
         name: 'Sant Joan Square',
         location: '41.6157°N, 0.6273°E',
         image: 'assets/images_points_of_interest/Sant Joan Square.png',

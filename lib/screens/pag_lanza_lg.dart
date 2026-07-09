@@ -27,8 +27,11 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
     await _sendToLG();
     // Then we do the Fly To so the camera moves to the location
     await _lgService.flyToPOI(widget.poi);
-    // Finally we send the balloon with the description to the LG3 screen
+    // Send the balloon with the description to the LG3 screen
     await _lgService.sendBalloon(widget.poi);
+    // If this POI has a panorama image, show it centered and intact
+    // across the three middle screens (LG1, LG2, LG5)
+    await _lgService.sendPanoramaImage(widget.poi);
   }
 
   Future<void> _sendToLG() async {
@@ -65,6 +68,7 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
     // Make sure the orbit stops and the balloon is cleared when leaving the screen
     _lgService.stopOrbit();
     _lgService.clearBalloon();
+    _lgService.clearPanoramaImage();
     super.dispose();
   }
 

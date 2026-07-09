@@ -1,11 +1,34 @@
 import 'dart:async';
+import 'dart:math' as math;
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import '../models/connection_state.dart';
 import '../models/poi_model.dart';
 import '../kmls/logos_kml.dart';
+import '../kmls/panorama_kml.dart';
+import 'image_slicer.dart';
 
 class LGService {
   final LGConnectionState _conn = LGConnectionState();
   bool _isOrbiting = false;
+
+  /// The three middle screens that together show ONE panorama image,
+  /// ORDERED LEFT TO RIGHT as they are physically placed in the rig.
+  /// Confirmed physical order (left to right): lg4, lg5, lg1, lg2, lg3.
+  /// Of the three middle screens used here: lg5 (left) - lg1 (center) - lg2 (right).
+  static const List<int> _panoramaScreensLeftToRight = [5, 1, 2];
+
+  /// Assumed aspect ratio (width/height) of each physical screen.
+  /// Adjust if your monitors aren't 16:9.
+  static const double _screenAspect = 16 / 9;
+
+  /// How much of the COMBINED 3-screen width the image occupies (0-1).
+  /// Lower = smaller image. 1.0 would span the full 3 screens edge to edge.
+  static const double _panoramaWidthFraction = 0.35;
+
+  /// Gap between the BOTTOM of the image and the bottom edge of the screen,
+  /// as a fraction of one screen's height. 0 = touching the very bottom.
+  static const double _panoramaBottomMargin = 0.06;
 
   Future<void> sendKML(String kml) async {
     await _conn.execute("cat <<'EOF' > /var/www/html/kmls.kml\n$kml\nEOF");
@@ -194,5 +217,86 @@ fi
 <kml xmlns="http://www.opengis.net/kml/2.2"><Document></Document></kml>''';
     await _conn.execute(
         "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$blank\nKMLEOF");
+  }
+
+  /// Uploads [poi.panoramaImage] (if set) and shows it, SMALLER than full
+  /// screen and positioned near the bottom, split across the three middle
+  /// screens — LG5 (left), LG1 (center), LG2 (right) — so that, physically
+  /// side by side, they reconstruct the single original image intact
+  /// (not three copies of the same image, and never distorted).
+  /// Being a ScreenOverlay, it stays fixed on screen and never moves when
+  /// the camera moves.
+  Future<void> sendPanoramaImage(POI poi) async {
+    final String? asset = poi.panoramaImage;
+    if (asset == null || asset.isEmpty) return;
+
+    final ui.Image image = await ImageSlicer.loadImage(asset);
+    final double imgAspect = image.width / image.height;
+
+    final int screenCount = _panoramaScreensLeftToRight.length;
+
+    // Treat the N screens as one long combined canvas (in "screen-height"
+    // units, assuming all screens share the same height and aspect ratio).
+    final double canvasWidth = screenCount * _screenAspect;
+    final double displayedWidth = _panoramaWidthFraction * canvasWidth;
+    // Preserve the image's own aspect ratio -> never stretched/cropped.
+    final double displayedHeight = displayedWidth / imgAspect;
+    final double xStart = (canvasWidth - displayedWidth) / 2; // centered
+
+    final String baseName = asset.split('/').last.split('.').first;
+
+    for (int i = 0; i < screenCount; i++) {
+      final int slaveNo = _panoramaScreensLeftToRight[i];
+      final double screenLeft = i * _screenAspect;
+      final double screenRight = screenLeft + _screenAspect;
+
+      final double visLeft = math.max(screenLeft, xStart);
+      final double visRight = math.min(screenRight, xStart + displayedWidth);
+
+      if (visRight <= visLeft) {
+        // The image doesn't reach this screen at all: make sure it's clear.
+        await _conn.execute(
+            "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n${PanoramaOverlayManager.blank()}\nKMLEOF");
+        continue;
+      }
+
+      // Where, within THIS screen (0-1), the visible part starts and how wide it is.
+      final double localLeft = (visLeft - screenLeft) / _screenAspect;
+      final double localWidth = (visRight - visLeft) / _screenAspect;
+
+      // Which pixel range of the SOURCE image corresponds to that visible part.
+      final int pixelStart =
+          ((visLeft - xStart) / displayedWidth * image.width).round();
+      final int pixelEndRaw =
+          ((visRight - xStart) / displayedWidth * image.width).round();
+      final int pixelWidth =
+          (pixelEndRaw - pixelStart).clamp(1, image.width - pixelStart);
+
+      final Uint8List slice =
+          await ImageSlicer.cropHorizontal(image, pixelStart, pixelWidth);
+
+      final String fileName = '${baseName}_s$i.png';
+      await _conn.uploadImageBytes(slice, fileName);
+
+      final String kml = PanoramaOverlayManager.generatePositioned(
+        'http://lg1:81/logos/$fileName',
+        left: localLeft,
+        bottom: _panoramaBottomMargin,
+        width: localWidth,
+        height: displayedHeight,
+      );
+      await _conn.execute(
+          "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$kml\nKMLEOF");
+    }
+  }
+
+  /// Removes the panorama image from LG5, LG1 and LG2.
+  /// LG4's logo is untouched since it's never overwritten in the first place.
+  Future<void> clearPanoramaImage() async {
+    final String blank = PanoramaOverlayManager.blank();
+    for (final slaveNo in _panoramaScreensLeftToRight) {
+      await _conn.execute(
+          "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$blank\nKMLEOF");
+    }
   }
 }
