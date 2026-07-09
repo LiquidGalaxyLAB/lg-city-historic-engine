@@ -7,8 +7,8 @@ import 'package:prueba/screens/pag_conectar.dart';
 import 'package:prueba/widgets/app_top_bar.dart';
 import '../main.dart';
 
-class PagCategorias extends StatelessWidget {
-  const PagCategorias({super.key});
+class CategoriesHomePage extends StatelessWidget {
+  const CategoriesHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class PagCategorias extends StatelessWidget {
                   child: AppTopBar(currentTitle: T.s('home')),
                 ),
 
-                // ── LOGO NUEVO  ──
+                // ── NEW LOGO  ──
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18),
                   child: Image.asset('assets/images/logo.png', height: 118),
@@ -51,7 +51,7 @@ class PagCategorias extends StatelessWidget {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const PagUbicInteres(),
+                            builder: (_) => const POILocationsPage(),
                           ),
                         ),
                       ),
@@ -66,7 +66,7 @@ class PagCategorias extends StatelessWidget {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const PagCatedralesIglesias(),
+                            builder: (_) => const CathedralsChurchesPage(),
                           ),
                         ),
                       ),
@@ -80,7 +80,7 @@ class PagCategorias extends StatelessWidget {
                         subtitle: T.s('museums_subtitle'),
                         onTap: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const PagMuseos()),
+                          MaterialPageRoute(builder: (_) => const MuseumsPage()),
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -94,7 +94,7 @@ class PagCategorias extends StatelessWidget {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const PagHechosHistoricos(),
+                            builder: (_) => const HistoricalEventsPage(),
                           ),
                         ),
                       ),
@@ -103,7 +103,7 @@ class PagCategorias extends StatelessWidget {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const PagConectar(),
+                            builder: (_) => const ConnectPage(),
                           ),
                         ),
                         child: Container(

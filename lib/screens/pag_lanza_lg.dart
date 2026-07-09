@@ -3,16 +3,16 @@ import '../models/poi_model.dart';
 import '../services/lg_service.dart';
 import '../widgets/m_superior.dart';
 
-class PagLanzaLG extends StatefulWidget {
+class LaunchLGPage extends StatefulWidget {
   final POI poi;
 
-  const PagLanzaLG({super.key, required this.poi});
+  const LaunchLGPage({super.key, required this.poi});
 
   @override
-  State<PagLanzaLG> createState() => _PagLanzaLGState();
+  State<LaunchLGPage> createState() => _LaunchLGPageState();
 }
 
-class _PagLanzaLGState extends State<PagLanzaLG> {
+class _LaunchLGPageState extends State<LaunchLGPage> {
   final LGService _lgService = LGService();
   bool _isOrbiting = false;
 
@@ -23,11 +23,11 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
   }
 
   Future<void> _initLG() async {
-    // Primero enviamos el KML
+    // First we send the KML
     await _sendToLG();
-    // Luego hacemos el Fly To para que la cámara se mueva al sitio
+    // Then we do the Fly To so the camera moves to the location
     await _lgService.flyToPOI(widget.poi);
-    // Finalmente enviamos el balloon con la descripción a la pantalla LG3
+    // Finally we send the balloon with the description to the LG3 screen
     await _lgService.sendBalloon(widget.poi);
   }
 
@@ -62,7 +62,7 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
 
   @override
   void dispose() {
-    // Aseguramos que la órbita se detenga y el balloon se limpie al salir de la pantalla
+    // Make sure the orbit stops and the balloon is cleared when leaving the screen
     _lgService.stopOrbit();
     _lgService.clearBalloon();
     super.dispose();
@@ -82,7 +82,7 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () => MenuFlotante.mostrar(context,
+                    onTap: () => FloatingMenu.show(context,
                         currentTitle: widget.poi.name),
                     child: Container(
                       padding: const EdgeInsets.all(12),
@@ -239,7 +239,7 @@ class _PagLanzaLGState extends State<PagLanzaLG> {
     required VoidCallback onTap,
     bool isActive = false,
   }) {
-    // Definimos los colores para el estado activo (marrón oscuro solicitado) e inactivo
+    // Define the colors for the active state (requested dark brown) and inactive state
     final Color bgColor =
         isActive ? const Color(0xFF4E342E) : const Color(0xFFFBF9F6);
     final Color iconColor = isActive ? Colors.white : const Color(0xFF6B5B45);
