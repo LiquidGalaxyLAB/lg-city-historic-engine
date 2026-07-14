@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:flutter/foundation.dart' show debugPrint;
 import '../models/connection_state.dart';
 import '../models/poi_model.dart';
 import '../kmls/logos_kml.dart';
@@ -24,7 +25,9 @@ class LGService {
 
   /// How much of the COMBINED 3-screen width the image occupies (0-1).
   /// Lower = smaller image. 1.0 would span the full 3 screens edge to edge.
-  static const double _panoramaWidthFraction = 0.35;
+  /// 0.75 gives roughly: lg5 ~62% covered, lg1 (center) 100% covered,
+  /// lg2 ~62% covered — so all three screens clearly show part of it.
+  static const double _panoramaWidthFraction = 0.75;
 
   /// Gap between the BOTTOM of the image and the bottom edge of the screen,
   /// as a fraction of one screen's height. 0 = touching the very bottom.
@@ -230,7 +233,13 @@ fi
     final String? asset = poi.panoramaImage;
     if (asset == null || asset.isEmpty) return;
 
-    final ui.Image image = await ImageSlicer.loadImage(asset);
+    final ui.Image image;
+    try {
+      image = await ImageSlicer.loadImage(asset);
+    } catch (e) {
+      debugPrint('LGService: could not load panorama asset "$asset": $e');
+      return;
+    }
     final double imgAspect = image.width / image.height;
 
     final int screenCount = _panoramaScreensLeftToRight.length;
@@ -247,46 +256,59 @@ fi
 
     for (int i = 0; i < screenCount; i++) {
       final int slaveNo = _panoramaScreensLeftToRight[i];
-      final double screenLeft = i * _screenAspect;
-      final double screenRight = screenLeft + _screenAspect;
+      try {
+        final double screenLeft = i * _screenAspect;
+        final double screenRight = screenLeft + _screenAspect;
 
-      final double visLeft = math.max(screenLeft, xStart);
-      final double visRight = math.min(screenRight, xStart + displayedWidth);
+        final double visLeft = math.max(screenLeft, xStart);
+        final double visRight = math.min(screenRight, xStart + displayedWidth);
 
-      if (visRight <= visLeft) {
-        // The image doesn't reach this screen at all: make sure it's clear.
+        if (visRight <= visLeft) {
+          // The image doesn't reach this screen at all: make sure it's clear.
+          await _conn.execute(
+              "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n${PanoramaOverlayManager.blank()}\nKMLEOF");
+          continue;
+        }
+
+        // Where, within THIS screen (0-1), the visible part starts and how wide it is.
+        final double localLeft = (visLeft - screenLeft) / _screenAspect;
+        final double localWidth = (visRight - visLeft) / _screenAspect;
+
+        // Which pixel range of the SOURCE image corresponds to that visible part.
+        // Clamp defensively: rounding can push these 1px past the image edges.
+        int pixelStart = ((visLeft - xStart) / displayedWidth * image.width)
+            .round()
+            .clamp(0, image.width - 1);
+        int pixelEnd = ((visRight - xStart) / displayedWidth * image.width)
+            .round()
+            .clamp(pixelStart + 1, image.width);
+        final int pixelWidth = pixelEnd - pixelStart;
+
+        final Uint8List slice =
+            await ImageSlicer.cropHorizontal(image, pixelStart, pixelWidth);
+
+        final String fileName = '${baseName}_s$i.png';
+        await _conn.uploadImageBytes(slice, fileName);
+
+        // LG1 is the master: its own Google Earth instance runs on the
+        // same machine as the web server, so it must fetch the image via
+        // 'localhost' (same pattern used in relaunch()/shutdown()/reboot()
+        // above). LG2 and LG5 are separate machines and reach the master
+        // over the network via the 'lg1' hostname.
+        final String imageHost = slaveNo == 1 ? 'localhost' : 'lg1';
+        final String kml = PanoramaOverlayManager.generatePositioned(
+          'http://$imageHost:81/logos/$fileName',
+          left: localLeft,
+          bottom: _panoramaBottomMargin,
+          width: localWidth,
+          height: displayedHeight,
+        );
         await _conn.execute(
-            "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n${PanoramaOverlayManager.blank()}\nKMLEOF");
-        continue;
+            "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$kml\nKMLEOF");
+      } catch (e) {
+        // Never let one screen's failure stop the other screens from updating.
+        debugPrint('LGService: failed to send panorama slice to slave_$slaveNo: $e');
       }
-
-      // Where, within THIS screen (0-1), the visible part starts and how wide it is.
-      final double localLeft = (visLeft - screenLeft) / _screenAspect;
-      final double localWidth = (visRight - visLeft) / _screenAspect;
-
-      // Which pixel range of the SOURCE image corresponds to that visible part.
-      final int pixelStart =
-          ((visLeft - xStart) / displayedWidth * image.width).round();
-      final int pixelEndRaw =
-          ((visRight - xStart) / displayedWidth * image.width).round();
-      final int pixelWidth =
-          (pixelEndRaw - pixelStart).clamp(1, image.width - pixelStart);
-
-      final Uint8List slice =
-          await ImageSlicer.cropHorizontal(image, pixelStart, pixelWidth);
-
-      final String fileName = '${baseName}_s$i.png';
-      await _conn.uploadImageBytes(slice, fileName);
-
-      final String kml = PanoramaOverlayManager.generatePositioned(
-        'http://lg1:81/logos/$fileName',
-        left: localLeft,
-        bottom: _panoramaBottomMargin,
-        width: localWidth,
-        height: displayedHeight,
-      );
-      await _conn.execute(
-          "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$kml\nKMLEOF");
     }
   }
 

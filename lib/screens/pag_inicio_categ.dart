@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:prueba/screens/pag_ubi_interes.dart';
-import 'package:prueba/screens/pag_cat.ig.dart';
-import 'package:prueba/screens/pag_museos.dart';
-import 'package:prueba/screens/pag_hechos_h.dart';
-import 'package:prueba/screens/pag_conectar.dart';
-import 'package:prueba/widgets/app_top_bar.dart';
+import 'pag_ubi_interes.dart';
+import 'pag_cat.ig.dart';
+import 'pag_museos.dart';
+import 'pag_hechos_h.dart';
+import 'pag_conectar.dart';
+import '../widgets/app_top_bar.dart';
 import '../main.dart';
 
 class CategoriesHomePage extends StatelessWidget {
