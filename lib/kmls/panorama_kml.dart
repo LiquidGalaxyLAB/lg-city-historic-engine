@@ -10,12 +10,12 @@ class PanoramaOverlayManager {
   /// - [bottom]: distance from the screen's bottom edge to the image's bottom edge.
   /// - [width] / [height]: size of the image slice on this screen.
   static String generatePositioned(
-    String imageUrl, {
-    required double left,
-    required double bottom,
-    required double width,
-    required double height,
-  }) {
+      String imageUrl, {
+        required double left,
+        required double bottom,
+        required double width,
+        required double height,
+      }) {
     return '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
   <Document>
@@ -30,6 +30,30 @@ class PanoramaOverlayManager {
       <screenXY x="$left" y="$bottom" xunits="fraction" yunits="fraction"/>
       <rotationXY x="0" y="0" xunits="fraction" yunits="fraction"/>
       <size x="$width" y="$height" xunits="fraction" yunits="fraction"/>
+    </ScreenOverlay>
+  </Document>
+</kml>''';
+  }
+
+  /// Places [imageUrl] filling the ENTIRE width of the screen, anchored to
+  /// the bottom edge. Used for sites where the panorama slices were already
+  /// pre-cut server-side to match each screen exactly (e.g. `<site>_L.png`,
+  /// `<site>_C.png`, `<site>_R.png`), so no client-side slicing/positioning
+  /// math is needed — just point each screen at its own slice.
+  static String generateFullWidth(String imageUrl) {
+    return '''<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+  <Document>
+    <name>Site Panorama Slice</name>
+    <ScreenOverlay>
+      <name>Site Image Slice</name>
+      <Icon>
+        <href>$imageUrl</href>
+      </Icon>
+      <overlayXY x="0" y="0" xunits="fraction" yunits="fraction"/>
+      <screenXY x="0.0" y="0" xunits="fraction" yunits="fraction"/>
+      <rotationXY x="0" y="0" xunits="fraction" yunits="fraction"/>
+      <size x="1.0" y="0" xunits="fraction" yunits="fraction"/>
     </ScreenOverlay>
   </Document>
 </kml>''';

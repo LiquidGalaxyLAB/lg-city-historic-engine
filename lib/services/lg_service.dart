@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart' show debugPrint;
+import 'package:flutter/services.dart' show rootBundle;
 import '../models/connection_state.dart';
 import '../models/poi_model.dart';
 import '../kmls/logos_kml.dart';
@@ -32,6 +33,13 @@ class LGService {
   /// Gap between the BOTTOM of the image and the bottom edge of the screen,
   /// as a fraction of one screen's height. 0 = touching the very bottom.
   static const double _panoramaBottomMargin = 0.06;
+
+  /// The "Solo KML" filename each machine's sync_nlc_N.php serves.
+  /// Machine 1 (the master) is the ONE exception: it's named `master_1.kml`,
+  /// not `slave_1.kml`. Every other machine follows `slave_N.kml`.
+  String _soloKmlFilename(int machineNumber) {
+    return machineNumber == 1 ? 'master_1.kml' : 'slave_$machineNumber.kml';
+  }
 
   Future<void> sendKML(String kml) async {
     await _conn.execute("cat <<'EOF' > /var/www/html/kmls.kml\n$kml\nEOF");
@@ -156,7 +164,8 @@ fi
     }
   }
 
-  /// Sends the balloon with the description only to the right screen (LG3 / slave_3).
+  /// Sends the balloon with the description (and, if available, an image)
+  /// only to the right screen (LG3 / slave_3).
   Future<void> sendBalloon(POI poi) async {
     const int slaveNo = 3;
 
@@ -164,19 +173,42 @@ fi
     final String localizedDescription = poi.getDescription('en');
 
     final String eraLine = (poi.era != null && poi.era!.isNotEmpty)
-        ? '<p style="font-size:18px;color:#C8A96E;margin:0 0 10px 0;text-transform:uppercase;font-weight:bold;">${poi.era}</p>'
+        ? '<p style="font-size:21px;color:#3b1d01;margin:0 0 10px 0;text-transform:uppercase;font-weight:bold;">${poi.era}</p>'
         : '';
 
     final String dateLine = (poi.startDate != null && poi.startDate!.isNotEmpty)
-        ? '<p style="font-size:16px;color:#A0856A;margin:0 0 20px 0;">'
+        ? '<p style="font-size:19px;color:#3b1d01;margin:0 0 20px 0;">'
         '${poi.startDate}'
         '${poi.endDate != null && poi.endDate != poi.startDate ? " – ${poi.endDate}" : ""}'
         '</p>'
         : '';
 
     final String descLine = localizedDescription.isNotEmpty
-        ? '<p style="font-size:24px;line-height:1.6;color:#F5F1E9;margin:0;text-align:justify;">$localizedDescription</p>'
+        ? '<p style="font-size:27px;line-height:1.6;color:#3b1d01;margin:0;text-align:justify;">$localizedDescription</p>'
         : '';
+
+    // The balloon is plain HTML rendered inside Google Earth, so an <img>
+    // works exactly like in a web page — but it has to point at a URL the
+    // machine running Google Earth can actually reach, so the image must
+    // be uploaded to the master's Apache first (never referenced as a
+    // local Flutter asset path, which only exists on the phone).
+    String imgLine = '';
+    if (poi.image.isNotEmpty) {
+      try {
+        final ByteData data = await rootBundle.load(poi.image);
+        final Uint8List bytes = data.buffer.asUint8List();
+        final String fileName =
+            '${poi.name.replaceAll(RegExp(r'[^A-Za-z0-9_]'), '_')}_balloon.png';
+        await _conn.uploadImageBytes(bytes, fileName);
+        // Always lg1 here too: LG3 is a separate machine from the master,
+        // so it must resolve the image over the network, never localhost.
+        final String imageUrl = 'http://lg1:81/logos/$fileName';
+        imgLine =
+        '<img src="$imageUrl" style="width:100%;max-height:320px;object-fit:cover;border-radius:6px;margin:0 0 20px 0;display:block;">';
+      } catch (e) {
+        debugPrint('LGService: could not upload balloon image "${poi.image}": $e');
+      }
+    }
 
     final String kml = '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
@@ -188,11 +220,12 @@ fi
         <BalloonStyle>
           <text><![CDATA[
         <html>
-        <body style="margin:0;padding:0;background-color:#1C1C1E;font-family:Georgia,serif;color:#F5F1E9;width:700px;min-height:500px;overflow-y:auto;">
+        <body style="margin:0;padding:0;background-color:#faf0e6;font-family:Georgia,serif;color:#F5F1E9;width:700px;min-height:500px;overflow-y:auto;">
           <div style="padding:45px;">
-            <h1 style="font-size:40px;font-weight:bold;margin:0 0 18px 0;color:#FFFFFF;border-bottom:2px solid #C8A96E;padding-bottom:12px;">
+            <h1 style="font-size:44px;font-weight:bold;margin:0 0 18px 0;color:#241b13;border-bottom:8px solid #753801;padding-bottom:12px;">
               ${poi.name}
             </h1>
+            $imgLine
             $eraLine
             $dateLine
             $descLine
@@ -285,7 +318,7 @@ fi
         final int pixelWidth = pixelEnd - pixelStart;
 
         final Uint8List slice =
-            await ImageSlicer.cropHorizontal(image, pixelStart, pixelWidth);
+        await ImageSlicer.cropHorizontal(image, pixelStart, pixelWidth);
 
         final String fileName = '${baseName}_s$i.png';
         await _conn.uploadImageBytes(slice, fileName);
@@ -317,8 +350,61 @@ fi
   Future<void> clearPanoramaImage() async {
     final String blank = PanoramaOverlayManager.blank();
     for (final slaveNo in _panoramaScreensLeftToRight) {
+      final String fileName = _soloKmlFilename(slaveNo);
       await _conn.execute(
-          "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$blank\nKMLEOF");
+          "cat <<'KMLEOF' > /var/www/html/kml/$fileName\n$blank\nKMLEOF");
+    }
+  }
+
+  /// Shows a FULL-WIDTH, bottom-anchored panorama for [siteId] across the
+  /// three middle screens (LG5 left, LG1 center, LG2 right), reusing slices
+  /// that were already uploaded/pre-cut server-side under
+  /// `/var/www/html/logos/`, named:
+  ///   <siteId>_L.png  <siteId>_C.png  <siteId>_R.png
+  ///
+  /// This is the reusable version of what we did manually for
+  /// "la_seu_vella": call this from ANY "send to LG" button by just passing
+  /// that site's [siteId] — no per-site KML files needed.
+  ///
+  /// Requires the three PNGs to already exist on the master's Apache
+  /// (upload them once per site, e.g. via [LGConnectionState.uploadImageBytes]
+  /// or manually to /var/www/html/logos/).
+  Future<void> sendSitePanorama(String siteId) async {
+    // Always resolve against lg1 (the master), never localhost — slaves
+    // must reach the image over the network via the 'lg1' hostname, and
+    // lg1 itself resolves 'lg1:81' fine too (Apache is on the same box).
+    const String imageHost = 'lg1';
+
+    final Map<int, String> suffixByScreen = {
+      5: 'L', // left
+      1: 'C', // center
+      2: 'R', // right
+    };
+
+    for (final slaveNo in _panoramaScreensLeftToRight) {
+      try {
+        final String suffix = suffixByScreen[slaveNo]!;
+        final String imageUrl =
+            'http://$imageHost:81/logos/${siteId}_$suffix.png';
+        final String kml = PanoramaOverlayManager.generateFullWidth(imageUrl);
+        final String fileName = _soloKmlFilename(slaveNo);
+        await _conn.execute(
+            "cat <<'KMLEOF' > /var/www/html/kml/$fileName\n$kml\nKMLEOF");
+      } catch (e) {
+        debugPrint(
+            'LGService: failed to send site panorama slice to slave_$slaveNo: $e');
+      }
+    }
+  }
+
+  /// Clears the full-width site panorama from LG5, LG1 and LG2.
+  /// Use this before switching to a different site, or when hiding it.
+  Future<void> clearSitePanorama() async {
+    final String blank = PanoramaOverlayManager.blank();
+    for (final slaveNo in _panoramaScreensLeftToRight) {
+      final String fileName = _soloKmlFilename(slaveNo);
+      await _conn.execute(
+          "cat <<'KMLEOF' > /var/www/html/kml/$fileName\n$blank\nKMLEOF");
     }
   }
 }
