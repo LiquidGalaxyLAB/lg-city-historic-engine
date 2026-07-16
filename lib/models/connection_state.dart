@@ -120,8 +120,30 @@ class LGConnectionState extends ChangeNotifier {
   Future<void> sendLogoKML(String kml) async {
     // Logo on LG4 (slave_4)
     const int slaveNo = 4;
-    await execute(
-        "cat <<'EOF' > /var/www/html/kml/slave_$slaveNo.kml\n$kml\nEOF");
+    await writeRemoteFile('/var/www/html/kml/slave_$slaveNo.kml', kml);
+  }
+
+  /// Writes [content] to [path] on the remote rig.
+  ///
+  /// Content is base64-encoded before being sent so that quotes,
+  /// XML attributes (e.g. `version="1.0"`), newlines or any other
+  /// special characters inside it can NEVER break the remote shell
+  /// command — the classic bug with `cat <<'EOF' > file ... EOF`
+  /// wrapped inside extra quoting layers (e.g. `sudo -S sh -c "..."`).
+  ///
+  /// [useSudo] defaults to true because folder permissions on
+  /// `/var/www/html` can get reset by the LG rig between syncs/reboots,
+  /// so writing with sudo is the safe default for the "tools" actions.
+  Future<void> writeRemoteFile(String path, String content,
+      {bool useSudo = true}) async {
+    final String b64 = base64Encode(utf8.encode(content));
+    if (useSudo) {
+      final String sudo = sudoPassword ?? '';
+      await execute(
+          "echo '$sudo' | sudo -S bash -c \"echo '$b64' | base64 -d > '$path'\"");
+    } else {
+      await execute("echo '$b64' | base64 -d > '$path'");
+    }
   }
 
   Future<void> uploadAssets() async {
@@ -147,8 +169,8 @@ class LGConnectionState extends ChangeNotifier {
       final sftp = await _client!.sftp();
       final file = await sftp.open('/var/www/html/logos/$remoteFileName',
           mode: SftpFileOpenMode.create |
-              SftpFileOpenMode.write |
-              SftpFileOpenMode.truncate);
+          SftpFileOpenMode.write |
+          SftpFileOpenMode.truncate);
       await file.writeBytes(bytes);
       await file.close();
       await execute(
