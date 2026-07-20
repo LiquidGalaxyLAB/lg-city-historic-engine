@@ -6,7 +6,7 @@ import 'pag_hechos_h.dart';
 import 'pag_conectar.dart';
 import '../widgets/app_top_bar.dart';
 import '../main.dart';
-
+//Es la pagina cuando 
 class CategoriesHomePage extends StatelessWidget {
   const CategoriesHomePage({super.key});
 
@@ -32,6 +32,20 @@ class CategoriesHomePage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18),
                   child: Image.asset('assets/images/logo.png', height: 118),
+                ),
+
+                const SizedBox(height: 6),
+
+                // ── STATUS LINE ──
+                const Text(
+                  'Lleida, Spain, Data Base Loaded',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.3,
+                    color: Color(0xFF6B6459),
+                  ),
                 ),
 
                 const SizedBox(height: 18),

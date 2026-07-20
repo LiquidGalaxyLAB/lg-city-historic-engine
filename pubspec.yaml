@@ -1,5 +1,5 @@
-name: prueba
-description: "A new Flutter project."
+name: lg_city_historic_engine
+description: "LG City Historic Engine"
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -20,6 +20,19 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.14.3
+
+# Genera los iconos con: dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/images/KMLs/logo.png"
+  min_sdk_android: 21
+  # Si tu logo.png tiene fondo transparente y quieres que Android le ponga
+  # un fondo de color sólido detrás en vez de dejarlo transparente,
+  # descomenta y ajusta esta línea:
+  # adaptive_icon_background: "#0B1220"
+  # adaptive_icon_foreground: "assets/images/KMLs/logo.png"
 
 flutter:
   uses-material-design: true
