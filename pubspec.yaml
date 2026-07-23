@@ -15,6 +15,8 @@ dependencies:
   shared_preferences: ^2.2.0
   sqflite: ^2.3.3
   path: ^1.9.0
+  image: ^4.5.4
+  flutter_tts: ^4.2.0
 
 dev_dependencies:
   flutter_test:
@@ -40,6 +42,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/KMLs/logos.png
+    - assets/images/KMLs/placemark_base.png
     - assets/images_points_of_interest/
     - assets/images_churches_cathedrals/
     - assets/images_museums/

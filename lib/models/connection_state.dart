@@ -118,31 +118,121 @@ class LGConnectionState extends ChangeNotifier {
   }
 
   Future<void> sendLogoKML(String kml) async {
-    // Logo on LG4 (slave_4)
-    const int slaveNo = 4;
-    await writeRemoteFile('/var/www/html/kml/slave_$slaveNo.kml', kml);
+    final slaveNo = _leftMostScreen(_screens);
+    final withId = _ensureDocumentId(kml, 'slave_$slaveNo');
+    await writeRemoteFile('/var/www/html/kml/slave_$slaveNo.kml', withId);
+    await notifySlaveKmlChanged(slaveNo);
+  }
+
+  /// Pantalla izquierda del rig según número de pantallas (lg-server formula).
+  int _leftMostScreen(int screens) => (screens ~/ 2) + 2;
+
+  /// Pantalla derecha del rig según número de pantallas (lg-server formula).
+  int _rightMostScreen(int screens) => (screens ~/ 2) + 1;
+
+  String _ensureDocumentId(String kml, String documentId) {
+    if (kml.contains('id="$documentId"') || kml.contains("id='$documentId'")) {
+      return kml;
+    }
+    return kml.replaceFirst('<Document>', '<Document id="$documentId">');
+  }
+
+  /// Avisa al sync_nlc del rig de que cambió el KML solo de [machineNo].
+  /// LG1 (centro) usa master_1.kml; el resto slave_N.kml.
+  Future<void> notifySoloKmlChanged(int machineNo) async {
+    final kmlPath = _soloKmlPath(machineNo);
+    final listPath = '/var/www/html/kmls_$machineNo.txt';
+    final url = _soloKmlUrl(machineNo);
+    await execute('touch $kmlPath');
+    await execute(
+      "test -f '$listPath' && touch '$listPath' || echo '$url' > '$listPath'",
+    );
+  }
+
+  Future<void> notifySlaveKmlChanged(int slaveNo) =>
+      notifySoloKmlChanged(slaveNo);
+
+  String _soloKmlPath(int machineNo) => machineNo == 1
+      ? '/var/www/html/kml/master_1.kml'
+      : '/var/www/html/kml/slave_$machineNo.kml';
+
+  String _soloKmlUrl(int machineNo) => machineNo == 1
+      ? 'http://lg1:81/kml/master_1.kml'
+      : 'http://lg1:81/kml/slave_$machineNo.kml';
+
+  /// Escribe el KML solo de una máquina (1 = centro/master, resto = slave).
+  Future<bool> writeSoloKml(int machineNo, String content) async {
+    return writeRemoteFile(_soloKmlPath(machineNo), content);
+  }
+
+  /// Escribe un KML en la pantalla esclava [slaveNo] (p. ej. 3 = LG3 balloon).
+  Future<bool> writeSlaveKml(int slaveNo, String content) async {
+    return writeSoloKml(slaveNo, content);
   }
 
   /// Writes [content] to [path] on the remote rig.
   ///
-  /// Content is base64-encoded before being sent so that quotes,
-  /// XML attributes (e.g. `version="1.0"`), newlines or any other
-  /// special characters inside it can NEVER break the remote shell
-  /// command — the classic bug with `cat <<'EOF' > file ... EOF`
-  /// wrapped inside extra quoting layers (e.g. `sudo -S sh -c "..."`).
-  ///
-  /// [useSudo] defaults to true because folder permissions on
-  /// `/var/www/html` can get reset by the LG rig between syncs/reboots,
-  /// so writing with sudo is the safe default for the "tools" actions.
-  Future<void> writeRemoteFile(String path, String content,
-      {bool useSudo = true}) async {
-    final String b64 = base64Encode(utf8.encode(content));
-    if (useSudo) {
-      final String sudo = sudoPassword ?? '';
-      await execute(
-          "echo '$sudo' | sudo -S bash -c \"echo '$b64' | base64 -d > '$path'\"");
-    } else {
-      await execute("echo '$b64' | base64 -d > '$path'");
+  /// Prefiere SFTP (fiable para KML grandes). Si falla, prueba heredoc y
+  /// base64 como respaldo.
+  Future<bool> writeRemoteFile(
+    String path,
+    String content, {
+    bool useSudo = false,
+  }) async {
+    if (!_isConnected || _client == null) {
+      debugPrint('LGService: writeRemoteFile skipped (no connection): $path');
+      return false;
+    }
+
+    final bytes = utf8.encode(content);
+
+    // 1) SFTP — mismo canal que las imágenes del balloon; evita límites del shell.
+    try {
+      final sftp = await _client!.sftp();
+      final file = await sftp.open(
+        path,
+        mode: SftpFileOpenMode.create |
+            SftpFileOpenMode.write |
+            SftpFileOpenMode.truncate,
+      );
+      await file.writeBytes(bytes);
+      await file.close();
+      debugPrint('LGService: SFTP wrote ${bytes.length} bytes -> $path');
+      return true;
+    } catch (e) {
+      debugPrint('LGService: SFTP write failed for $path: $e');
+    }
+
+    // 2) Heredoc sin sudo — funcionaba en rigs con /var/www/html en 777.
+    try {
+      const marker = 'LGKMLWRITEEOF';
+      await execute("cat <<'$marker' > '$path'\n$content\n$marker");
+      final sizeStr = await execute("wc -c < '$path'");
+      final size = int.tryParse(sizeStr?.trim() ?? '') ?? 0;
+      if (size > 0) {
+        debugPrint('LGService: heredoc wrote $path ($size bytes)');
+        return true;
+      }
+    } catch (e) {
+      debugPrint('LGService: heredoc write failed for $path: $e');
+    }
+
+    // 3) Base64 por shell (solo payloads pequeños).
+    try {
+      final b64 = base64Encode(bytes);
+      if (useSudo && (sudoPassword?.isNotEmpty ?? false)) {
+        final sudo = sudoPassword!;
+        await execute(
+          "echo '$sudo' | sudo -S bash -c \"echo '$b64' | base64 -d > '$path'\"",
+        );
+      } else {
+        await execute("echo '$b64' | base64 -d > '$path'");
+      }
+      debugPrint('LGService: base64 wrote ${bytes.length} bytes -> $path');
+      return true;
+    } catch (e) {
+      debugPrint('LGService: base64 write failed for $path: $e');
+      return false;
     }
   }
 
@@ -163,20 +253,28 @@ class LGConnectionState extends ChangeNotifier {
   }
 
   /// Uploads raw image bytes (e.g. a slice cropped in memory) to the LG rig.
-  Future<void> uploadImageBytes(Uint8List bytes, String remoteFileName) async {
+  Future<void> uploadImageBytes(
+    Uint8List bytes,
+    String remoteFileName, {
+    String remoteDir = '/var/www/html/logos',
+  }) async {
     if (!_isConnected || _client == null) return;
+    final remotePath = '$remoteDir/$remoteFileName';
     try {
       final sftp = await _client!.sftp();
-      final file = await sftp.open('/var/www/html/logos/$remoteFileName',
-          mode: SftpFileOpenMode.create |
-          SftpFileOpenMode.write |
-          SftpFileOpenMode.truncate);
+      final file = await sftp.open(
+        remotePath,
+        mode: SftpFileOpenMode.create |
+            SftpFileOpenMode.write |
+            SftpFileOpenMode.truncate,
+      );
       await file.writeBytes(bytes);
       await file.close();
       await execute(
-          "echo '$sudoPassword' | sudo -S chmod 644 /var/www/html/logos/$remoteFileName");
+        "echo '$sudoPassword' | sudo -S chmod 644 $remotePath",
+      );
     } catch (e) {
-      debugPrint('LGService SFTP Error uploading bytes to $remoteFileName: $e');
+      debugPrint('LGService SFTP Error uploading bytes to $remotePath: $e');
     }
   }
 }

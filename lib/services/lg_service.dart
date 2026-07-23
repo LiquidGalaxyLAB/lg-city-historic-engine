@@ -4,10 +4,12 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:flutter/services.dart' show rootBundle;
+import '../main.dart';
 import '../models/connection_state.dart';
 import '../models/poi_model.dart';
 import '../kmls/logos_kml.dart';
 import '../kmls/panorama_kml.dart';
+import '../kmls/placemark_icon.dart';
 import 'image_slicer.dart';
 
 class LGService {
@@ -33,6 +35,10 @@ class LGService {
   /// Gap between the BOTTOM of the image and the bottom edge of the screen,
   /// as a fraction of one screen's height. 0 = touching the very bottom.
   static const double _panoramaBottomMargin = 0.06;
+
+  /// Fondo beige de la app (balloon).
+  static const String _appBackground = '#F5F1E9';
+  static const String _appText = '#1C1C1E';
 
   /// The "Solo KML" filename each machine's sync_nlc_N.php serves.
   /// Machine 1 (the master) is the ONE exception: it's named `master_1.kml`,
@@ -164,77 +170,135 @@ fi
     }
   }
 
-  /// Sends the balloon with the description (and, if available, an image)
-  /// only to the right screen (LG3 / slave_3).
-  Future<void> sendBalloon(POI poi) async {
-    const int slaveNo = 3;
+  /// LG1 (master) es siempre la pantalla central del rig.
+  static const int _centerScreen = 1;
 
-    // Force English for all the balloon content
-    final String localizedDescription = poi.getDescription('en');
+  /// Índice de pantalla del rig para logo (izquierda) y balloon (derecha).
+  int _leftMostScreen(int screens) => (screens ~/ 2) + 2;
+  int _rightMostScreen(int screens) => (screens ~/ 2) + 1;
+
+  /// Muestra un pin en la pantalla central (LG1) en las coordenadas del POI.
+  Future<void> sendCenterPlacemark(POI poi) async {
+    if (!_conn.isConnected) {
+      debugPrint('LGService: sendCenterPlacemark skipped — not connected');
+      return;
+    }
+
+    const machineNo = _centerScreen;
+    const documentId = 'master_1';
+    final lat = poi.lat ?? 41.6147;
+    final lng = poi.lng ?? 0.6268;
+
+    try {
+      final iconBytes = await PlacemarkIconManager.buildColoredIcon(poi);
+      await _conn.uploadImageBytes(
+        iconBytes,
+        PlacemarkIconManager.remoteFileNameFor(poi),
+        remoteDir: '/var/www/html/kml',
+      );
+    } catch (e) {
+      debugPrint('LGService: sendCenterPlacemark icon upload failed: $e');
+      return;
+    }
+
+    final kml = PlacemarkIconManager.kmlPlacemark(
+      poi: poi,
+      lat: lat,
+      lng: lng,
+      documentId: documentId,
+    );
+
+    final ok = await _conn.writeSoloKml(machineNo, kml);
+    if (ok) {
+      await _conn.notifySoloKmlChanged(machineNo);
+      final color = PlacemarkIconManager.colorForPoi(poi);
+      debugPrint(
+        'LGService: sendCenterPlacemark OK -> master_1.kml (${poi.name}, rgb(${color.r},${color.g},${color.b}))',
+      );
+    } else {
+      debugPrint('LGService: sendCenterPlacemark FAILED master_1.kml');
+    }
+  }
+
+  /// Quita el pin de la pantalla central.
+  Future<void> clearCenterPlacemark() async {
+    const machineNo = _centerScreen;
+    const String blank = '''<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+  <Document id="master_1"></Document>
+</kml>''';
+    await _conn.writeSoloKml(machineNo, blank);
+    await _conn.notifySoloKmlChanged(machineNo);
+  }
+
+  /// Sends the balloon to the right-most screen of the rig.
+  Future<void> sendBalloon(POI poi) async {
+    final screens = _conn.screens;
+    final slaveNo = _rightMostScreen(screens);
+
+    if (!_conn.isConnected) {
+      debugPrint('LGService: sendBalloon skipped — not connected');
+      return;
+    }
+
+    final lang = languageNotifier.value;
+    final String localizedDescription = poi.getDescription(lang);
+
+    String? imageBlock;
+    if (poi.image.isNotEmpty) {
+      try {
+        final rawName = poi.image.split('/').last;
+        final safeName =
+            'balloon_${Object.hash(poi.name, poi.image).abs()}_$rawName'
+                .replaceAll(RegExp(r'[^\w.\-]'), '_');
+        await _conn.uploadImageAsset(poi.image, safeName);
+        imageBlock =
+            '<img src="http://lg1:81/logos/$safeName" alt="${poi.name}" '
+            'style="width:100%;max-height:320px;object-fit:cover;display:block;" />';
+      } catch (e) {
+        debugPrint('LGService: balloon image upload failed: $e');
+      }
+    }
 
     final String eraLine = (poi.era != null && poi.era!.isNotEmpty)
-        ? '<p style="font-size:21px;color:#3b1d01;margin:0 0 10px 0;text-transform:uppercase;font-weight:bold;">${poi.era}</p>'
+        ? '<p style="font-size:22px;color:$_appText;margin:0 0 12px 0;text-transform:uppercase;font-weight:bold;">${poi.era}</p>'
         : '';
 
     final String dateLine = (poi.startDate != null && poi.startDate!.isNotEmpty)
-        ? '<p style="font-size:19px;color:#3b1d01;margin:0 0 20px 0;">'
+        ? '<p style="font-size:20px;color:$_appText;margin:0 0 24px 0;">'
         '${poi.startDate}'
         '${poi.endDate != null && poi.endDate != poi.startDate ? " – ${poi.endDate}" : ""}'
         '</p>'
         : '';
 
     final String descLine = localizedDescription.isNotEmpty
-        ? '<p style="font-size:27px;line-height:1.6;color:#3b1d01;margin:0;text-align:justify;">$localizedDescription</p>'
+        ? '<p style="font-size:30px;line-height:1.55;color:$_appText;margin:0;text-align:justify;">$localizedDescription</p>'
         : '';
 
-    // The balloon is plain HTML rendered inside Google Earth, so an <img>
-    // works exactly like in a web page — but it has to point at a URL the
-    // machine running Google Earth can actually reach, so the image must
-    // be uploaded to the master's Apache first (never referenced as a
-    // local Flutter asset path, which only exists on the phone).
-    String imgLine = '';
-    if (poi.image.isNotEmpty) {
-      try {
-        final ByteData data = await rootBundle.load(poi.image);
-        final Uint8List bytes = data.buffer.asUint8List();
-        final String fileName =
-            '${poi.name.replaceAll(RegExp(r'[^A-Za-z0-9_]'), '_')}_balloon.png';
-        await _conn.uploadImageBytes(bytes, fileName);
-        // Always lg1 here too: LG3 is a separate machine from the master,
-        // so it must resolve the image over the network, never localhost.
-        final String imageUrl = 'http://lg1:81/logos/$fileName';
-        imgLine =
-        '<img src="$imageUrl" style="width:100%;max-height:320px;object-fit:cover;border-radius:6px;margin:0 0 20px 0;display:block;">';
-      } catch (e) {
-        debugPrint('LGService: could not upload balloon image "${poi.image}": $e');
-      }
-    }
+    final String imageHtml = imageBlock ?? '';
 
+    // Document id="slave_N" es obligatorio en Liquid Galaxy para que GE recargue la capa solo.
     final String kml = '''<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
-  <Document>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+  <Document id="slave_$slaveNo">
     <Placemark>
       <name>${poi.name}</name>
       <gx:balloonVisibility>1</gx:balloonVisibility>
-      <Style>
-        <BalloonStyle>
-          <text><![CDATA[
+      <description><![CDATA[
         <html>
-        <body style="margin:0;padding:0;background-color:#faf0e6;font-family:Georgia,serif;color:#F5F1E9;width:700px;min-height:500px;overflow-y:auto;">
-          <div style="padding:45px;">
-            <h1 style="font-size:44px;font-weight:bold;margin:0 0 18px 0;color:#241b13;border-bottom:8px solid #753801;padding-bottom:12px;">
+        <body style="margin:0;padding:0;background-color:$_appBackground;font-family:Georgia,serif;color:$_appText;width:100%;height:100%;overflow-y:auto;">
+          $imageHtml
+          <div style="padding:36px 40px 40px 40px;">
+            <h1 style="font-size:54px;font-weight:bold;margin:0 0 18px 0;color:$_appText;border-bottom:2px solid #6B5B45;padding-bottom:12px;">
               ${poi.name}
             </h1>
-            $imgLine
             $eraLine
             $dateLine
             $descLine
           </div>
         </body>
         </html>
-          ]]></text>
-        </BalloonStyle>
-      </Style>
+      ]]></description>
       <Point>
         <coordinates>${poi.lng ?? 0.6268},${poi.lat ?? 41.6147},0</coordinates>
       </Point>
@@ -242,17 +306,26 @@ fi
   </Document>
 </kml>''';
 
-    await _conn.execute(
-        "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$kml\nKMLEOF");
+    final ok = await _conn.writeSlaveKml(slaveNo, kml);
+    if (ok) {
+      await _conn.notifySlaveKmlChanged(slaveNo);
+      debugPrint(
+        'LGService: sendBalloon OK -> slave_$slaveNo.kml (${poi.name}, $screens screens)',
+      );
+    } else {
+      debugPrint('LGService: sendBalloon FAILED slave_$slaveNo.kml');
+    }
   }
 
-  /// Clears only the right screen (LG3 / slave_3).
+  /// Clears the right-most screen balloon layer.
   Future<void> clearBalloon() async {
-    const int slaveNo = 3;
-    const String blank = '''<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2"><Document></Document></kml>''';
-    await _conn.execute(
-        "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$blank\nKMLEOF");
+    final slaveNo = _rightMostScreen(_conn.screens);
+    final String blank = '''<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+  <Document id="slave_$slaveNo"></Document>
+</kml>''';
+    await _conn.writeSlaveKml(slaveNo, blank);
+    await _conn.notifySlaveKmlChanged(slaveNo);
   }
 
   /// Uploads [poi.panoramaImage] (if set) and shows it, SMALLER than full

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
+import '../models/connection_state.dart';
 import '../models/poi_model.dart';
 import '../services/lg_service.dart';
+import '../services/narration_service.dart';
 import '../widgets/m_superior.dart';
 
 class LaunchLGPage extends StatefulWidget {
@@ -13,25 +16,36 @@ class LaunchLGPage extends StatefulWidget {
 }
 
 class _LaunchLGPageState extends State<LaunchLGPage> {
+  final LGConnectionState _conn = LGConnectionState();
   final LGService _lgService = LGService();
+  final NarrationService _narration = NarrationService();
   bool _isOrbiting = false;
+  bool _isNarrating = false;
 
   @override
   void initState() {
     super.initState();
+    _narration.init(
+      onSpeakingChanged: () {
+        if (mounted) {
+          setState(() => _isNarrating = _narration.isSpeaking);
+        }
+      },
+    );
     _initLG();
   }
 
   Future<void> _initLG() async {
-    // First we send the KML
+    if (!_conn.isConnected) {
+      debugPrint('LaunchLGPage: not connected — skipping LG send');
+      return;
+    }
+
     await _sendToLG();
-    // Then we do the Fly To so the camera moves to the location
     await _lgService.flyToPOI(widget.poi);
-    // Send the balloon with the description to the LG3 screen
+    await _lgService.sendCenterPlacemark(widget.poi);
+    await Future.delayed(const Duration(milliseconds: 800));
     await _lgService.sendBalloon(widget.poi);
-    // If this POI has a panorama image, show it centered and intact
-    // across the three middle screens (LG1, LG2, LG5)
-    await _lgService.sendPanoramaImage(widget.poi);
   }
 
   Future<void> _sendToLG() async {
@@ -51,6 +65,10 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
     await _lgService.sendKML(kml);
   }
 
+  void _toggleNarration() {
+    _narration.speakPoi(widget.poi, languageNotifier.value);
+  }
+
   void _toggleOrbit() {
     setState(() {
       _isOrbiting = !_isOrbiting;
@@ -65,10 +83,10 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
 
   @override
   void dispose() {
-    // Make sure the orbit stops and the balloon is cleared when leaving the screen
+    _narration.dispose();
     _lgService.stopOrbit();
+    _lgService.clearCenterPlacemark();
     _lgService.clearBalloon();
-    _lgService.clearPanoramaImage();
     super.dispose();
   }
 
@@ -206,11 +224,12 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
                           children: [
                             Expanded(
                               child: _buildActionCard(
-                                icon: Icons.volume_up_outlined,
+                                icon: _isNarrating
+                                    ? Icons.stop_circle_outlined
+                                    : Icons.volume_up_outlined,
                                 label: 'AI Narration',
-                                onTap: () {
-                                  // AI Narration logic
-                                },
+                                isActive: _isNarrating,
+                                onTap: _toggleNarration,
                               ),
                             ),
                             const SizedBox(width: 15),
