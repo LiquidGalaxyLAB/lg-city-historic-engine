@@ -53,9 +53,6 @@ class ChromiumImageCatalog {
   }
 
   static String _slug(String name) {
-    return name
-        .toLowerCase()
-        .replaceAll(RegExp(r"[^a-z0-9]+"), '')
-        .trim();
+    return name.toLowerCase().replaceAll(RegExp(r"[^a-z0-9]+"), '').trim();
   }
 }

@@ -246,7 +246,8 @@ img.onload = () => {
 </html>
 ''';
 
-    final ok = await _conn.writeRemoteFile('/var/www/html/$_htmlFileName', html);
+    final ok =
+        await _conn.writeRemoteFile('/var/www/html/$_htmlFileName', html);
     if (!ok) {
       debugPrint('ChromiumService: HTML upload failed');
     }

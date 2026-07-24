@@ -34,148 +34,150 @@ class FloatingMenu extends StatelessWidget {
       valueListenable: languageNotifier,
       builder: (context, _, __) {
         return Align(
-      alignment: Alignment.topLeft,
-      child: Material(
-        color: Colors.transparent,
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.5,
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-            color: AppTheme.menuPanelBackground(context),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.15),
-                blurRadius: 20,
-                offset: const Offset(4, 0),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 60),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10,
-                ),
-                child: Text(
-                  T.s('menu'),
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    letterSpacing: 1.2,
+          alignment: Alignment.topLeft,
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.5,
+              height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(
+                color: AppTheme.menuPanelBackground(context),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.15),
+                    blurRadius: 20,
+                    offset: const Offset(4, 0),
                   ),
-                ),
+                ],
               ),
-              const Divider(),
-              Expanded(
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    _item(
-                      context,
-                      icon: Icons.home_outlined,
-                      title: T.s('home'),
-                      subtitle: T.s('menu_categories_sub'),
-                      highlighted: currentTitle == T.s('home'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const CategoriesHomePage(),
-                          ),
-                          (route) => false,
-                        );
-                      },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 60),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
                     ),
-                    _item(
-                      context,
-                      icon: Icons.wifi,
-                      title: T.s('connect'),
-                      subtitle: T.s('menu_connection_sub'),
-                      highlighted: currentTitle == T.s('connect'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const ConnectPage(),
-                          ),
-                        );
-                      },
+                    child: Text(
+                      T.s('menu'),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface,
+                        letterSpacing: 1.2,
+                      ),
                     ),
-                    _item(
-                      context,
-                      icon: Icons.build_outlined,
-                      title: T.s('tools'),
-                      subtitle: T.s('menu_tools_sub'),
-                      highlighted: currentTitle == T.s('tools'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
+                  ),
+                  const Divider(),
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      children: [
+                        _item(
                           context,
-                          MaterialPageRoute(builder: (_) => const ToolsPage()),
-                        );
-                      },
-                    ),
-                    _item(
-                      context,
-                      icon: Icons.settings_outlined,
-                      title: T.s('settings'),
-                      subtitle: T.s('menu_settings_sub'),
-                      highlighted: currentTitle == T.s('settings'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
+                          icon: Icons.home_outlined,
+                          title: T.s('home'),
+                          subtitle: T.s('menu_categories_sub'),
+                          highlighted: currentTitle == T.s('home'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const CategoriesHomePage(),
+                              ),
+                              (route) => false,
+                            );
+                          },
+                        ),
+                        _item(
                           context,
-                          MaterialPageRoute(
-                            builder: (_) => const SettingsPage(),
-                          ),
-                        );
-                      },
-                    ),
-                    _item(
-                      context,
-                      icon: Icons.info_outline,
-                      title: T.s('menu_about'),
-                      subtitle: T.s('menu_about_sub'),
-                      highlighted: currentTitle == T.s('menu_about'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
+                          icon: Icons.wifi,
+                          title: T.s('connect'),
+                          subtitle: T.s('menu_connection_sub'),
+                          highlighted: currentTitle == T.s('connect'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const ConnectPage(),
+                              ),
+                            );
+                          },
+                        ),
+                        _item(
                           context,
-                          MaterialPageRoute(
-                            builder: (_) => const AboutPage(),
-                          ),
-                        );
-                      },
-                    ),
-                    _item(
-                      context,
-                      icon: Icons.help_outline,
-                      title: T.s('help'),
-                      subtitle: T.s('menu_help_sub'),
-                      highlighted: currentTitle == T.s('help'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
+                          icon: Icons.build_outlined,
+                          title: T.s('tools'),
+                          subtitle: T.s('menu_tools_sub'),
+                          highlighted: currentTitle == T.s('tools'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const ToolsPage()),
+                            );
+                          },
+                        ),
+                        _item(
                           context,
-                          MaterialPageRoute(builder: (_) => const HelpPage()),
-                        );
-                      },
+                          icon: Icons.settings_outlined,
+                          title: T.s('settings'),
+                          subtitle: T.s('menu_settings_sub'),
+                          highlighted: currentTitle == T.s('settings'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const SettingsPage(),
+                              ),
+                            );
+                          },
+                        ),
+                        _item(
+                          context,
+                          icon: Icons.info_outline,
+                          title: T.s('menu_about'),
+                          subtitle: T.s('menu_about_sub'),
+                          highlighted: currentTitle == T.s('menu_about'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const AboutPage(),
+                              ),
+                            );
+                          },
+                        ),
+                        _item(
+                          context,
+                          icon: Icons.help_outline,
+                          title: T.s('help'),
+                          subtitle: T.s('menu_help_sub'),
+                          highlighted: currentTitle == T.s('help'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const HelpPage()),
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
               ),
-              const SizedBox(height: 20),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        );
       },
     );
   }

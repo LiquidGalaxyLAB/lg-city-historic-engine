@@ -300,8 +300,7 @@ const _es = {
   'era_modern_age': 'Edad Moderna',
   'era_contemporary': 'Edad Contemporánea',
   'db_status': 'Lleida, España, Base de datos cargada',
-  'connect_first':
-      'Conéctate primero al Liquid Galaxy en la pantalla Conectar',
+  'connect_first': 'Conéctate primero al Liquid Galaxy en la pantalla Conectar',
 };
 
 const _ca = {
@@ -428,8 +427,7 @@ const _ca = {
   'era_modern_age': 'Edat Moderna',
   'era_contemporary': 'Edat Contemporània',
   'db_status': 'Lleida, Espanya, Base de dades carregada',
-  'connect_first':
-      'Connecta primer al Liquid Galaxy a la pantalla Connectar',
+  'connect_first': 'Connecta primer al Liquid Galaxy a la pantalla Connectar',
 };
 
 const _tr = {
@@ -554,6 +552,5 @@ const _tr = {
   'era_modern_age': 'Modern Çağ',
   'era_contemporary': 'Yakın Çağ',
   'db_status': 'Lleida, İspanya, Veritabanı yüklendi',
-  'connect_first':
-      'Önce Bağlan ekranından Liquid Galaxy\'ye bağlanın',
+  'connect_first': 'Önce Bağlan ekranından Liquid Galaxy\'ye bağlanın',
 };

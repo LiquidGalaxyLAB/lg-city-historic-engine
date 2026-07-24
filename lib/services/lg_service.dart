@@ -310,7 +310,8 @@ fi
 " && sshpass -p $password ssh -o StrictHostKeyChecking=no -x -t $user@$hostname "\$RELAUNCH_CMD\"""";
 
       if (i == 1) {
-        await _conn.execute('"/home/$user/bin/lg-relaunch" > /home/$user/log.txt 2>&1');
+        await _conn.execute(
+            '"/home/$user/bin/lg-relaunch" > /home/$user/log.txt 2>&1');
       }
       await _conn.execute(relaunchCommand);
     }
@@ -427,9 +428,10 @@ fi
     final String safeEra = poi.era != null && poi.era!.isNotEmpty
         ? escapeHtml(poi.getEra(lang))
         : '';
-    final String safeStartDate = poi.startDate != null && poi.startDate!.isNotEmpty
-        ? escapeHtml(poi.startDate!)
-        : '';
+    final String safeStartDate =
+        poi.startDate != null && poi.startDate!.isNotEmpty
+            ? escapeHtml(poi.startDate!)
+            : '';
     final String safeEndDate = poi.endDate != null && poi.endDate!.isNotEmpty
         ? escapeHtml(poi.endDate!)
         : '';
@@ -456,9 +458,9 @@ fi
 
     final String dateLine = safeStartDate.isNotEmpty
         ? '<p style="font-size:20px;color:$_appText;margin:0 0 24px 0;">'
-        '$safeStartDate'
-        '${safeEndDate.isNotEmpty && safeEndDate != safeStartDate ? " – $safeEndDate" : ""}'
-        '</p>'
+            '$safeStartDate'
+            '${safeEndDate.isNotEmpty && safeEndDate != safeStartDate ? " – $safeEndDate" : ""}'
+            '</p>'
         : '';
 
     final String descLine = localizedDescription.isNotEmpty
@@ -588,7 +590,7 @@ fi
         final int pixelWidth = pixelEnd - pixelStart;
 
         final Uint8List slice =
-        await ImageSlicer.cropHorizontal(image, pixelStart, pixelWidth);
+            await ImageSlicer.cropHorizontal(image, pixelStart, pixelWidth);
 
         final String fileName = '${baseName}_s$i.png';
         await _conn.uploadImageBytes(slice, fileName);
@@ -610,7 +612,8 @@ fi
             "cat <<'KMLEOF' > /var/www/html/kml/slave_$slaveNo.kml\n$kml\nKMLEOF");
       } catch (e) {
         // Never let one screen's failure stop the other screens from updating.
-        debugPrint('LGService: failed to send panorama slice to slave_$slaveNo: $e');
+        debugPrint(
+            'LGService: failed to send panorama slice to slave_$slaveNo: $e');
       }
     }
   }

@@ -10,12 +10,12 @@ class PanoramaOverlayManager {
   /// - [bottom]: distance from the screen's bottom edge to the image's bottom edge.
   /// - [width] / [height]: size of the image slice on this screen.
   static String generatePositioned(
-      String imageUrl, {
-        required double left,
-        required double bottom,
-        required double width,
-        required double height,
-      }) {
+    String imageUrl, {
+    required double left,
+    required double bottom,
+    required double width,
+    required double height,
+  }) {
     return '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
   <Document>

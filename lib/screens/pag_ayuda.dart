@@ -18,7 +18,8 @@ class HelpPage extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: AppTopBar(currentTitle: T.s('help')),
                 ),
                 Padding(

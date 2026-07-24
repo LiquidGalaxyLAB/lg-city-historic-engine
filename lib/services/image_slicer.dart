@@ -26,7 +26,8 @@ class ImageSlicer {
     final ui.Canvas canvas = ui.Canvas(recorder);
     final ui.Rect src =
         ui.Rect.fromLTWH(x.toDouble(), 0, width.toDouble(), height.toDouble());
-    final ui.Rect dst = ui.Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble());
+    final ui.Rect dst =
+        ui.Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble());
     canvas.drawImageRect(image, src, dst, ui.Paint());
     final ui.Picture picture = recorder.endRecording();
     final ui.Image cropped = await picture.toImage(width, height);

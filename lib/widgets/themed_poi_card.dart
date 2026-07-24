@@ -25,7 +25,8 @@ class ThemedPoiCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: AppTheme.shadowAlpha(context)),
+            color:
+                Colors.black.withValues(alpha: AppTheme.shadowAlpha(context)),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -35,8 +36,7 @@ class ThemedPoiCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             child: Image.asset(
               imageAsset,
               height: 180,
@@ -152,7 +152,8 @@ class ThemedListFilterBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: AppTheme.shadowAlpha(context)),
+            color:
+                Colors.black.withValues(alpha: AppTheme.shadowAlpha(context)),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),

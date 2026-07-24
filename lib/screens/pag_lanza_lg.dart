@@ -111,188 +111,190 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
         return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () => FloatingMenu.show(context,
-                        currentTitle: _poi.getName(lang)),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          body: SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () => FloatingMenu.show(context,
+                            currentTitle: _poi.getName(lang)),
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surface,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(
+                                  alpha: AppTheme.shadowAlpha(context),
+                                ),
+                                blurRadius: 10,
+                              )
+                            ],
+                          ),
+                          child: Icon(
+                            Icons.menu,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const ConnectPage()),
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: isDark
+                                ? const Color(0xFF2A3D2A)
+                                : const Color(0xFFD7F5E9),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Icon(
+                            _conn.isConnected ? Icons.wifi : Icons.wifi_off,
+                            color: isDark
+                                ? const Color(0xFF80E8C0)
+                                : (_conn.isConnected
+                                    ? const Color(0xFF4CAF50)
+                                    : const Color(0xFF6B5B45)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Back Arrow
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        size: 30,
+                      ),
+                      onPressed: _leavePage,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                // Main Card
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 20),
                     child: Container(
-                      padding: const EdgeInsets.all(12),
+                      width: double.infinity,
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.surface,
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius:
+                            BorderRadius.circular(40), // Very rounded corners
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(
                               alpha: AppTheme.shadowAlpha(context),
                             ),
-                            blurRadius: 10,
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
                           )
                         ],
                       ),
-                      child: Icon(
-                        Icons.menu,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const ConnectPage()),
-                    ),
-                    child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? const Color(0xFF2A3D2A)
-                          : const Color(0xFFD7F5E9),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Icon(
-                      _conn.isConnected ? Icons.wifi : Icons.wifi_off,
-                      color: isDark
-                          ? const Color(0xFF80E8C0)
-                          : (_conn.isConnected
-                              ? const Color(0xFF4CAF50)
-                              : const Color(0xFF6B5B45)),
-                    ),
-                  ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Back Arrow
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    size: 30,
-                  ),
-                  onPressed: _leavePage,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            // Main Card
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    borderRadius:
-                        BorderRadius.circular(40), // Very rounded corners
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(
-                          alpha: AppTheme.shadowAlpha(context),
-                        ),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
-                      )
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      // Image
-                      Expanded(
-                        flex: 5,
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(40)),
-                          child: Image.asset(
-                            widget.poi.image,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Container(
-                              color: Colors.grey[300],
-                              child: const Icon(Icons.image_not_supported,
-                                  size: 80),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      // Title
-                      Padding(
-                        padding: const EdgeInsets.only(top: 25, bottom: 10),
-                        child: Text(
-                          _poi.getName(lang),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'serif',
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                        child: Divider(
-                          color: Theme.of(context).dividerColor,
-                          thickness: 1.5,
-                        ),
-                      ),
-
-                      const Spacer(),
-
-                      // Action Buttons
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            bottom: 30, left: 20, right: 20),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: _buildActionCard(
-                                icon: _isNarrating
-                                    ? Icons.stop_circle_outlined
-                                    : Icons.volume_up_outlined,
-                                label: T.s('ai_narration'),
-                                isActive: _isNarrating,
-                                onTap: _toggleNarration,
+                      child: Column(
+                        children: [
+                          // Image
+                          Expanded(
+                            flex: 5,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(40)),
+                              child: Image.asset(
+                                widget.poi.image,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Container(
+                                  color: Colors.grey[300],
+                                  child: const Icon(Icons.image_not_supported,
+                                      size: 80),
+                                ),
                               ),
                             ),
-                            const SizedBox(width: 15),
-                            Expanded(
-                              child: _buildActionCard(
-                                icon: Icons.near_me_outlined,
-                                label: T.s('orbit'),
-                                isActive: _isOrbiting,
-                                onTap: _toggleOrbit,
+                          ),
+
+                          // Title
+                          Padding(
+                            padding: const EdgeInsets.only(top: 25, bottom: 10),
+                            child: Text(
+                              _poi.getName(lang),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'serif',
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: Divider(
+                              color: Theme.of(context).dividerColor,
+                              thickness: 1.5,
+                            ),
+                          ),
+
+                          const Spacer(),
+
+                          // Action Buttons
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 30, left: 20, right: 20),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: _buildActionCard(
+                                    icon: _isNarrating
+                                        ? Icons.stop_circle_outlined
+                                        : Icons.volume_up_outlined,
+                                    label: T.s('ai_narration'),
+                                    isActive: _isNarrating,
+                                    onTap: _toggleNarration,
+                                  ),
+                                ),
+                                const SizedBox(width: 15),
+                                Expanded(
+                                  child: _buildActionCard(
+                                    icon: Icons.near_me_outlined,
+                                    label: T.s('orbit'),
+                                    isActive: _isOrbiting,
+                                    onTap: _toggleOrbit,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+                const SizedBox(height: 20),
+              ],
             ),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
+          ),
         );
       },
     );
@@ -309,9 +311,8 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
         ? const Color(0xFF4E342E)
         : (isDark ? const Color(0xFF26221A) : const Color(0xFFFBF9F6));
     final Color iconColor = isActive ? Colors.white : const Color(0xFF6B5B45);
-    final Color textColor = isActive
-        ? Colors.white
-        : Theme.of(context).colorScheme.onSurface;
+    final Color textColor =
+        isActive ? Colors.white : Theme.of(context).colorScheme.onSurface;
     final Color circleColor = isActive
         ? const Color(0xFF3E2723)
         : (isDark ? const Color(0xFF352E25) : const Color(0xFFF5F1E9));

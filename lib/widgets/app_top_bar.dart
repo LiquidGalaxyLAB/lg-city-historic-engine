@@ -144,22 +144,22 @@ class _WifiIcon extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: connected
-            ? (Theme.of(context).brightness == Brightness.dark
-                ? const Color(0xFF2A3D2A)
-                : const Color(0xFFD4EDD4))
-            : (Theme.of(context).brightness == Brightness.dark
-                ? const Color(0xFF3A342C)
-                : const Color(0xFFD4C9B0)),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Icon(
-        connected ? Icons.wifi : Icons.wifi_off,
-        size: 26,
-        color: connected ? const Color(0xFF2E7D52) : const Color(0xFF6B5B45),
-      ),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: connected
+              ? (Theme.of(context).brightness == Brightness.dark
+                  ? const Color(0xFF2A3D2A)
+                  : const Color(0xFFD4EDD4))
+              : (Theme.of(context).brightness == Brightness.dark
+                  ? const Color(0xFF3A342C)
+                  : const Color(0xFFD4C9B0)),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(
+          connected ? Icons.wifi : Icons.wifi_off,
+          size: 26,
+          color: connected ? const Color(0xFF2E7D52) : const Color(0xFF6B5B45),
+        ),
       ),
     );
   }

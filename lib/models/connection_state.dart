@@ -182,7 +182,6 @@ class LGConnectionState extends ChangeNotifier {
     return false;
   }
 
-
   Future<String?> execute(String command) async {
     return runExclusive(() => _executeRaw(command));
   }

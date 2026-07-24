@@ -16,7 +16,8 @@ class AboutPage extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
                   child: AppTopBar(currentTitle: T.s('menu_about')),
                 ),
                 Padding(
@@ -33,7 +34,8 @@ class AboutPage extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   T.s('menu_about'),
-                  style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                      fontSize: 25, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 10),
                 const Expanded(
@@ -95,7 +97,8 @@ class _AboutLogosLayout extends StatelessWidget {
             Expanded(
               child: Align(
                 alignment: Alignment.topCenter,
-                child: Image.asset('assets/images/Parc-Agrobiotech.jpg', height: 90),
+                child: Image.asset('assets/images/Parc-Agrobiotech.jpg',
+                    height: 90),
               ),
             ),
           ],
@@ -120,7 +123,10 @@ class _AboutInfoList extends StatelessWidget {
       (label: T.s('about_admin_label'), value: T.s('about_admin_value')),
       (label: T.s('about_contact_label'), value: T.s('about_contact_value')),
       (label: T.s('about_support_label'), value: T.s('about_support_value')),
-      (label: T.s('about_coordinates_label'), value: T.s('about_coordinates_value')),
+      (
+        label: T.s('about_coordinates_label'),
+        value: T.s('about_coordinates_value')
+      ),
     ];
 
     return Column(

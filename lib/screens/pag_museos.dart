@@ -104,8 +104,8 @@ class _MuseumsPageState extends State<MuseumsPage> {
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
         final List<POI> allPois = (_selectedCategory == 'All'
-            ? _data.values.expand((x) => x)
-            : (_data[_selectedCategory] ?? []))
+                ? _data.values.expand((x) => x)
+                : (_data[_selectedCategory] ?? []))
             .map(PoiLocalization.instance.enrich)
             .toList();
 

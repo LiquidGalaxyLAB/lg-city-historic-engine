@@ -204,8 +204,8 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
         final List<POI> allPois = (_selectedCategory == 'All'
-            ? _data.values.expand((x) => x)
-            : (_data[_selectedCategory] ?? []))
+                ? _data.values.expand((x) => x)
+                : (_data[_selectedCategory] ?? []))
             .map(PoiLocalization.instance.enrich)
             .toList();
 
@@ -328,7 +328,8 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   itemCount: pois.length,
-                  itemBuilder: (context, index) => _placeCard(pois[index], lang),
+                  itemBuilder: (context, index) =>
+                      _placeCard(pois[index], lang),
                 ),
               ),
             ],

@@ -7,7 +7,8 @@ import 'pag_conectar.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_top_bar.dart';
 import '../main.dart';
-//Es la pagina cuando 
+
+//Es la pagina cuando
 class CategoriesHomePage extends StatelessWidget {
   const CategoriesHomePage({super.key});
 
@@ -95,7 +96,8 @@ class CategoriesHomePage extends StatelessWidget {
                         subtitle: T.s('museums_subtitle'),
                         onTap: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const MuseumsPage()),
+                          MaterialPageRoute(
+                              builder: (_) => const MuseumsPage()),
                         ),
                       ),
                       const SizedBox(height: 12),
