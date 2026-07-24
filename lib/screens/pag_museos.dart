@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
+import '../widgets/themed_poi_card.dart';
 import '../widgets/app_top_bar.dart';
 import '../widgets/m_superior.dart';
 import '../main.dart';
 import '../models/poi_model.dart';
+import '../services/poi_localization.dart';
 import 'pag_lanza_lg.dart';
 
 class MuseumsPage extends StatefulWidget {
@@ -21,14 +24,14 @@ class _MuseumsPageState extends State<MuseumsPage> {
     'Art': [
       POI(
         name: 'Museum of Modern and Contemporary Art of Lleida',
-        location: '41.6175° N, 0.6295° E',
+        location: '41.6176°N, 0.6297°E',
         image:
             'assets/images_museums/Museu d’Art Modern i Contemporani de Lleida.jpg',
-        lat: 41.617536,
-        lng: 0.629519,
-        range: 242,
-        heading: 0.0,
-        tilt: 43.0,
+        lat: 41.617625,
+        lng: 0.629728,
+        range: 64,
+        heading: -74.0,
+        tilt: 53.0,
         era: 'Contemporary Age',
         startDate: '1914',
         endDate: '1917',
@@ -39,13 +42,13 @@ class _MuseumsPageState extends State<MuseumsPage> {
     'History/Heritage': [
       POI(
         name: 'Diocesan Museum',
-        location: '41.6138° N, 0.6210° E',
+        location: '41.6138°N, 0.6209°E',
         image: 'assets/images_museums/museonoche.jpg',
-        lat: 41.613836,
-        lng: 0.620993,
-        range: 205,
-        heading: -5.0,
-        tilt: 45.0,
+        lat: 41.613794,
+        lng: 0.620883,
+        range: 61,
+        heading: 91.0,
+        tilt: 56.0,
         era: 'Contemporary Age',
         startDate: '1893',
         endDate: '1893',
@@ -56,13 +59,13 @@ class _MuseumsPageState extends State<MuseumsPage> {
     'Science/Technology': [
       POI(
         name: 'Water Museum',
-        location: '41.6031° N, 0.6360° E',
+        location: '41.6032°N, 0.6357°E',
         image: 'assets/images_museums/Museu de l’Aigua.jpg',
-        lat: 41.603122,
-        lng: 0.635982,
-        range: 218,
-        heading: 40.0,
-        tilt: 48.0,
+        lat: 41.603211,
+        lng: 0.635728,
+        range: 101,
+        heading: 77.0,
+        tilt: 60.0,
         era: 'Contemporary Age',
         startDate: '2004',
         endDate: '2004',
@@ -73,13 +76,13 @@ class _MuseumsPageState extends State<MuseumsPage> {
     'Automotive': [
       POI(
         name: 'Automotive Museum',
-        location: '41.6134° N, 0.6328° E',
+        location: '41.6133°N, 0.6328°E',
         image: 'assets/images_museums/Museu de l’Automoció.jpg',
-        lat: 41.613377,
-        lng: 0.632815,
-        range: 270,
-        heading: -179.0,
-        tilt: 45.0,
+        lat: 41.613319,
+        lng: 0.632769,
+        range: 75,
+        heading: 177.0,
+        tilt: 64.0,
         era: 'Contemporary Age',
         startDate: '2002',
         endDate: '2002',
@@ -100,16 +103,21 @@ class _MuseumsPageState extends State<MuseumsPage> {
     return ValueListenableBuilder<String>(
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
-        final List<POI> allPois = _selectedCategory == 'All'
-            ? _data.values.expand((x) => x).toList()
-            : (_data[_selectedCategory] ?? []);
+        final List<POI> allPois = (_selectedCategory == 'All'
+            ? _data.values.expand((x) => x)
+            : (_data[_selectedCategory] ?? []))
+            .map(PoiLocalization.instance.enrich)
+            .toList();
 
-        final List<POI> pois = allPois.where((poi) {
-          return poi.name.toLowerCase().contains(_searchQuery.toLowerCase());
-        }).toList();
+        final List<POI> pois = allPois
+            .where((poi) => poi.matchesSearch(_searchQuery, lang))
+            .toList();
 
         return Scaffold(
-          backgroundColor: const Color(0xFFF8F7F2),
+          backgroundColor: AppTheme.pageBackground(
+            context,
+            light: const Color(0xFFF8F7F2),
+          ),
           body: Column(
             children: [
               Stack(
@@ -261,7 +269,7 @@ class _MuseumsPageState extends State<MuseumsPage> {
                               T.s('no_results_found'),
                               style: TextStyle(
                                 fontSize: 18,
-                                color: Colors.grey[600],
+                                color: context.appOnSurfaceVariant,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -274,7 +282,7 @@ class _MuseumsPageState extends State<MuseumsPage> {
                         physics: const BouncingScrollPhysics(),
                         itemCount: pois.length,
                         itemBuilder: (context, index) =>
-                            _cardPunto(pois[index]),
+                            _cardPunto(pois[index], lang),
                       ),
               ),
             ],
@@ -285,63 +293,16 @@ class _MuseumsPageState extends State<MuseumsPage> {
   }
 
   Widget _buildFilterBar() {
-    return Container(
-      height: 56,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          const SizedBox(width: 18),
-          const Icon(Icons.search_rounded, color: Color(0xFF8E8E93), size: 22),
-          const SizedBox(width: 10),
-          Expanded(
-            child: TextField(
-              controller: _searchController,
-              onChanged: (value) {
-                setState(() {
-                  _searchQuery = value;
-                });
-              },
-              decoration: InputDecoration(
-                hintText: T.s('search'),
-                hintStyle: const TextStyle(
-                  color: Color(0xFF8E8E93),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: -0.2,
-                ),
-                border: InputBorder.none,
-                isDense: true,
-                contentPadding: EdgeInsets.zero,
-              ),
-              style: const TextStyle(fontSize: 16, color: Color(0xFF1C1C1E)),
-            ),
-          ),
-          if (_searchQuery.isNotEmpty)
-            GestureDetector(
-              onTap: () {
-                _searchController.clear();
-                setState(() {
-                  _searchQuery = '';
-                });
-              },
-              child: const Icon(Icons.close_rounded,
-                  color: Color(0xFF8E8E93), size: 20),
-            ),
-          const SizedBox(width: 10),
-          _buildCategoryDropdown(),
-          const SizedBox(width: 8),
-        ],
-      ),
+    return ThemedListFilterBar(
+      searchController: _searchController,
+      searchHint: T.s('search'),
+      searchQuery: _searchQuery,
+      onSearchChanged: (value) => setState(() => _searchQuery = value),
+      onClearSearch: () {
+        _searchController.clear();
+        setState(() => _searchQuery = '');
+      },
+      categoryMenu: _buildCategoryDropdown(),
     );
   }
 
@@ -362,13 +323,13 @@ class _MuseumsPageState extends State<MuseumsPage> {
               (cat) => PopupMenuItem<String>(
                 value: cat,
                 child: Text(
-                  cat == 'All' ? T.s('show_all') : cat,
+                  cat == 'All' ? T.s('show_all') : T.category(cat),
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: _selectedCategory == cat
                         ? FontWeight.w700
                         : FontWeight.w500,
-                    color: const Color(0xFF1C1C1E),
+                    color: context.appOnSurface,
                   ),
                 ),
               ),
@@ -378,7 +339,7 @@ class _MuseumsPageState extends State<MuseumsPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: const Color(0xFFF2F2F7),
+          color: AppTheme.chipBackground(context),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -386,127 +347,30 @@ class _MuseumsPageState extends State<MuseumsPage> {
           children: [
             Text(
               T.s('categories'),
-              style: const TextStyle(
-                fontWeight: FontWeight.w800,
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
                 fontSize: 13,
-                color: Color(0xFF1C1C1E),
+                color: context.appOnSurface,
                 letterSpacing: 0.5,
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(Icons.keyboard_arrow_down_rounded,
-                color: Color(0xFF1C1C1E), size: 18),
+            Icon(Icons.keyboard_arrow_down_rounded,
+                color: context.appOnSurface, size: 18),
           ],
         ),
       ),
     );
   }
 
-  Widget _cardPunto(POI poi) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            child: Image.asset(
-              poi.image,
-              height: 180,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  height: 180,
-                  color: Colors.grey[300],
-                  child: const Icon(Icons.image_not_supported,
-                      size: 50, color: Colors.grey),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  poi.name,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    fontFamily: 'serif',
-                    color: Color(0xFF1C1C1E),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Divider(color: Color(0xFFF2F2F7), thickness: 1.5),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.explore_outlined,
-                            size: 16, color: Color(0xFF8E8E93)),
-                        const SizedBox(width: 6),
-                        Text(
-                          T.s('details'),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => LaunchLGPage(poi: poi)),
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF2F2F7).withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            Text(
-                              T.s('send_lg'),
-                              style: const TextStyle(
-                                color: Color(0xFF6B5B45),
-                                fontWeight: FontWeight.w900,
-                                fontSize: 13,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            const Icon(Icons.arrow_forward_rounded,
-                                size: 16, color: Color(0xFF6B5B45)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
+  Widget _cardPunto(POI poi, String lang) {
+    return ThemedPoiCard(
+      imageAsset: poi.image,
+      title: poi.getName(lang),
+      actionLabel: T.s('send_lg'),
+      onSend: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => LaunchLGPage(poi: poi)),
       ),
     );
   }

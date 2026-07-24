@@ -21,10 +21,13 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return ValueListenableBuilder<String>(
-      valueListenable: languageNotifier,
-      builder: (context, currentLang, _) {
-        return Scaffold(
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeNotifier,
+      builder: (context, _, __) {
+        return ValueListenableBuilder<String>(
+          valueListenable: languageNotifier,
+          builder: (context, currentLang, _) {
+            return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: SafeArea(
             child: Column(
@@ -125,7 +128,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 name: l['name']!,
                                 selected: isSelected,
                                 onTap: () {
-                                  languageNotifier.value = l['code']!;
+                                  setAppLanguage(l['code']!);
                                 },
                               );
                             }).toList(),
@@ -139,6 +142,8 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
           ),
+            );
+          },
         );
       },
     );

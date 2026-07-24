@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
 import '../widgets/app_top_bar.dart';
 
 class AboutPage extends StatelessWidget {
@@ -6,82 +7,181 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF0EBE0),
-      body: SafeArea(
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 18, vertical: 22),
-              child: AppTopBar(currentTitle: 'About Us'),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.arrow_back, size: 28),
+    return ValueListenableBuilder<String>(
+      valueListenable: languageNotifier,
+      builder: (context, _, __) {
+        return Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          body: SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
+                  child: AppTopBar(currentTitle: T.s('menu_about')),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: const Icon(Icons.arrow_back, size: 28),
+                      ),
+                    ],
                   ),
-                ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  T.s('menu_about'),
+                  style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 10),
+                const Expanded(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    child: Column(
+                      children: [
+                        _AboutInfoList(),
+                        SizedBox(height: 30),
+                        _AboutLogosLayout(),
+                        SizedBox(height: 40),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _AboutLogosLayout extends StatelessWidget {
+  const _AboutLogosLayout();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Image.asset('assets/images/lg.jpg', height: 90),
               ),
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'About Us',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 10),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Author name - Yasmina Ramadan\n'
-                      'Mentor name - Claudia \n'
-                      'Organization administrator name - Andreu Ibáñez\n\n'
-                      'Author contact information - \n'
-                      'yasiramadan@gmail.com\n'
-                      'Support - Lleida Liquid Galaxy LAB',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 15,
-                        height: 1.6,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    Image.asset('assets/images/lg.jpg', height: 80),
-                    const SizedBox(height: 35),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Image.asset('assets/images/tic.jpg', height: 70),
-                        Image.asset('assets/images/verano.jpg', height: 60),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Image.asset(
-                          'assets/images/Parc-Agrobiotech.jpg',
-                          height: 60,
-                        ),
-                        Image.asset('assets/images/lglab.jpg', height: 50),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Image.asset('assets/images/LGEU.jpg', height: 50),
-                    const SizedBox(height: 40),
-                  ],
-                ),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Image.asset('assets/images/verano.jpg', height: 90),
               ),
             ),
           ],
         ),
-      ),
+        const SizedBox(height: 18),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Image.asset('assets/images/tic.jpg', height: 90),
+              ),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Image.asset('assets/images/Parc-Agrobiotech.jpg', height: 90),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 18),
+        Image.asset('assets/images/lglab.jpg', height: 60),
+        const SizedBox(height: 18),
+        Image.asset('assets/images/LGEU.jpg', height: 60),
+      ],
+    );
+  }
+}
+
+class _AboutInfoList extends StatelessWidget {
+  const _AboutInfoList();
+
+  @override
+  Widget build(BuildContext context) {
+    final items = [
+      (label: T.s('about_author_label'), value: T.s('about_author_value')),
+      (label: T.s('about_mentor_label'), value: T.s('about_mentor_value')),
+      (label: T.s('about_admin_label'), value: T.s('about_admin_value')),
+      (label: T.s('about_contact_label'), value: T.s('about_contact_value')),
+      (label: T.s('about_support_label'), value: T.s('about_support_value')),
+      (label: T.s('about_coordinates_label'), value: T.s('about_coordinates_value')),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (var i = 0; i < items.length; i++) ...[
+          _AboutBulletItem(
+            label: items[i].label,
+            value: items[i].value,
+          ),
+          if (i < items.length - 1) const SizedBox(height: 14),
+        ],
+      ],
+    );
+  }
+}
+
+class _AboutBulletItem extends StatelessWidget {
+  const _AboutBulletItem({
+    required this.label,
+    required this.value,
+  });
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(top: 6, right: 12),
+          child: Icon(
+            Icons.circle,
+            size: 7,
+            color: Color(0xFF6B5B45),
+          ),
+        ),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              style: TextStyle(
+                fontSize: 15,
+                height: 1.5,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+              children: [
+                TextSpan(
+                  text: '$label: ',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+                TextSpan(text: value),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

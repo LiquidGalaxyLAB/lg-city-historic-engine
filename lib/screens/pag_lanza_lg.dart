@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 import '../main.dart';
 import '../models/connection_state.dart';
 import '../models/poi_model.dart';
 import '../services/lg_service.dart';
 import '../services/narration_service.dart';
+import '../services/poi_localization.dart';
+import '../screens/pag_conectar.dart';
 import '../widgets/m_superior.dart';
 
 class LaunchLGPage extends StatefulWidget {
@@ -21,10 +24,14 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
   final NarrationService _narration = NarrationService();
   bool _isOrbiting = false;
   bool _isNarrating = false;
+  late POI _poi;
+  String? _lastPresentedLang;
 
   @override
   void initState() {
     super.initState();
+    _poi = PoiLocalization.instance.enrich(widget.poi);
+    languageNotifier.addListener(_onLanguageChanged);
     _narration.init(
       onSpeakingChanged: () {
         if (mounted) {
@@ -32,7 +39,24 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
         }
       },
     );
+    _conn.addListener(_onConnectionChanged);
     _initLG();
+  }
+
+  void _onConnectionChanged() {
+    if (mounted) setState(() {});
+  }
+
+  void _onLanguageChanged() {
+    if (!mounted) return;
+    setState(() {});
+    if (_conn.isConnected && _lastPresentedLang != languageNotifier.value) {
+      _lgService.presentPoi(_poi);
+      _lastPresentedLang = languageNotifier.value;
+    }
+    if (_narration.isSpeaking) {
+      _narration.speakPoi(_poi, languageNotifier.value);
+    }
   }
 
   Future<void> _initLG() async {
@@ -41,32 +65,12 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
       return;
     }
 
-    await _sendToLG();
-    await _lgService.flyToPOI(widget.poi);
-    await _lgService.sendCenterPlacemark(widget.poi);
-    await Future.delayed(const Duration(milliseconds: 800));
-    await _lgService.sendBalloon(widget.poi);
-  }
-
-  Future<void> _sendToLG() async {
-    final kml = '''<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-  <Document>
-    <LookAt>
-      <longitude>${widget.poi.lng ?? 0.6268}</longitude>
-      <latitude>${widget.poi.lat ?? 41.6147}</latitude>
-      <range>${widget.poi.range ?? 1000}</range>
-      <tilt>${widget.poi.tilt ?? 45}</tilt>
-      <heading>${widget.poi.heading ?? 0}</heading>
-      <altitudeMode>${widget.poi.altitudeMode ?? 'relativeToGround'}</altitudeMode>
-    </LookAt>
-  </Document>
-</kml>''';
-    await _lgService.sendKML(kml);
+    await _lgService.presentPoi(_poi);
+    _lastPresentedLang = languageNotifier.value;
   }
 
   void _toggleNarration() {
-    _narration.speakPoi(widget.poi, languageNotifier.value);
+    _narration.speakPoi(_poi, languageNotifier.value);
   }
 
   void _toggleOrbit() {
@@ -81,23 +85,36 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
     }
   }
 
+  Future<void> _leavePage() async {
+    _lgService.stopOrbit();
+    await _lgService.closeChromium();
+    if (mounted) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   void dispose() {
+    languageNotifier.removeListener(_onLanguageChanged);
+    _conn.removeListener(_onConnectionChanged);
     _narration.dispose();
     _lgService.stopOrbit();
-    _lgService.clearCenterPlacemark();
-    _lgService.clearBalloon();
+    _lgService.closeChromium();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F1E9), // Light beige background
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return ValueListenableBuilder<String>(
+      valueListenable: languageNotifier,
+      builder: (context, lang, _) {
+        return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
-            // Top Bar
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Row(
@@ -105,29 +122,49 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
                 children: [
                   GestureDetector(
                     onTap: () => FloatingMenu.show(context,
-                        currentTitle: widget.poi.name),
+                        currentTitle: _poi.getName(lang)),
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.surface,
                         borderRadius: BorderRadius.circular(15),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.05),
+                            color: Colors.black.withValues(
+                              alpha: AppTheme.shadowAlpha(context),
+                            ),
                             blurRadius: 10,
                           )
                         ],
                       ),
-                      child: const Icon(Icons.menu, color: Colors.black87),
+                      child: Icon(
+                        Icons.menu,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                   ),
-                  Container(
+                  GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const ConnectPage()),
+                    ),
+                    child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFD7F5E9),
+                      color: isDark
+                          ? const Color(0xFF2A3D2A)
+                          : const Color(0xFFD7F5E9),
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: const Icon(Icons.wifi, color: Color(0xFF4CAF50)),
+                    child: Icon(
+                      _conn.isConnected ? Icons.wifi : Icons.wifi_off,
+                      color: isDark
+                          ? const Color(0xFF80E8C0)
+                          : (_conn.isConnected
+                              ? const Color(0xFF4CAF50)
+                              : const Color(0xFF6B5B45)),
+                    ),
+                  ),
                   ),
                 ],
               ),
@@ -139,13 +176,12 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 16),
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back,
-                      color: Color(0xFF6B5B45), size: 30),
-                  onPressed: () {
-                    _lgService.stopOrbit();
-                    _lgService.clearBalloon();
-                    Navigator.pop(context);
-                  },
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    size: 30,
+                  ),
+                  onPressed: _leavePage,
                 ),
               ),
             ),
@@ -160,12 +196,14 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius:
                         BorderRadius.circular(40), // Very rounded corners
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
+                        color: Colors.black.withValues(
+                          alpha: AppTheme.shadowAlpha(context),
+                        ),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       )
@@ -197,21 +235,23 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 25, bottom: 10),
                         child: Text(
-                          widget.poi.name,
+                          _poi.getName(lang),
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.w400,
                             fontFamily: 'serif',
-                            color: Color(0xFF1C1C1E),
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                       ),
 
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 40),
-                        child:
-                            Divider(color: Color(0xFFF2F2F7), thickness: 1.5),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: Divider(
+                          color: Theme.of(context).dividerColor,
+                          thickness: 1.5,
+                        ),
                       ),
 
                       const Spacer(),
@@ -227,7 +267,7 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
                                 icon: _isNarrating
                                     ? Icons.stop_circle_outlined
                                     : Icons.volume_up_outlined,
-                                label: 'AI Narration',
+                                label: T.s('ai_narration'),
                                 isActive: _isNarrating,
                                 onTap: _toggleNarration,
                               ),
@@ -236,7 +276,7 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
                             Expanded(
                               child: _buildActionCard(
                                 icon: Icons.near_me_outlined,
-                                label: 'Orbit',
+                                label: T.s('orbit'),
                                 isActive: _isOrbiting,
                                 onTap: _toggleOrbit,
                               ),
@@ -253,6 +293,8 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
           ],
         ),
       ),
+        );
+      },
     );
   }
 
@@ -262,13 +304,17 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
     required VoidCallback onTap,
     bool isActive = false,
   }) {
-    // Define the colors for the active state (requested dark brown) and inactive state
-    final Color bgColor =
-        isActive ? const Color(0xFF4E342E) : const Color(0xFFFBF9F6);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color bgColor = isActive
+        ? const Color(0xFF4E342E)
+        : (isDark ? const Color(0xFF26221A) : const Color(0xFFFBF9F6));
     final Color iconColor = isActive ? Colors.white : const Color(0xFF6B5B45);
-    final Color textColor = isActive ? Colors.white : const Color(0xFF1C1C1E);
-    final Color circleColor =
-        isActive ? const Color(0xFF3E2723) : const Color(0xFFF5F1E9);
+    final Color textColor = isActive
+        ? Colors.white
+        : Theme.of(context).colorScheme.onSurface;
+    final Color circleColor = isActive
+        ? const Color(0xFF3E2723)
+        : (isDark ? const Color(0xFF352E25) : const Color(0xFFF5F1E9));
 
     return GestureDetector(
       onTap: onTap,

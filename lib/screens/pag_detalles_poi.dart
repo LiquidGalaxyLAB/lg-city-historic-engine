@@ -9,9 +9,13 @@ class POIDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ValueListenableBuilder<String>(
+      valueListenable: languageNotifier,
+      builder: (context, lang, _) {
+        final localized = poi.getName(lang);
+        return Scaffold(
       appBar: AppBar(
-        title: Text(poi.name),
+        title: Text(localized),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -33,7 +37,7 @@ class POIDetailsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    poi.name,
+                    localized,
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 8),
@@ -42,10 +46,11 @@ class POIDetailsPage extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 16),
+                  if (poi.getDescription(lang).isNotEmpty)
+                    Text(poi.getDescription(lang)),
+                  const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () {
-                      // Logic to send to LG
-                    },
+                    onPressed: () {},
                     child: Text(T.s('send_lg')),
                   ),
                 ],
@@ -54,6 +59,8 @@ class POIDetailsPage extends StatelessWidget {
           ],
         ),
       ),
+        );
+      },
     );
   }
 }

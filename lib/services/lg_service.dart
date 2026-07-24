@@ -10,11 +10,18 @@ import '../models/poi_model.dart';
 import '../kmls/logos_kml.dart';
 import '../kmls/panorama_kml.dart';
 import '../kmls/placemark_icon.dart';
+import '../kmls/kml_escape.dart';
+import 'chromium_service.dart';
+import '../data/chromium_image_catalog.dart';
 import 'image_slicer.dart';
 
 class LGService {
   final LGConnectionState _conn = LGConnectionState();
-  bool _isOrbiting = false;
+  final ChromiumService _chromium = ChromiumService();
+  static bool _isOrbiting = false;
+  static int _presentGeneration = 0;
+  static Future<void> _presentQueue = Future.value();
+  static POI? _lastPresentedPoi;
 
   /// The three middle screens that together show ONE panorama image,
   /// ORDERED LEFT TO RIGHT as they are physically placed in the rig.
@@ -52,7 +59,7 @@ class LGService {
   }
 
   /// Moves the camera without deleting the logo or other KMLs.
-  Future<void> flyToPOI(POI poi) async {
+  Future<bool> flyToPOI(POI poi) async {
     final lat = poi.lat ?? 41.6147;
     final lng = poi.lng ?? 0.6268;
     final range = poi.range ?? 1000.0;
@@ -62,7 +69,8 @@ class LGService {
 
     final String command =
         'echo "flytoview=<LookAt><longitude>$lng</longitude><latitude>$lat</latitude><range>$range</range><tilt>$tilt</tilt><heading>$heading</heading><altitudeMode>$altitudeMode</altitudeMode></LookAt>" > /tmp/query.txt';
-    await _conn.execute(command);
+    final result = await _conn.execute(command);
+    return result != null;
   }
 
   Future<void> startOrbitPOI(POI poi) async {
@@ -87,31 +95,195 @@ class LGService {
     _isOrbiting = false;
   }
 
-  Future<void> clearKMLs() async {
-    const String blank = '''<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-  <Document></Document>
-</kml>''';
-    await _conn.execute("cat <<'EOF' > /var/www/html/kmls.kml\n$blank\nEOF");
-  }
-
-  /// Clears all slave screens (including logos and balloons).
-  Future<void> clearLogos() async {
-    const String blank = '''<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-  <Document></Document>
-</kml>''';
-    final sudo = _conn.sudoPassword;
-    final screens = _conn.screens;
-    for (var i = 1; i <= screens; i++) {
-      await _conn
-          .execute("echo '$sudo' | sudo -S sh -c \"cat <<'EOF' > /var/www/html/kml/slave_$i.kml\n$blank\nEOF\"");
+  /// Cambia al POI en el rig sobrescribiendo el anterior (sin limpiar antes).
+  Future<void> presentPoi(POI poi) async {
+    final previous = _presentQueue;
+    final gate = Completer<void>();
+    _presentQueue = gate.future;
+    await previous;
+    try {
+      await _presentPoiWithRetry(poi);
+    } finally {
+      gate.complete();
     }
   }
 
-  /// Shows the logos only on the left screen (LG4 / slave_4).
+  Future<void> _presentPoiWithRetry(POI poi) async {
+    for (var attempt = 0; attempt < 2; attempt++) {
+      if (attempt > 0) {
+        debugPrint('LGService: presentPoi retry ${attempt + 1} (${poi.name})');
+        await _conn.reconnect();
+        await Future.delayed(const Duration(milliseconds: 800));
+      }
+
+      final ok = await _presentPoiOnce(poi);
+      if (ok) {
+        _lastPresentedPoi = poi;
+        return;
+      }
+    }
+    debugPrint('LGService: presentPoi FAILED after retries (${poi.name})');
+  }
+
+  Future<bool> _presentPoiOnce(POI poi) async {
+    final generation = ++_presentGeneration;
+
+    stopOrbit();
+    if (!await _conn.ensureReady()) {
+      debugPrint('LGService: presentPoi skipped — SSH not ready');
+      return false;
+    }
+
+    debugPrint('LGService: presentPoi start (${poi.name}, gen=$generation)');
+
+    if (!await _hideBalloon()) {
+      debugPrint('LGService: hideBalloon failed (${poi.name})');
+      return false;
+    }
+    if (generation != _presentGeneration) return false;
+    await Future.delayed(const Duration(milliseconds: 700));
+
+    if (!await flyToPOI(poi)) {
+      debugPrint('LGService: flyToPOI failed (${poi.name})');
+      return false;
+    }
+    if (generation != _presentGeneration) return false;
+    await Future.delayed(_flySettleDelay(poi));
+
+    final placemarkOk = await sendCenterPlacemark(poi);
+    if (generation != _presentGeneration) return false;
+    if (!placemarkOk) {
+      debugPrint('LGService: placemark failed (${poi.name})');
+      return false;
+    }
+    await Future.delayed(const Duration(milliseconds: 900));
+
+    final balloonOk = await sendBalloon(poi);
+    if (!balloonOk) {
+      debugPrint('LGService: balloon failed (${poi.name})');
+      return false;
+    }
+    if (generation != _presentGeneration) return false;
+
+    final chromiumAsset = await ChromiumImageCatalog.resolve(poi);
+    if (chromiumAsset != null) {
+      unawaited(_chromium.showPoiImageTimed(poi));
+    } else {
+      debugPrint('LGService: no chromium image (${poi.name})');
+    }
+
+    debugPrint('LGService: presentPoi done (${poi.name}, gen=$generation)');
+    return true;
+  }
+
+  /// Cierra Chromium en todas las pantallas y vuelve a Google Earth.
+  Future<void> closeChromium() => _chromium.closeChromiumOnAllScreens();
+
+  Duration _flySettleDelay(POI poi) {
+    final prev = _lastPresentedPoi;
+    if (prev == null) {
+      return const Duration(milliseconds: 2000);
+    }
+
+    final lat1 = prev.lat ?? 41.6147;
+    final lng1 = prev.lng ?? 0.6268;
+    final lat2 = poi.lat ?? 41.6147;
+    final lng2 = poi.lng ?? 0.6268;
+    final dLat = (lat2 - lat1).abs();
+    final dLng = (lng2 - lng1).abs();
+    final distance = math.sqrt(dLat * dLat + dLng * dLng);
+
+    if (distance > 0.05) return const Duration(milliseconds: 3500);
+    if (distance > 0.01) return const Duration(milliseconds: 2500);
+    return const Duration(milliseconds: 1800);
+  }
+
+  /// Cierra el balloon abierto antes de volar a otro sitio.
+  Future<bool> _hideBalloon() async {
+    if (!_conn.isConnected) return false;
+
+    final slaveNo = _rightMostScreen(_conn.screens);
+    final String kml = '''<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+  <Document id="slave_$slaveNo">
+    <Placemark id="poi_balloon">
+      <gx:balloonVisibility>0</gx:balloonVisibility>
+      <Point><coordinates>0,0,0</coordinates></Point>
+    </Placemark>
+  </Document>
+</kml>''';
+    final ok = await _conn.writeSlaveKml(slaveNo, kml);
+    if (!ok) return false;
+    return _conn.notifySlaveKmlChanged(slaveNo);
+  }
+
+  /// Limpieza completa (Tools / desconexión). No usar al cambiar de sitio.
+  Future<void> clearPoiPresentation() async {
+    _presentGeneration++;
+    stopOrbit();
+    if (!_conn.isConnected) return;
+
+    await clearBalloon();
+    await clearCenterPlacemark();
+  }
+
+  Future<void> clearKMLs() async {
+    _requireConnection();
+    const String blankMain = '''<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document></Document>
+</kml>''';
+
+    await _conn.writeRemoteFile('/var/www/html/kmls.kml', blankMain);
+    await _conn.execute('touch /var/www/html/kmls.kml');
+
+    await _conn.writeSoloKml(1, PanoramaOverlayManager.blankMaster());
+    await _conn.notifySoloKmlChanged(1);
+
+    final screens = _conn.screens;
+    for (var i = 2; i <= screens; i++) {
+      await _conn.writeRemoteFile(
+        '/var/www/html/kml/slave_$i.kml',
+        PanoramaOverlayManager.blankSlave(i),
+      );
+      await _conn.notifySlaveKmlChanged(i);
+    }
+    await _conn.writeRemoteFile(
+      '/var/www/html/kml/slave_1.kml',
+      PanoramaOverlayManager.blankSlave(1),
+    );
+    await _conn.execute('touch /var/www/html/kml/slave_1.kml');
+
+    debugPrint('LGService: clearKMLs OK ($screens screens)');
+  }
+
+  /// Quita el panel de logos de la pantalla izquierda del rig.
+  Future<void> clearLogos() async {
+    _requireConnection();
+    final slaveNo = _leftMostScreen(_conn.screens);
+    final ok = await _conn.writeRemoteFile(
+      '/var/www/html/kml/slave_$slaveNo.kml',
+      PanoramaOverlayManager.blankSlave(slaveNo),
+    );
+    if (!ok) {
+      throw StateError('No se pudo escribir slave_$slaveNo.kml');
+    }
+    await _conn.notifySlaveKmlChanged(slaveNo);
+    debugPrint('LGService: clearLogos OK -> slave_$slaveNo.kml');
+  }
+
+  /// Muestra el panel de logos en la pantalla izquierda (p. ej. LG4).
   Future<void> showLogos() async {
+    _requireConnection();
+    await _conn.uploadAssets();
     await _conn.sendLogoKML(LogoOverlayManager.generate());
+    debugPrint('LGService: showLogos OK');
+  }
+
+  void _requireConnection() {
+    if (!_conn.isConnected) {
+      throw StateError('No hay conexión SSH con el Liquid Galaxy');
+    }
   }
 
   Future<void> relaunch() async {
@@ -178,10 +350,10 @@ fi
   int _rightMostScreen(int screens) => (screens ~/ 2) + 1;
 
   /// Muestra un pin en la pantalla central (LG1) en las coordenadas del POI.
-  Future<void> sendCenterPlacemark(POI poi) async {
+  Future<bool> sendCenterPlacemark(POI poi) async {
     if (!_conn.isConnected) {
       debugPrint('LGService: sendCenterPlacemark skipped — not connected');
-      return;
+      return false;
     }
 
     const machineNo = _centerScreen;
@@ -198,7 +370,7 @@ fi
       );
     } catch (e) {
       debugPrint('LGService: sendCenterPlacemark icon upload failed: $e');
-      return;
+      return false;
     }
 
     final kml = PlacemarkIconManager.kmlPlacemark(
@@ -209,15 +381,22 @@ fi
     );
 
     final ok = await _conn.writeSoloKml(machineNo, kml);
-    if (ok) {
-      await _conn.notifySoloKmlChanged(machineNo);
-      final color = PlacemarkIconManager.colorForPoi(poi);
-      debugPrint(
-        'LGService: sendCenterPlacemark OK -> master_1.kml (${poi.name}, rgb(${color.r},${color.g},${color.b}))',
-      );
-    } else {
-      debugPrint('LGService: sendCenterPlacemark FAILED master_1.kml');
+    if (!ok) {
+      debugPrint('LGService: sendCenterPlacemark FAILED write master_1.kml');
+      return false;
     }
+
+    final notified = await _conn.notifySoloKmlChanged(machineNo);
+    if (!notified) {
+      debugPrint('LGService: sendCenterPlacemark FAILED notify master_1.kml');
+      return false;
+    }
+
+    final color = PlacemarkIconManager.colorForPoi(poi);
+    debugPrint(
+      'LGService: sendCenterPlacemark OK -> master_1.kml (${poi.name}, rgb(${color.r},${color.g},${color.b}))',
+    );
+    return true;
   }
 
   /// Quita el pin de la pantalla central.
@@ -232,42 +411,53 @@ fi
   }
 
   /// Sends the balloon to the right-most screen of the rig.
-  Future<void> sendBalloon(POI poi) async {
+  Future<bool> sendBalloon(POI poi) async {
     final screens = _conn.screens;
     final slaveNo = _rightMostScreen(screens);
 
     if (!_conn.isConnected) {
       debugPrint('LGService: sendBalloon skipped — not connected');
-      return;
+      return false;
     }
 
     final lang = languageNotifier.value;
-    final String localizedDescription = poi.getDescription(lang);
+    final String localizedDescription =
+        sanitizeCData(escapeHtml(poi.getDescription(lang)));
+    final String safeName = escapeXml(poi.getName(lang));
+    final String safeEra = poi.era != null && poi.era!.isNotEmpty
+        ? escapeHtml(poi.getEra(lang))
+        : '';
+    final String safeStartDate = poi.startDate != null && poi.startDate!.isNotEmpty
+        ? escapeHtml(poi.startDate!)
+        : '';
+    final String safeEndDate = poi.endDate != null && poi.endDate!.isNotEmpty
+        ? escapeHtml(poi.endDate!)
+        : '';
 
     String? imageBlock;
     if (poi.image.isNotEmpty) {
       try {
         final rawName = poi.image.split('/').last;
-        final safeName =
+        final safeNameFile =
             'balloon_${Object.hash(poi.name, poi.image).abs()}_$rawName'
                 .replaceAll(RegExp(r'[^\w.\-]'), '_');
-        await _conn.uploadImageAsset(poi.image, safeName);
+        await _conn.uploadImageAsset(poi.image, safeNameFile);
         imageBlock =
-            '<img src="http://lg1:81/logos/$safeName" alt="${poi.name}" '
+            '<img src="http://lg1:81/logos/$safeNameFile" alt="$safeName" '
             'style="width:100%;max-height:320px;object-fit:cover;display:block;" />';
       } catch (e) {
         debugPrint('LGService: balloon image upload failed: $e');
       }
     }
 
-    final String eraLine = (poi.era != null && poi.era!.isNotEmpty)
-        ? '<p style="font-size:22px;color:$_appText;margin:0 0 12px 0;text-transform:uppercase;font-weight:bold;">${poi.era}</p>'
+    final String eraLine = safeEra.isNotEmpty
+        ? '<p style="font-size:22px;color:$_appText;margin:0 0 12px 0;text-transform:uppercase;font-weight:bold;">$safeEra</p>'
         : '';
 
-    final String dateLine = (poi.startDate != null && poi.startDate!.isNotEmpty)
+    final String dateLine = safeStartDate.isNotEmpty
         ? '<p style="font-size:20px;color:$_appText;margin:0 0 24px 0;">'
-        '${poi.startDate}'
-        '${poi.endDate != null && poi.endDate != poi.startDate ? " – ${poi.endDate}" : ""}'
+        '$safeStartDate'
+        '${safeEndDate.isNotEmpty && safeEndDate != safeStartDate ? " – $safeEndDate" : ""}'
         '</p>'
         : '';
 
@@ -281,8 +471,8 @@ fi
     final String kml = '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
   <Document id="slave_$slaveNo">
-    <Placemark>
-      <name>${poi.name}</name>
+    <Placemark id="poi_balloon">
+      <name>$safeName</name>
       <gx:balloonVisibility>1</gx:balloonVisibility>
       <description><![CDATA[
         <html>
@@ -290,7 +480,7 @@ fi
           $imageHtml
           <div style="padding:36px 40px 40px 40px;">
             <h1 style="font-size:54px;font-weight:bold;margin:0 0 18px 0;color:$_appText;border-bottom:2px solid #6B5B45;padding-bottom:12px;">
-              ${poi.name}
+              $safeName
             </h1>
             $eraLine
             $dateLine
@@ -307,14 +497,21 @@ fi
 </kml>''';
 
     final ok = await _conn.writeSlaveKml(slaveNo, kml);
-    if (ok) {
-      await _conn.notifySlaveKmlChanged(slaveNo);
-      debugPrint(
-        'LGService: sendBalloon OK -> slave_$slaveNo.kml (${poi.name}, $screens screens)',
-      );
-    } else {
-      debugPrint('LGService: sendBalloon FAILED slave_$slaveNo.kml');
+    if (!ok) {
+      debugPrint('LGService: sendBalloon FAILED write slave_$slaveNo.kml');
+      return false;
     }
+
+    final notified = await _conn.notifySlaveKmlChanged(slaveNo);
+    if (!notified) {
+      debugPrint('LGService: sendBalloon FAILED notify slave_$slaveNo.kml');
+      return false;
+    }
+
+    debugPrint(
+      'LGService: sendBalloon OK -> slave_$slaveNo.kml (${poi.name}, $screens screens)',
+    );
+    return true;
   }
 
   /// Clears the right-most screen balloon layer.

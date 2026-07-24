@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'dart:typed_data';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,20 @@ class LGConnectionState extends ChangeNotifier {
   int? _port;
   int _screens = 5;
   SSHClient? _client;
+  Future<void> _opQueue = Future.value();
+
+  /// Serializa operaciones SSH/SFTP para evitar condiciones de carrera en el rig.
+  Future<T> runExclusive<T>(Future<T> Function() action) async {
+    final previous = _opQueue;
+    final gate = Completer<void>();
+    _opQueue = gate.future;
+    await previous;
+    try {
+      return await action();
+    } finally {
+      gate.complete();
+    }
+  }
 
   bool get isConnected => _isConnected;
   String get ip => _host ?? '';
@@ -83,6 +98,12 @@ class LGConnectionState extends ChangeNotifier {
         _username == null ||
         _password == null) return;
     try {
+      try {
+        _client?.close();
+      } catch (_) {}
+      _client = null;
+      await Future.delayed(const Duration(milliseconds: 250));
+
       final socket = await SSHSocket.connect(_host!, _port!,
           timeout: const Duration(seconds: 10));
       _client = SSHClient(socket,
@@ -91,9 +112,51 @@ class LGConnectionState extends ChangeNotifier {
       _isConnected = true;
       notifyListeners();
     } catch (e) {
+      debugPrint('LGService: reconnect failed: $e');
       _isConnected = false;
       notifyListeners();
     }
+  }
+
+  Future<void> _resetClient() async {
+    _isConnected = false;
+    try {
+      _client?.close();
+    } catch (_) {}
+    _client = null;
+    await Future.delayed(const Duration(milliseconds: 350));
+    await reconnect();
+  }
+
+  bool _isRecoverableSshError(Object e) {
+    final message = e.toString().toLowerCase();
+    return message.contains('sshchannelopenerror') ||
+        message.contains('open failed') ||
+        message.contains('connection closed') ||
+        message.contains('socket');
+  }
+
+  Future<String?> _executeRaw(String command, {int retries = 3}) async {
+    for (var attempt = 0; attempt < retries; attempt++) {
+      if (_client == null || _client?.isClosed == true) await reconnect();
+      if (!_isConnected || _client == null) return null;
+      try {
+        final session = await _client!.execute(command);
+        final stdout = await utf8.decodeStream(session.stdout);
+        await session.done;
+        return stdout;
+      } catch (e) {
+        debugPrint(
+          'LGService Execution Error (attempt ${attempt + 1}/$retries): $e',
+        );
+        if (_isRecoverableSshError(e) && attempt < retries - 1) {
+          await _resetClient();
+          continue;
+        }
+        return null;
+      }
+    }
+    return null;
   }
 
   Future<void> disconnect() async {
@@ -103,19 +166,54 @@ class LGConnectionState extends ChangeNotifier {
     _client = null;
   }
 
+  /// Comprueba que SSH responde antes de enviar un POI.
+  Future<bool> ensureReady() async {
+    if (_client == null || _client?.isClosed == true) {
+      await reconnect();
+    }
+    if (!_isConnected || _client == null) return false;
+
+    for (var attempt = 0; attempt < 3; attempt++) {
+      final pong = await execute('echo lg_ok');
+      if (pong != null && pong.contains('lg_ok')) return true;
+      await _resetClient();
+      await Future.delayed(const Duration(milliseconds: 400));
+    }
+    return false;
+  }
+
 
   Future<String?> execute(String command) async {
-    if (_client == null || _client?.isClosed == true) await reconnect();
-    if (!_isConnected || _client == null) return null;
-    try {
-      final session = await _client!.execute(command);
-      final stdout = await utf8.decodeStream(session.stdout);
-      return stdout;
-    } catch (e) {
-      debugPrint('LGService Execution Error: $e');
-      return null;
-    }
+    return runExclusive(() => _executeRaw(command));
   }
+
+  /// Avisa al sync_nlc del rig de que cambió el KML solo de [machineNo].
+  /// LG1 (centro) usa master_1.kml; el resto slave_N.kml.
+  Future<bool> notifySoloKmlChanged(int machineNo) async {
+    final kmlPath = _soloKmlPath(machineNo);
+    final listPath = '/var/www/html/kmls_$machineNo.txt';
+    final url = _soloKmlUrl(machineNo);
+
+    for (var attempt = 0; attempt < 3; attempt++) {
+      final touchKml = await execute('touch $kmlPath');
+      final touchList = await execute(
+        "test -f '$listPath' && touch '$listPath' || echo '$url' > '$listPath'",
+      );
+      if (touchKml != null && touchList != null) {
+        debugPrint('LGService: notify OK -> $kmlPath');
+        return true;
+      }
+      debugPrint(
+        'LGService: notify FAILED for $kmlPath (attempt ${attempt + 1}/3)',
+      );
+      await _resetClient();
+      await Future.delayed(const Duration(milliseconds: 400));
+    }
+    return false;
+  }
+
+  Future<bool> notifySlaveKmlChanged(int slaveNo) =>
+      notifySoloKmlChanged(slaveNo);
 
   Future<void> sendLogoKML(String kml) async {
     final slaveNo = _leftMostScreen(_screens);
@@ -136,21 +234,6 @@ class LGConnectionState extends ChangeNotifier {
     }
     return kml.replaceFirst('<Document>', '<Document id="$documentId">');
   }
-
-  /// Avisa al sync_nlc del rig de que cambió el KML solo de [machineNo].
-  /// LG1 (centro) usa master_1.kml; el resto slave_N.kml.
-  Future<void> notifySoloKmlChanged(int machineNo) async {
-    final kmlPath = _soloKmlPath(machineNo);
-    final listPath = '/var/www/html/kmls_$machineNo.txt';
-    final url = _soloKmlUrl(machineNo);
-    await execute('touch $kmlPath');
-    await execute(
-      "test -f '$listPath' && touch '$listPath' || echo '$url' > '$listPath'",
-    );
-  }
-
-  Future<void> notifySlaveKmlChanged(int slaveNo) =>
-      notifySoloKmlChanged(slaveNo);
 
   String _soloKmlPath(int machineNo) => machineNo == 1
       ? '/var/www/html/kml/master_1.kml'
@@ -179,61 +262,84 @@ class LGConnectionState extends ChangeNotifier {
     String content, {
     bool useSudo = false,
   }) async {
-    if (!_isConnected || _client == null) {
-      debugPrint('LGService: writeRemoteFile skipped (no connection): $path');
-      return false;
-    }
+    return runExclusive(
+      () => _writeRemoteFileRaw(path, content, useSudo: useSudo),
+    );
+  }
 
-    final bytes = utf8.encode(content);
-
-    // 1) SFTP — mismo canal que las imágenes del balloon; evita límites del shell.
-    try {
-      final sftp = await _client!.sftp();
-      final file = await sftp.open(
-        path,
-        mode: SftpFileOpenMode.create |
-            SftpFileOpenMode.write |
-            SftpFileOpenMode.truncate,
-      );
-      await file.writeBytes(bytes);
-      await file.close();
-      debugPrint('LGService: SFTP wrote ${bytes.length} bytes -> $path');
-      return true;
-    } catch (e) {
-      debugPrint('LGService: SFTP write failed for $path: $e');
-    }
-
-    // 2) Heredoc sin sudo — funcionaba en rigs con /var/www/html en 777.
-    try {
-      const marker = 'LGKMLWRITEEOF';
-      await execute("cat <<'$marker' > '$path'\n$content\n$marker");
-      final sizeStr = await execute("wc -c < '$path'");
-      final size = int.tryParse(sizeStr?.trim() ?? '') ?? 0;
-      if (size > 0) {
-        debugPrint('LGService: heredoc wrote $path ($size bytes)');
-        return true;
+  Future<bool> _writeRemoteFileRaw(
+    String path,
+    String content, {
+    bool useSudo = false,
+  }) async {
+    for (var attempt = 0; attempt < 3; attempt++) {
+      if (_client == null || _client?.isClosed == true) await reconnect();
+      if (!_isConnected || _client == null) {
+        debugPrint('LGService: writeRemoteFile skipped (no connection): $path');
+        return false;
       }
-    } catch (e) {
-      debugPrint('LGService: heredoc write failed for $path: $e');
-    }
 
-    // 3) Base64 por shell (solo payloads pequeños).
-    try {
-      final b64 = base64Encode(bytes);
-      if (useSudo && (sudoPassword?.isNotEmpty ?? false)) {
-        final sudo = sudoPassword!;
-        await execute(
-          "echo '$sudo' | sudo -S bash -c \"echo '$b64' | base64 -d > '$path'\"",
+      final bytes = utf8.encode(content);
+
+      // 1) SFTP
+      try {
+        final sftp = await _client!.sftp();
+        final file = await sftp.open(
+          path,
+          mode: SftpFileOpenMode.create |
+              SftpFileOpenMode.write |
+              SftpFileOpenMode.truncate,
         );
-      } else {
-        await execute("echo '$b64' | base64 -d > '$path'");
+        await file.writeBytes(bytes);
+        await file.close();
+        debugPrint('LGService: SFTP wrote ${bytes.length} bytes -> $path');
+        return true;
+      } catch (e) {
+        debugPrint(
+          'LGService: SFTP write failed for $path (attempt ${attempt + 1}/3): $e',
+        );
+        if (_isRecoverableSshError(e) && attempt < 2) {
+          await _resetClient();
+          continue;
+        }
       }
-      debugPrint('LGService: base64 wrote ${bytes.length} bytes -> $path');
-      return true;
-    } catch (e) {
-      debugPrint('LGService: base64 write failed for $path: $e');
-      return false;
+
+      // 2) Heredoc
+      try {
+        const marker = 'LGKMLWRITEEOF';
+        await _executeRaw("cat <<'$marker' > '$path'\n$content\n$marker");
+        final sizeStr = await _executeRaw("wc -c < '$path'");
+        final size = int.tryParse(sizeStr?.trim() ?? '') ?? 0;
+        if (size > 0) {
+          debugPrint('LGService: heredoc wrote $path ($size bytes)');
+          return true;
+        }
+      } catch (e) {
+        debugPrint('LGService: heredoc write failed for $path: $e');
+      }
+
+      // 3) Base64
+      try {
+        final b64 = base64Encode(bytes);
+        if (useSudo && (sudoPassword?.isNotEmpty ?? false)) {
+          final sudo = sudoPassword!;
+          await _executeRaw(
+            "echo '$sudo' | sudo -S bash -c \"echo '$b64' | base64 -d > '$path'\"",
+          );
+        } else {
+          await _executeRaw("echo '$b64' | base64 -d > '$path'");
+        }
+        debugPrint('LGService: base64 wrote ${bytes.length} bytes -> $path');
+        return true;
+      } catch (e) {
+        debugPrint('LGService: base64 write failed for $path: $e');
+      }
+
+      if (attempt < 2) {
+        await _resetClient();
+      }
     }
+    return false;
   }
 
   Future<void> uploadAssets() async {
@@ -258,23 +364,35 @@ class LGConnectionState extends ChangeNotifier {
     String remoteFileName, {
     String remoteDir = '/var/www/html/logos',
   }) async {
-    if (!_isConnected || _client == null) return;
-    final remotePath = '$remoteDir/$remoteFileName';
-    try {
-      final sftp = await _client!.sftp();
-      final file = await sftp.open(
-        remotePath,
-        mode: SftpFileOpenMode.create |
-            SftpFileOpenMode.write |
-            SftpFileOpenMode.truncate,
-      );
-      await file.writeBytes(bytes);
-      await file.close();
-      await execute(
-        "echo '$sudoPassword' | sudo -S chmod 644 $remotePath",
-      );
-    } catch (e) {
-      debugPrint('LGService SFTP Error uploading bytes to $remotePath: $e');
-    }
+    return runExclusive(() async {
+      final remotePath = '$remoteDir/$remoteFileName';
+      for (var attempt = 0; attempt < 3; attempt++) {
+        if (_client == null || _client?.isClosed == true) await reconnect();
+        if (!_isConnected || _client == null) return;
+        try {
+          final sftp = await _client!.sftp();
+          final file = await sftp.open(
+            remotePath,
+            mode: SftpFileOpenMode.create |
+                SftpFileOpenMode.write |
+                SftpFileOpenMode.truncate,
+          );
+          await file.writeBytes(bytes);
+          await file.close();
+          await _executeRaw(
+            "echo '$sudoPassword' | sudo -S chmod 644 $remotePath",
+          );
+          return;
+        } catch (e) {
+          debugPrint(
+            'LGService SFTP Error uploading bytes to $remotePath '
+            '(attempt ${attempt + 1}/3): $e',
+          );
+          if (attempt < 2) {
+            await _resetClient();
+          }
+        }
+      }
+    });
   }
 }

@@ -5,10 +5,11 @@ import '../models/poi_model.dart';
 class BalloonNarration {
   static String scriptFor(POI poi, {String? langCode}) {
     final lang = langCode ?? languageNotifier.value;
-    final parts = <String>[poi.name];
+    final parts = <String>[poi.getName(lang)];
 
-    if (poi.era != null && poi.era!.trim().isNotEmpty) {
-      parts.add(poi.era!.trim());
+    final era = poi.getEra(lang);
+    if (era.isNotEmpty) {
+      parts.add(era);
     }
 
     if (poi.startDate != null && poi.startDate!.trim().isNotEmpty) {

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:image/image.dart' as img;
 
 import '../models/poi_model.dart';
+import 'kml_escape.dart';
 
 class _PoiColor {
   const _PoiColor(this.r, this.g, this.b);
@@ -91,12 +92,23 @@ class PlacemarkIconManager {
     required double lng,
     required String documentId,
   }) {
-    final iconUrl = iconUrlFor(poi);
     return '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
   <Document id="$documentId">
-    <Placemark>
-      <name>${poi.name}</name>
+${placemarkMarkup(poi: poi, lat: lat, lng: lng)}
+  </Document>
+</kml>''';
+  }
+
+  static String placemarkMarkup({
+    required POI poi,
+    required double lat,
+    required double lng,
+  }) {
+    final iconUrl = iconUrlFor(poi);
+    final safeName = escapeXml(poi.name);
+    return '''    <Placemark id="poi_center_marker">
+      <name>$safeName</name>
       <visibility>1</visibility>
       <Style>
         <IconStyle>
@@ -113,9 +125,7 @@ class PlacemarkIconManager {
       <Point>
         <coordinates>$lng,$lat,0</coordinates>
       </Point>
-    </Placemark>
-  </Document>
-</kml>''';
+    </Placemark>''';
   }
 
   static bool _isCenterHole(int x, int y, int w, int h) {

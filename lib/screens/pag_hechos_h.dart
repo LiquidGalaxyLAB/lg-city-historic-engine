@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
+import '../widgets/themed_poi_card.dart';
 import '../widgets/app_top_bar.dart';
 import '../widgets/m_superior.dart';
 import '../main.dart';
 import '../models/poi_model.dart';
+import '../services/poi_localization.dart';
 import 'pag_lanza_lg.dart';
 
 class HistoricalEventsPage extends StatefulWidget {
@@ -401,16 +404,21 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
     return ValueListenableBuilder<String>(
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
-        final List<POI> allPois = _selectedCategory == 'All'
-            ? _data.values.expand((x) => x).toList()
-            : (_data[_selectedCategory] ?? []);
+        final List<POI> allPois = (_selectedCategory == 'All'
+            ? _data.values.expand((x) => x)
+            : (_data[_selectedCategory] ?? []))
+            .map(PoiLocalization.instance.enrich)
+            .toList();
 
-        final List<POI> pois = allPois.where((poi) {
-          return poi.name.toLowerCase().contains(_searchQuery.toLowerCase());
-        }).toList();
+        final List<POI> pois = allPois
+            .where((poi) => poi.matchesSearch(_searchQuery, lang))
+            .toList();
 
         return Scaffold(
-          backgroundColor: const Color(0xFFF8F7F2),
+          backgroundColor: AppTheme.pageBackground(
+            context,
+            light: const Color(0xFFF8F7F2),
+          ),
           body: Column(
             children: [
               Stack(
@@ -582,7 +590,7 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
                               T.s('no_results_found'),
                               style: TextStyle(
                                 fontSize: 18,
-                                color: Colors.grey[600],
+                                color: context.appOnSurfaceVariant,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -597,7 +605,7 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
                         physics: const BouncingScrollPhysics(),
                         itemCount: pois.length,
                         itemBuilder: (context, index) =>
-                            _cardPunto(pois[index]),
+                            _cardPunto(pois[index], lang),
                       ),
               ),
             ],
@@ -608,66 +616,16 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
   }
 
   Widget _buildFilterBar() {
-    return Container(
-      height: 56,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          const SizedBox(width: 18),
-          const Icon(Icons.search_rounded, color: Color(0xFF8E8E93), size: 22),
-          const SizedBox(width: 10),
-          Expanded(
-            child: TextField(
-              controller: _searchController,
-              onChanged: (value) {
-                setState(() {
-                  _searchQuery = value;
-                });
-              },
-              decoration: InputDecoration(
-                hintText: T.s('search_events'),
-                hintStyle: const TextStyle(
-                  color: Color(0xFF8E8E93),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: -0.2,
-                ),
-                border: InputBorder.none,
-                isDense: true,
-                contentPadding: EdgeInsets.zero,
-              ),
-              style: const TextStyle(fontSize: 16, color: Color(0xFF1C1C1E)),
-            ),
-          ),
-          if (_searchQuery.isNotEmpty)
-            GestureDetector(
-              onTap: () {
-                _searchController.clear();
-                setState(() {
-                  _searchQuery = '';
-                });
-              },
-              child: const Icon(
-                Icons.close_rounded,
-                color: Color(0xFF8E8E93),
-                size: 20,
-              ),
-            ),
-          const SizedBox(width: 10),
-          _buildCategoryDropdown(),
-          const SizedBox(width: 8),
-        ],
-      ),
+    return ThemedListFilterBar(
+      searchController: _searchController,
+      searchHint: T.s('search_events'),
+      searchQuery: _searchQuery,
+      onSearchChanged: (value) => setState(() => _searchQuery = value),
+      onClearSearch: () {
+        _searchController.clear();
+        setState(() => _searchQuery = '');
+      },
+      categoryMenu: _buildCategoryDropdown(),
     );
   }
 
@@ -688,13 +646,13 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
               (cat) => PopupMenuItem<String>(
                 value: cat,
                 child: Text(
-                  cat == 'All' ? T.s('show_all') : cat,
+                  cat == 'All' ? T.s('show_all') : T.category(cat),
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: _selectedCategory == cat
                         ? FontWeight.w800
                         : FontWeight.w500,
-                    color: const Color(0xFF1C1C1E),
+                    color: context.appOnSurface,
                   ),
                 ),
               ),
@@ -704,7 +662,7 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: const Color(0xFFF2F2F7),
+          color: AppTheme.chipBackground(context),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -712,17 +670,17 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
           children: [
             Text(
               T.s('categories'),
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w900,
                 fontSize: 13,
-                color: Color(0xFF1C1C1E),
+                color: context.appOnSurface,
                 letterSpacing: 0.5,
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(
+            Icon(
               Icons.keyboard_arrow_down_rounded,
-              color: Color(0xFF1C1C1E),
+              color: context.appOnSurface,
               size: 18,
             ),
           ],
@@ -731,90 +689,14 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
     );
   }
 
-  Widget _cardPunto(POI poi) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            child: Image.asset(
-              poi.image,
-              height: 180,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  height: 180,
-                  color: Colors.grey[300],
-                  child: const Icon(
-                    Icons.image_not_supported,
-                    size: 50,
-                    color: Colors.grey,
-                  ),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    poi.name,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      fontFamily: 'serif',
-                      color: Color(0xFF1C1C1E),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => LaunchLGPage(poi: poi),
-                    ),
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF2F2F7),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      T.s('send_lg'),
-                      style: const TextStyle(
-                        color: Color(0xFF6B5B45),
-                        fontWeight: FontWeight.w900,
-                        fontSize: 13,
-                        letterSpacing: 0.6,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+  Widget _cardPunto(POI poi, String lang) {
+    return ThemedPoiCard(
+      imageAsset: poi.image,
+      title: poi.getName(lang),
+      actionLabel: T.s('send_lg'),
+      onSend: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => LaunchLGPage(poi: poi)),
       ),
     );
   }

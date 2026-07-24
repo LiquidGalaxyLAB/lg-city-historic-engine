@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 import 'pag_inicio_categ.dart';
 
 class SplashPage extends StatefulWidget {
@@ -27,8 +28,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // We use the same beige as the rest of the app to avoid the black color
-      backgroundColor: const Color(0xFFF0EBE0),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(32.0),

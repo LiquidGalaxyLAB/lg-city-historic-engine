@@ -4,6 +4,7 @@ import 'pag_cat.ig.dart';
 import 'pag_museos.dart';
 import 'pag_hechos_h.dart';
 import 'pag_conectar.dart';
+import '../theme/app_theme.dart';
 import '../widgets/app_top_bar.dart';
 import '../main.dart';
 //Es la pagina cuando 
@@ -16,7 +17,7 @@ class CategoriesHomePage extends StatelessWidget {
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
         return Scaffold(
-          backgroundColor: const Color(0xFFF0EBE0),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: SafeArea(
             child: Column(
               children: [
@@ -37,14 +38,14 @@ class CategoriesHomePage extends StatelessWidget {
                 const SizedBox(height: 6),
 
                 // ── STATUS LINE ──
-                const Text(
-                  'Lleida, Spain, Data Base Loaded',
+                Text(
+                  T.s('db_status'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     letterSpacing: 0.3,
-                    color: Color(0xFF6B6459),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
 
@@ -124,16 +125,19 @@ class CategoriesHomePage extends StatelessWidget {
                           width: double.infinity,
                           padding: const EdgeInsets.symmetric(vertical: 17),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFCFE8E0),
+                            color: AppTheme.tintedCard(
+                              context,
+                              const Color(0xFFCFE8E0),
+                            ),
                             borderRadius: BorderRadius.circular(18),
                           ),
                           child: Text(
                             '${T.s('connect')} Liquid Galaxy',
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
-                              color: Colors.black87,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                         ),
@@ -174,11 +178,13 @@ class _CategoryCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(
-          color: color,
+          color: AppTheme.categoryCardBackground(context, color),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
+              color: Colors.black.withValues(
+                alpha: AppTheme.shadowAlpha(context),
+              ),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),
@@ -190,7 +196,7 @@ class _CategoryCard extends StatelessWidget {
               width: 50,
               height: 50,
               decoration: BoxDecoration(
-                color: iconBgColor,
+                color: AppTheme.categoryIconBackground(context, iconBgColor),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: iconColor, size: 28),
@@ -202,28 +208,28 @@ class _CategoryCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 19,
                       fontWeight: FontWeight.w700,
-                      color: Colors.black87,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
-                      color: Colors.black54,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                       height: 1.4,
                     ),
                   ),
                 ],
               ),
             ),
-            const Icon(
+            Icon(
               Icons.arrow_forward_ios,
               size: 16,
-              color: Colors.black38,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ],
         ),

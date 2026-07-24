@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_theme.dart';
+import '../main.dart';
 import '../screens/pag_conectar.dart';
 import '../screens/pag_acerca_de.dart';
 import '../screens/pag_ayuda.dart';
@@ -28,7 +30,10 @@ class FloatingMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
+    return ValueListenableBuilder<String>(
+      valueListenable: languageNotifier,
+      builder: (context, _, __) {
+        return Align(
       alignment: Alignment.topLeft,
       child: Material(
         color: Colors.transparent,
@@ -36,7 +41,7 @@ class FloatingMenu extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.5,
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
-            color: const Color(0xFFF5F0E8),
+            color: AppTheme.menuPanelBackground(context),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.15),
@@ -55,11 +60,11 @@ class FloatingMenu extends StatelessWidget {
                   vertical: 10,
                 ),
                 child: Text(
-                  'MENU',
+                  T.s('menu'),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.brown[700],
+                    color: Theme.of(context).colorScheme.onSurface,
                     letterSpacing: 1.2,
                   ),
                 ),
@@ -72,9 +77,9 @@ class FloatingMenu extends StatelessWidget {
                     _item(
                       context,
                       icon: Icons.home_outlined,
-                      title: 'Categories',
-                      subtitle: 'Browse categories',
-                      highlighted: currentTitle == 'Categories',
+                      title: T.s('home'),
+                      subtitle: T.s('menu_categories_sub'),
+                      highlighted: currentTitle == T.s('home'),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.pushAndRemoveUntil(
@@ -89,9 +94,9 @@ class FloatingMenu extends StatelessWidget {
                     _item(
                       context,
                       icon: Icons.wifi,
-                      title: 'Connection',
-                      subtitle: 'Liquid Galaxy status',
-                      highlighted: currentTitle == 'Connection',
+                      title: T.s('connect'),
+                      subtitle: T.s('menu_connection_sub'),
+                      highlighted: currentTitle == T.s('connect'),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.push(
@@ -105,9 +110,9 @@ class FloatingMenu extends StatelessWidget {
                     _item(
                       context,
                       icon: Icons.build_outlined,
-                      title: 'Tools',
-                      subtitle: 'Utility tools',
-                      highlighted: currentTitle == 'Tools',
+                      title: T.s('tools'),
+                      subtitle: T.s('menu_tools_sub'),
+                      highlighted: currentTitle == T.s('tools'),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.push(
@@ -119,9 +124,9 @@ class FloatingMenu extends StatelessWidget {
                     _item(
                       context,
                       icon: Icons.settings_outlined,
-                      title: 'Settings',
-                      subtitle: 'App preferences',
-                      highlighted: currentTitle == 'Settings',
+                      title: T.s('settings'),
+                      subtitle: T.s('menu_settings_sub'),
+                      highlighted: currentTitle == T.s('settings'),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.push(
@@ -135,9 +140,9 @@ class FloatingMenu extends StatelessWidget {
                     _item(
                       context,
                       icon: Icons.info_outline,
-                      title: 'About Us',
-                      subtitle: 'Learn more',
-                      highlighted: currentTitle == 'About Us',
+                      title: T.s('menu_about'),
+                      subtitle: T.s('menu_about_sub'),
+                      highlighted: currentTitle == T.s('menu_about'),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.push(
@@ -151,9 +156,9 @@ class FloatingMenu extends StatelessWidget {
                     _item(
                       context,
                       icon: Icons.help_outline,
-                      title: 'Help',
-                      subtitle: 'Get assistance',
-                      highlighted: currentTitle == 'Help',
+                      title: T.s('help'),
+                      subtitle: T.s('menu_help_sub'),
+                      highlighted: currentTitle == T.s('help'),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.push(
@@ -171,6 +176,8 @@ class FloatingMenu extends StatelessWidget {
         ),
       ),
     );
+      },
+    );
   }
 
   Widget _item(
@@ -181,6 +188,12 @@ class FloatingMenu extends StatelessWidget {
     required VoidCallback onTap,
     bool highlighted = false,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final highlightBg =
+        isDark ? const Color(0xFF6F4E37) : const Color(0xFF6F4E37);
+    final normalText = Theme.of(context).colorScheme.onSurface;
+    final normalSub = Theme.of(context).colorScheme.onSurfaceVariant;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -188,7 +201,7 @@ class FloatingMenu extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
-          color: highlighted ? const Color(0xFF6F4E37) : Colors.transparent,
+          color: highlighted ? highlightBg : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -196,7 +209,7 @@ class FloatingMenu extends StatelessWidget {
             Icon(
               icon,
               size: 22,
-              color: highlighted ? Colors.white : Colors.black87,
+              color: highlighted ? Colors.white : normalText,
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -208,7 +221,7 @@ class FloatingMenu extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: highlighted ? Colors.white : Colors.black87,
+                      color: highlighted ? Colors.white : normalText,
                     ),
                   ),
                   Text(
@@ -217,7 +230,7 @@ class FloatingMenu extends StatelessWidget {
                       fontSize: 12,
                       color: highlighted
                           ? Colors.white.withValues(alpha: 0.8)
-                          : Colors.black45,
+                          : normalSub,
                     ),
                   ),
                 ],

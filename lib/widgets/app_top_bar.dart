@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 import '../models/connection_state.dart';
+import '../screens/pag_conectar.dart';
 import 'm_superior.dart';
 
 /// Reusable top bar for all pages.
@@ -44,7 +46,11 @@ class _AppTopBarState extends State<AppTopBar> {
 
     // Wifi-only mode (for headers with a dark image)
     if (widget.wifiOnly) {
-      return _WifiIcon(connected: connected, onDark: widget.onDarkBackground);
+      return _WifiIcon(
+        connected: connected,
+        onDark: widget.onDarkBackground,
+        onTap: () => _openConnectPage(context),
+      );
     }
 
     // Full mode: menu + wifi
@@ -59,7 +65,11 @@ class _AppTopBarState extends State<AppTopBar> {
             ),
             child: const Icon(Icons.menu, color: Colors.white, size: 32),
           ),
-          _WifiIcon(connected: connected, onDark: true),
+          _WifiIcon(
+            connected: connected,
+            onDark: true,
+            onTap: () => _openConnectPage(context),
+          ),
         ],
       );
     }
@@ -73,20 +83,37 @@ class _AppTopBarState extends State<AppTopBar> {
           child: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.08),
+                  color: Colors.black.withValues(
+                    alpha: AppTheme.shadowAlpha(context),
+                  ),
                   blurRadius: 6,
                 ),
               ],
             ),
-            child: const Icon(Icons.menu, size: 28),
+            child: Icon(
+              Icons.menu,
+              size: 28,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
         ),
-        _WifiIcon(connected: connected, onDark: false),
+        _WifiIcon(
+          connected: connected,
+          onDark: false,
+          onTap: () => _openConnectPage(context),
+        ),
       ],
+    );
+  }
+
+  void _openConnectPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ConnectPage()),
     );
   }
 }
@@ -94,28 +121,45 @@ class _AppTopBarState extends State<AppTopBar> {
 class _WifiIcon extends StatelessWidget {
   final bool connected;
   final bool onDark;
+  final VoidCallback? onTap;
 
-  const _WifiIcon({required this.connected, required this.onDark});
+  const _WifiIcon({
+    required this.connected,
+    required this.onDark,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     if (onDark) {
-      return Icon(
-        connected ? Icons.wifi : Icons.wifi_off,
-        color: connected ? const Color(0xFF80E8C0) : Colors.white70,
-        size: 30,
+      return GestureDetector(
+        onTap: onTap,
+        child: Icon(
+          connected ? Icons.wifi : Icons.wifi_off,
+          color: connected ? const Color(0xFF80E8C0) : Colors.white70,
+          size: 30,
+        ),
       );
     }
-    return Container(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: connected ? const Color(0xFFD4EDD4) : const Color(0xFFD4C9B0),
+        color: connected
+            ? (Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xFF2A3D2A)
+                : const Color(0xFFD4EDD4))
+            : (Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xFF3A342C)
+                : const Color(0xFFD4C9B0)),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Icon(
         connected ? Icons.wifi : Icons.wifi_off,
         size: 26,
         color: connected ? const Color(0xFF2E7D52) : const Color(0xFF6B5B45),
+      ),
       ),
     );
   }

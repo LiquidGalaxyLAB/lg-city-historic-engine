@@ -20,6 +20,13 @@ class T {
     'Contemporary Age': 'cat_contemporary',
   };
 
+  static const _eraKeys = {
+    'Ancient Age': 'era_ancient',
+    'Middle Ages': 'era_middle_ages',
+    'Modern Age': 'era_modern_age',
+    'Contemporary Age': 'era_contemporary',
+  };
+
   static final Map<String, Map<String, String>> _data = {
     'en': _en,
     'es': _es,
@@ -33,6 +40,12 @@ class T {
 
   static String category(String key) {
     final tKey = _categoryKeys[key];
+    if (tKey == null) return key;
+    return s(tKey);
+  }
+
+  static String era(String key) {
+    final tKey = _eraKeys[key];
     if (tKey == null) return key;
     return s(tKey);
   }
@@ -94,11 +107,18 @@ const _en = {
   'help_more_title': 'Need more help?',
   'help_more_text':
       'If you experience any issues, please restart the application or check your connection.',
-  'about_author': 'Author name - Yasmina Ramadan',
-  'about_mentor': 'Mentor name - Claudia',
-  'about_admin': 'Organization administrator - Andreu Ibáñez',
-  'about_contact': 'Author contact - yasiramadan@gmail.com',
-  'about_support': 'Support - Lleida Liquid Galaxy LAB',
+  'about_author_label': 'Author name',
+  'about_author_value': 'Yasmina Ramadan',
+  'about_mentor_label': 'Mentor name',
+  'about_mentor_value': 'Claudia',
+  'about_admin_label': 'Organization administrator name',
+  'about_admin_value': 'Andreu Ibáñez',
+  'about_contact_label': 'Author contact',
+  'about_contact_value': 'yasiramadan@gmail.com',
+  'about_support_label': 'Support',
+  'about_support_value': 'Lleida Liquid Galaxy LAB',
+  'about_coordinates_label': 'Coordinates',
+  'about_coordinates_value': 'David López Solá & Adriá Ballesteros Oro',
   'connection': 'Connection',
   'connected_to': 'Connected to',
   'disconnect': 'Disconnect',
@@ -148,6 +168,12 @@ const _en = {
   'cat_late_medieval': 'Middle Ages / Late Middle Ages',
   'cat_modern_age': 'Modern Age',
   'cat_contemporary': 'Contemporary Age',
+  'era_ancient': 'Ancient Age',
+  'era_middle_ages': 'Middle Ages',
+  'era_modern_age': 'Modern Age',
+  'era_contemporary': 'Contemporary Age',
+  'db_status': 'Lleida, Spain, Data Base Loaded',
+  'connect_first': 'Connect to Liquid Galaxy first on the Connect screen',
 };
 
 const _es = {
@@ -208,11 +234,18 @@ const _es = {
   'help_more_title': '¿Necesitas más ayuda?',
   'help_more_text':
       'Si experimentas algún problema, reinicia la aplicación o comprueba tu conexión.',
-  'about_author': 'Nombre del autor - Yasmina Ramadan',
-  'about_mentor': 'Nombre del mentor - Claudia',
-  'about_admin': 'Administrador de la organización - Andreu Ibáñez',
-  'about_contact': 'Contacto del autor - yasiramadan@gmail.com',
-  'about_support': 'Soporte - Lleida Liquid Galaxy LAB',
+  'about_author_label': 'Nombre del autor',
+  'about_author_value': 'Yasmina Ramadan',
+  'about_mentor_label': 'Nombre del mentor',
+  'about_mentor_value': 'Claudia',
+  'about_admin_label': 'Administrador de la organización',
+  'about_admin_value': 'Andreu Ibáñez',
+  'about_contact_label': 'Contacto del autor',
+  'about_contact_value': 'yasiramadan@gmail.com',
+  'about_support_label': 'Support',
+  'about_support_value': 'Lleida Liquid Galaxy LAB',
+  'about_coordinates_label': 'Coordenadas',
+  'about_coordinates_value': 'David López Solá & Adriá Ballesteros Oro',
   'connection': 'Conexión',
   'connected_to': 'Conectado a',
   'disconnect': 'Desconectar',
@@ -262,6 +295,13 @@ const _es = {
   'cat_late_medieval': 'Edad Media / Baja Edad Media',
   'cat_modern_age': 'Edad Moderna',
   'cat_contemporary': 'Edad Contemporánea',
+  'era_ancient': 'Edad Antigua',
+  'era_middle_ages': 'Edad Media',
+  'era_modern_age': 'Edad Moderna',
+  'era_contemporary': 'Edad Contemporánea',
+  'db_status': 'Lleida, España, Base de datos cargada',
+  'connect_first':
+      'Conéctate primero al Liquid Galaxy en la pantalla Conectar',
 };
 
 const _ca = {
@@ -322,11 +362,18 @@ const _ca = {
   'help_more_title': 'Necessites més ajuda?',
   'help_more_text':
       'Si experimentes algun problema, reinicia l\'aplicació o comprova la connexió.',
-  'about_author': 'Nom de l\'autor - Yasmina Ramadan',
-  'about_mentor': 'Nom del mentor - Claudia',
-  'about_admin': 'Administrador de l\'organització - Andreu Ibáñez',
-  'about_contact': 'Contact de l\'autor - yasiramadan@gmail.com',
-  'about_support': 'Suport - Lleida Liquid Galaxy LAB',
+  'about_author_label': 'Nom de l\'autor',
+  'about_author_value': 'Yasmina Ramadan',
+  'about_mentor_label': 'Nom del mentor',
+  'about_mentor_value': 'Claudia',
+  'about_admin_label': 'Administrador de l\'organització',
+  'about_admin_value': 'Andreu Ibáñez',
+  'about_contact_label': 'Contacte de l\'autor',
+  'about_contact_value': 'yasiramadan@gmail.com',
+  'about_support_label': 'Support',
+  'about_support_value': 'Lleida Liquid Galaxy LAB',
+  'about_coordinates_label': 'Coordenades',
+  'about_coordinates_value': 'David López Solá & Adriá Ballesteros Oro',
   'connection': 'Connexió',
   'connected_to': 'Connectat a',
   'disconnect': 'Desconnectar',
@@ -376,6 +423,13 @@ const _ca = {
   'cat_late_medieval': 'Edat Mitjana / Baixa Edat Mitjana',
   'cat_modern_age': 'Edat Moderna',
   'cat_contemporary': 'Edat Contemporània',
+  'era_ancient': 'Edat Antiga',
+  'era_middle_ages': 'Edat Mitjana',
+  'era_modern_age': 'Edat Moderna',
+  'era_contemporary': 'Edat Contemporània',
+  'db_status': 'Lleida, Espanya, Base de dades carregada',
+  'connect_first':
+      'Connecta primer al Liquid Galaxy a la pantalla Connectar',
 };
 
 const _tr = {
@@ -434,11 +488,18 @@ const _tr = {
   'help_more_title': 'Daha fazla yardıma ihtiyacınız var?',
   'help_more_text':
       'Sorun yaşıyorsanız uygulamayı yeniden başlatın veya bağlantınızı kontrol edin.',
-  'about_author': 'Yazar adı - Yasmina Ramadan',
-  'about_mentor': 'Mentor adı - Claudia',
-  'about_admin': 'Kuruluş yöneticisi - Andreu Ibáñez',
-  'about_contact': 'Yazar iletişim - yasiramadan@gmail.com',
-  'about_support': 'Destek - Lleida Liquid Galaxy LAB',
+  'about_author_label': 'Yazar adı',
+  'about_author_value': 'Yasmina Ramadan',
+  'about_mentor_label': 'Mentor adı',
+  'about_mentor_value': 'Claudia',
+  'about_admin_label': 'Kuruluş yöneticisi',
+  'about_admin_value': 'Andreu Ibáñez',
+  'about_contact_label': 'Yazar iletişim',
+  'about_contact_value': 'yasiramadan@gmail.com',
+  'about_support_label': 'Support',
+  'about_support_value': 'Lleida Liquid Galaxy LAB',
+  'about_coordinates_label': 'Koordinatlar',
+  'about_coordinates_value': 'David López Solá & Adriá Ballesteros Oro',
   'connection': 'Bağlantı',
   'connected_to': 'Bağlandı',
   'disconnect': 'Bağlantıyı kes',
@@ -488,4 +549,11 @@ const _tr = {
   'cat_late_medieval': 'Orta Çağ / Geç Orta Çağ',
   'cat_modern_age': 'Modern Çağ',
   'cat_contemporary': 'Yakın Çağ',
+  'era_ancient': 'Antik Çağ',
+  'era_middle_ages': 'Orta Çağ',
+  'era_modern_age': 'Modern Çağ',
+  'era_contemporary': 'Yakın Çağ',
+  'db_status': 'Lleida, İspanya, Veritabanı yüklendi',
+  'connect_first':
+      'Önce Bağlan ekranından Liquid Galaxy\'ye bağlanın',
 };

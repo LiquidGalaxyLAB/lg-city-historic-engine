@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
+import '../widgets/themed_poi_card.dart';
 import '../widgets/app_top_bar.dart';
 import '../widgets/m_superior.dart';
 import '../main.dart';
 import '../models/poi_model.dart';
+import '../services/poi_localization.dart';
 import 'pag_lanza_lg.dart';
 
 class CathedralsChurchesPage extends StatefulWidget {
@@ -21,11 +24,13 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
     'Cathedrals': [
       POI(
         name: 'Seu Vella Cathedral',
-        location: '41.6176° N, 0.6267° E',
+        location: '41.6175°N, 0.6269°E',
         image: 'assets/images_churches_cathedrals/img.png',
-        lat: 41.6176,
-        lng: 0.6267,
-        range: 1000,
+        lat: 41.617475,
+        lng: 0.626900,
+        range: 404,
+        heading: -40.0,
+        tilt: 62.0,
         era: 'Middle Ages',
         startDate: '1203',
         endDate: '1431',
@@ -34,11 +39,13 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
       ),
       POI(
         name: 'New Cathedral',
-        location: '41.6130° N, 0.6232° E',
+        location: '41.6129°N, 0.6231°E',
         image: 'assets/images_churches_cathedrals/catedral.jpg',
-        lat: 41.6129,
-        lng: 0.6232,
-        range: 400,
+        lat: 41.612900,
+        lng: 0.623125,
+        range: 108,
+        heading: -5.0,
+        tilt: 57.0,
         era: 'Modern Age',
         startDate: '1761',
         endDate: '1781',
@@ -49,15 +56,138 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
     'Churches': [
       POI(
         name: 'Church of Sant Llorenç',
-        location: '41.6144° N, 0.6219° E',
+        location: '41.6143°N, 0.6216°E',
         image: 'assets/images_churches_cathedrals/Iglesia de Sant Llorenç.jpg',
-        lat: 41.6144,
-        lng: 0.6219,
+        lat: 41.614250,
+        lng: 0.621639,
+        range: 92,
+        heading: -10.0,
+        tilt: 61.0,
         era: 'Middle Ages',
         startDate: '1150',
         endDate: '1400',
         description:
             'What was twice the seat of a cathedral is a Romanesque-style construction with Gothic extensions and finishes. Considered the second most important church after the La Seu Vella, it has three naves of equal height and three apses. The building preserves four important Gothic altarpieces, the largest of which is dedicated to Saint Lawrence.',
+      ),
+      POI(
+        name: 'Old Church of San Martí',
+        location: '41.6177°N, 0.6220°E',
+        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        lat: 41.617669,
+        lng: 0.622039,
+        range: 78,
+        heading: 26.0,
+        tilt: 57.0,
+        era: 'Middle Ages',
+        startDate: '1150',
+        endDate: '1200',
+        description:
+            'This church is a Romanesque gem located in the heart of the city. Built in the 12th century, it became the chapel of the Estudi General in 1300. In 1648, during the Reapers\' War, it was converted into a military barracks, and in the 19th century it was used as the municipal prison. In 1893, Bishop Messeguer Costa ordered its restoration.',
+      ),
+      POI(
+        name: 'Church of San Juan',
+        location: '41.6164°N, 0.6277°E',
+        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        lat: 41.616403,
+        lng: 0.627722,
+        range: 72,
+        heading: 0.0,
+        tilt: 59.0,
+        era: 'Middle Ages',
+        startDate: '1885',
+        endDate: '1895',
+        description:
+            'In one of the most characteristic squares of the city stands the Church of Sant John. This Neo-Gothic building dates from the late 19th century and was designed by Julio de Saracíbar and Celestino Capmany.',
+      ),
+      POI(
+        name: 'Chapel of Sant Jaume',
+        location: '41.6135°N, 0.6246°E',
+        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        lat: 41.613458,
+        lng: 0.624600,
+        range: 63,
+        heading: 0.0,
+        tilt: 61.0,
+        era: 'Middle Ages',
+        startDate: '1399',
+        endDate: '1399',
+        description:
+            'This small chapel, originally dedicated to Our Lady of the Snows, was built during the Muslim period in what was then the Christian quarter, and it is currently dedicated to the worship of the Apostle James (Saint James).',
+      ),
+      POI(
+        name: 'Chapel of la Sang',
+        location: '41.6119°N, 0.6212°E',
+        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        lat: 41.611911,
+        lng: 0.621158,
+        range: 75,
+        heading: -52.0,
+        tilt: 58.0,
+        era: 'Middle Ages',
+        startDate: '1470',
+        endDate: '1499',
+        description:
+            'The Oratory of the Blood of Lleida takes its name from the Congregation of the Most Pure Blood of Our Lord Jesus. The Oratory of the Blood is the chapel from which the Holy Week processional floats depart.',
+      ),
+      POI(
+        name: 'Church of Sant Pere',
+        location: '41.6143°N, 0.6261°E',
+        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        lat: 41.614269,
+        lng: 0.626103,
+        range: 49,
+        heading: -112.0,
+        tilt: 55.0,
+        era: 'Middle Ages',
+        startDate: '1731',
+        endDate: '1749',
+        description:
+            'Located in Saint Francis Square, the Church of Saint Peter of Lleida was founded in 1731. It originally served as the church of the Franciscan Convent (1217).',
+      ),
+      POI(
+        name: 'Hermitage of Granyena',
+        location: '41.6419°N, 0.6621°E',
+        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        lat: 41.641917,
+        lng: 0.662147,
+        range: 60,
+        heading: 124.0,
+        tilt: 64.0,
+        era: 'Middle Ages',
+        startDate: '1300',
+        endDate: '1308',
+        description:
+            'It is a large building with a ground floor and one upper level, topped with a gabled roof. It was originally a mosque. Already mentioned in 1308, it is the site where the Virgin Mary of Granyena, patron saint of Alcoletge, is venerated.',
+      ),
+      POI(
+        name: 'Convent del Roser',
+        location: '41.6144°N, 0.6240°E',
+        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        lat: 41.614419,
+        lng: 0.623989,
+        range: 151,
+        heading: -24.0,
+        tilt: 62.0,
+        era: 'Middle Ages',
+        startDate: '1669',
+        endDate: '1669',
+        description:
+            'In the Reapers\' War, when Lleida was under French sovereignty in 1642, the Roser was located below the hill of the Seu Vella. In 1669 it was rebuilt in the city centre on Carrer Cavallers.',
+      ),
+      POI(
+        name: 'Academia Mariana',
+        location: '41.6109°N, 0.6190°E',
+        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        lat: 41.610928,
+        lng: 0.619022,
+        range: 73,
+        heading: -40.0,
+        tilt: 60.0,
+        era: 'Contemporary Age',
+        startDate: '1862',
+        endDate: '1862',
+        description:
+            'Since its foundation in 1862, the Academia Mariana has been a true symbol of the city. The Sanctuary of the Patroness of Lleida contains several artistic treasures unique in the world, including 300 square meters of fresco paintings from 1871 depicting the life of the Virgin.',
       ),
     ],
   };
@@ -73,16 +203,21 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
     return ValueListenableBuilder<String>(
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
-        final List<POI> allPois = _selectedCategory == 'All'
-            ? _data.values.expand((x) => x).toList()
-            : (_data[_selectedCategory] ?? []);
+        final List<POI> allPois = (_selectedCategory == 'All'
+            ? _data.values.expand((x) => x)
+            : (_data[_selectedCategory] ?? []))
+            .map(PoiLocalization.instance.enrich)
+            .toList();
 
-        final List<POI> pois = allPois.where((poi) {
-          return poi.name.toLowerCase().contains(_searchQuery.toLowerCase());
-        }).toList();
+        final List<POI> pois = allPois
+            .where((poi) => poi.matchesSearch(_searchQuery, lang))
+            .toList();
 
         return Scaffold(
-          backgroundColor: const Color(0xFFF8F7F2),
+          backgroundColor: AppTheme.pageBackground(
+            context,
+            light: const Color(0xFFF8F7F2),
+          ),
           body: Column(
             children: [
               Stack(
@@ -193,7 +328,7 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   itemCount: pois.length,
-                  itemBuilder: (context, index) => _placeCard(pois[index]),
+                  itemBuilder: (context, index) => _placeCard(pois[index], lang),
                 ),
               ),
             ],
@@ -204,109 +339,84 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
   }
 
   Widget _buildFilterBar() {
-    return Container(
-      height: 56,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 15,
-              offset: const Offset(0, 8))
-        ],
-      ),
-      child: Row(
-        children: [
-          const SizedBox(width: 18),
-          const Icon(Icons.search_rounded, color: Color(0xFF8E8E93), size: 22),
-          const SizedBox(width: 10),
-          Expanded(
-            child: TextField(
-              controller: _searchController,
-              onChanged: (value) => setState(() => _searchQuery = value),
-              decoration: InputDecoration(
-                  hintText: T.s('search'), border: InputBorder.none),
-            ),
-          ),
-          _buildCategoryDropdown(),
-          const SizedBox(width: 8),
-        ],
-      ),
+    return ThemedListFilterBar(
+      searchController: _searchController,
+      searchHint: T.s('search'),
+      searchQuery: _searchQuery,
+      onSearchChanged: (value) => setState(() => _searchQuery = value),
+      onClearSearch: () {
+        _searchController.clear();
+        setState(() => _searchQuery = '');
+      },
+      categoryMenu: _buildCategoryDropdown(),
     );
   }
 
   Widget _buildCategoryDropdown() {
     return PopupMenuButton<String>(
-      onSelected: (String value) => setState(() => _selectedCategory = value),
-      itemBuilder: (context) => ['All', 'Cathedrals', 'Churches']
-          .map((cat) => PopupMenuItem(
-              value: cat, child: Text(cat == 'All' ? T.s('show_all') : cat)))
-          .toList(),
+      onSelected: (String value) {
+        setState(() {
+          _selectedCategory = value;
+        });
+      },
+      offset: const Offset(0, 60),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 12,
+      itemBuilder: (context) {
+        List<String> categories = ['All', ..._data.keys];
+        return categories
+            .map(
+              (cat) => PopupMenuItem<String>(
+                value: cat,
+                child: Text(
+                  cat == 'All' ? T.s('show_all') : T.category(cat),
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: _selectedCategory == cat
+                        ? FontWeight.w800
+                        : FontWeight.w500,
+                    color: context.appOnSurface,
+                  ),
+                ),
+              ),
+            )
+            .toList();
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-            color: const Color(0xFFF2F2F7),
-            borderRadius: BorderRadius.circular(12)),
-        child: Row(children: [
-          Text(T.s('categories')),
-          const Icon(Icons.keyboard_arrow_down)
-        ]),
+          color: AppTheme.chipBackground(context),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              T.s('categories'),
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: 13,
+                color: context.appOnSurface,
+                letterSpacing: 0.5,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Icon(Icons.keyboard_arrow_down_rounded,
+                color: context.appOnSurface, size: 18),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _placeCard(POI poi) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 16,
-              offset: const Offset(0, 8))
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            child: Image.asset(poi.image,
-                height: 180, width: double.infinity, fit: BoxFit.cover),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                    child: Text(poi.name,
-                        style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                            fontFamily: 'serif'))),
-                GestureDetector(
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => LaunchLGPage(poi: poi))),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 10),
-                    decoration: BoxDecoration(
-                        color: const Color(0xFFF2F2F7),
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Text(T.s('send_lg'),
-                        style: const TextStyle(
-                            color: Color(0xFF6B5B45),
-                            fontWeight: FontWeight.w900)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+  Widget _placeCard(POI poi, String lang) {
+    return ThemedPoiCard(
+      imageAsset: poi.image,
+      title: poi.getName(lang),
+      actionLabel: T.s('send_lg'),
+      onSend: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => LaunchLGPage(poi: poi)),
       ),
     );
   }
