@@ -99,7 +99,6 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
     _conn.removeListener(_onConnectionChanged);
     _narration.dispose();
     _lgService.stopOrbit();
-    _lgService.closeChromium();
     super.dispose();
   }
 

@@ -42,13 +42,34 @@ class PlacemarkIconManager {
     return _palette[_colorSeed(poi) % _palette.length];
   }
 
+  static int kmlAbgrColorForPoi(POI poi, {int alpha = 220}) {
+    final color = colorForPoi(poi);
+    return _toKmlAbgr(color.r, color.g, color.b, alpha);
+  }
+
+  static int _toKmlAbgr(int r, int g, int b, int alpha) {
+    return ((alpha & 0xff) << 24) |
+        ((b & 0xff) << 16) |
+        ((g & 0xff) << 8) |
+        (r & 0xff);
+  }
+
+  static String kmlAbgrHexForPoi(POI poi, {int alpha = 220}) {
+    final abgr = kmlAbgrColorForPoi(poi, alpha: alpha);
+    return abgr.toRadixString(16).padLeft(8, '0').toUpperCase();
+  }
+
   static String remoteFileNameFor(POI poi) {
     final color = colorForPoi(poi);
     final id = _colorSeed(poi);
     return 'placemark_${id}_${color.r}_${color.g}_${color.b}.png';
   }
 
-  /// LG1 (master) debe cargar el icono vía localhost (misma máquina que Apache).
+  /// Icon URL reachable from every screen in the rig (not localhost).
+  static String networkIconUrlFor(POI poi) =>
+      'http://lg1:81/kml/${remoteFileNameFor(poi)}';
+
+  /// LG1 (master) must load the icon via localhost (same machine as Apache).
   static String iconUrlFor(POI poi) =>
       'http://localhost:81/kml/${remoteFileNameFor(poi)}';
 
@@ -91,11 +112,25 @@ class PlacemarkIconManager {
     required double lat,
     required double lng,
     required String documentId,
+    String extraMarkup = '',
+  }) {
+    return kmlDocument(
+      documentId: documentId,
+      body: '''
+$extraMarkup
+${placemarkMarkup(poi: poi, lat: lat, lng: lng)}
+''',
+    );
+  }
+
+  static String kmlDocument({
+    required String documentId,
+    required String body,
   }) {
     return '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
   <Document id="$documentId">
-${placemarkMarkup(poi: poi, lat: lat, lng: lng)}
+$body
   </Document>
 </kml>''';
   }
@@ -104,8 +139,10 @@ ${placemarkMarkup(poi: poi, lat: lat, lng: lng)}
     required POI poi,
     required double lat,
     required double lng,
+    bool useNetworkIcon = false,
   }) {
-    final iconUrl = iconUrlFor(poi);
+    final iconUrl =
+        useNetworkIcon ? networkIconUrlFor(poi) : iconUrlFor(poi);
     final safeName = escapeXml(poi.name);
     return '''    <Placemark id="poi_center_marker">
       <name>$safeName</name>

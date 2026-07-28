@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart' show debugPrint;
-import 'package:flutter/services.dart' show rootBundle;
 import '../main.dart';
 import '../models/connection_state.dart';
 import '../models/poi_model.dart';
@@ -11,6 +10,7 @@ import '../kmls/logos_kml.dart';
 import '../kmls/panorama_kml.dart';
 import '../kmls/placemark_icon.dart';
 import '../kmls/kml_escape.dart';
+import '../kmls/poi_highlight_circle.dart';
 import 'chromium_service.dart';
 import '../data/chromium_image_catalog.dart';
 import 'image_slicer.dart';
@@ -150,30 +150,49 @@ class LGService {
     if (generation != _presentGeneration) return false;
     await Future.delayed(_flySettleDelay(poi));
 
-    final placemarkOk = await sendCenterPlacemark(poi);
+    final highlightOk = await sendPoiHighlightCircle(poi);
+    if (!highlightOk) {
+      debugPrint('LGService: highlight failed (${poi.name})');
+    }
+    if (generation != _presentGeneration) return false;
+
+    final placemarkOk = await sendCenterPlacemark(poi, includeHighlight: true);
     if (generation != _presentGeneration) return false;
     if (!placemarkOk) {
       debugPrint('LGService: placemark failed (${poi.name})');
       return false;
     }
-    await Future.delayed(const Duration(milliseconds: 900));
+
+    final chromiumOk = await _launchChromiumIfAvailable(poi, generation);
+    if (!chromiumOk) {
+      debugPrint('LGService: chromium skipped or failed (${poi.name})');
+    }
+    if (generation != _presentGeneration) return false;
+
+    await Future.delayed(const Duration(milliseconds: 400));
 
     final balloonOk = await sendBalloon(poi);
     if (!balloonOk) {
       debugPrint('LGService: balloon failed (${poi.name})');
+    }
+    if (generation != _presentGeneration) return false;
+
+    debugPrint('LGService: presentPoi done (${poi.name}, gen=$generation)');
+    return true;
+  }
+
+  Future<bool> _launchChromiumIfAvailable(POI poi, int generation) async {
+    if (generation != _presentGeneration) return false;
+
+    final chromiumAsset = await ChromiumImageCatalog.resolve(poi);
+    if (chromiumAsset == null) {
+      debugPrint('LGService: no chromium image (${poi.name})');
       return false;
     }
     if (generation != _presentGeneration) return false;
 
-    final chromiumAsset = await ChromiumImageCatalog.resolve(poi);
-    if (chromiumAsset != null) {
-      unawaited(_chromium.showPoiImageTimed(poi));
-    } else {
-      debugPrint('LGService: no chromium image (${poi.name})');
-    }
-
-    debugPrint('LGService: presentPoi done (${poi.name}, gen=$generation)');
-    return true;
+    debugPrint('LGService: launching chromium (${poi.name}) -> $chromiumAsset');
+    return _chromium.showPoiImageTimed(poi);
   }
 
   /// Cierra Chromium en todas las pantallas y vuelve a Google Earth.
@@ -225,17 +244,17 @@ class LGService {
 
     await clearBalloon();
     await clearCenterPlacemark();
+    await clearPoiHighlightCircle();
   }
 
   Future<void> clearKMLs() async {
     _requireConnection();
-    const String blankMain = '''<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-  <Document></Document>
-</kml>''';
 
-    await _conn.writeRemoteFile('/var/www/html/kmls.kml', blankMain);
-    await _conn.execute('touch /var/www/html/kmls.kml');
+    await _conn.writeRemoteFile(
+      PoiHighlightCircle.kmlPath,
+      PoiHighlightCircle.blank(),
+    );
+    await _conn.notifyMainKmlChanged();
 
     await _conn.writeSoloKml(1, PanoramaOverlayManager.blankMaster());
     await _conn.notifySoloKmlChanged(1);
@@ -351,7 +370,10 @@ fi
   int _rightMostScreen(int screens) => (screens ~/ 2) + 1;
 
   /// Muestra un pin en la pantalla central (LG1) en las coordenadas del POI.
-  Future<bool> sendCenterPlacemark(POI poi) async {
+  Future<bool> sendCenterPlacemark(
+    POI poi, {
+    bool includeHighlight = true,
+  }) async {
     if (!_conn.isConnected) {
       debugPrint('LGService: sendCenterPlacemark skipped — not connected');
       return false;
@@ -374,11 +396,15 @@ fi
       return false;
     }
 
+    final highlightMarkup =
+        includeHighlight ? PoiHighlightCircle.markup(poi) : '';
+
     final kml = PlacemarkIconManager.kmlPlacemark(
       poi: poi,
       lat: lat,
       lng: lng,
       documentId: documentId,
+      extraMarkup: highlightMarkup,
     );
 
     final ok = await _conn.writeSoloKml(machineNo, kml);
@@ -398,6 +424,46 @@ fi
       'LGService: sendCenterPlacemark OK -> master_1.kml (${poi.name}, rgb(${color.r},${color.g},${color.b}))',
     );
     return true;
+  }
+
+  /// Contorno 3D en la capa global del globo (`kmls.txt`).
+  Future<bool> sendPoiHighlightCircle(POI poi) async {
+    if (!_conn.isConnected) {
+      debugPrint('LGService: sendPoiHighlightCircle skipped — not connected');
+      return false;
+    }
+
+    final kml = PoiHighlightCircle.generateDocument(poi);
+    final ok = await _conn.writeRemoteFile(PoiHighlightCircle.kmlPath, kml);
+    if (!ok) {
+      debugPrint('LGService: sendPoiHighlightCircle FAILED write poi_highlight.kml');
+      return false;
+    }
+
+    final notified = await _conn.notifyPoiHighlightOnAllScreens();
+    if (!notified) {
+      debugPrint('LGService: sendPoiHighlightCircle FAILED notify kmls.txt');
+      return false;
+    }
+
+    final color = PlacemarkIconManager.colorForPoi(poi);
+    final footprint = PoiHighlightCircle.usesFootprintPolygon(poi);
+    debugPrint(
+      'LGService: sendPoiHighlightCircle OK (${poi.name}, '
+      'footprint=$footprint, '
+      'h=${PoiHighlightCircle.wallHeightForPoi(poi).toStringAsFixed(0)}m, '
+      'rgb(${color.r},${color.g},${color.b}))',
+    );
+    return true;
+  }
+
+  Future<void> clearPoiHighlightCircle() async {
+    if (!_conn.isConnected) return;
+    await _conn.writeRemoteFile(
+      PoiHighlightCircle.kmlPath,
+      PoiHighlightCircle.blank(),
+    );
+    await _conn.notifyMainKmlChanged();
   }
 
   /// Quita el pin de la pantalla central.

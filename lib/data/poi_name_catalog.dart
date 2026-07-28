@@ -326,13 +326,36 @@ const Map<String, Map<String, String>> poiNameCatalog = {
   },
 };
 
+String _normalizePoiName(String name) {
+  return name
+      .replaceAll('’', "'")
+      .replaceAll('‘', "'")
+      .replaceAll('–', '-')
+      .trim();
+}
+
 Map<String, String>? catalogNamesFor(String englishName) {
   final direct = poiNameCatalog[englishName];
   if (direct != null) return direct;
 
-  final normalized = englishName
-      .replaceAll('’', "'")
-      .replaceAll('‘', "'")
-      .replaceAll('–', '-');
+  final normalized = _normalizePoiName(englishName);
   return poiNameCatalog[normalized];
+}
+
+/// Resolves any localized POI label back to the canonical English key.
+String? canonicalEnglishNameFor(String anyName) {
+  final normalized = _normalizePoiName(anyName);
+  if (poiNameCatalog.containsKey(normalized)) {
+    return normalized;
+  }
+
+  final lower = normalized.toLowerCase();
+  for (final entry in poiNameCatalog.entries) {
+    for (final localized in entry.value.values) {
+      if (_normalizePoiName(localized).toLowerCase() == lower) {
+        return entry.key;
+      }
+    }
+  }
+  return null;
 }

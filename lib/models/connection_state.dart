@@ -5,6 +5,7 @@ import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../kmls/logos_kml.dart';
+import '../kmls/poi_highlight_circle.dart';
 
 class LGConnectionState extends ChangeNotifier {
   static final LGConnectionState _instance = LGConnectionState._internal();
@@ -214,6 +215,40 @@ class LGConnectionState extends ChangeNotifier {
   Future<bool> notifySlaveKmlChanged(int slaveNo) =>
       notifySoloKmlChanged(slaveNo);
 
+  /// Refresca la capa del globo registrada en `kmls.txt` (visible en todas las pantallas).
+  Future<bool> notifyPoiHighlightOnAllScreens() async {
+    const kmlPath = PoiHighlightCircle.kmlPath;
+    const listPath = '/var/www/html/kmls.txt';
+    const url = PoiHighlightCircle.kmlUrl;
+
+    final ensureListed = '''
+if [ ! -f '$listPath' ]; then
+  echo '$url' > '$listPath'
+elif ! grep -qF '$url' '$listPath'; then
+  echo '$url' >> '$listPath'
+fi
+touch '$listPath'
+touch '$kmlPath'
+''';
+
+    for (var attempt = 0; attempt < 3; attempt++) {
+      final touchKml = await execute(ensureListed);
+      if (touchKml != null) {
+        debugPrint('LGService: notify OK -> $kmlPath (listed in kmls.txt)');
+        return true;
+      }
+      debugPrint(
+        'LGService: notify FAILED for $kmlPath (attempt ${attempt + 1}/3)',
+      );
+      await _resetClient();
+      await Future.delayed(const Duration(milliseconds: 400));
+    }
+    return false;
+  }
+
+  /// Refresca la capa principal del globo registrada en `kmls.txt`.
+  Future<bool> notifyMainKmlChanged() => notifyPoiHighlightOnAllScreens();
+
   Future<void> sendLogoKML(String kml) async {
     final slaveNo = _leftMostScreen(_screens);
     final withId = _ensureDocumentId(kml, 'slave_$slaveNo');
@@ -358,7 +393,7 @@ class LGConnectionState extends ChangeNotifier {
   }
 
   /// Uploads raw image bytes (e.g. a slice cropped in memory) to the LG rig.
-  Future<void> uploadImageBytes(
+  Future<bool> uploadImageBytes(
     Uint8List bytes,
     String remoteFileName, {
     String remoteDir = '/var/www/html/logos',
@@ -367,7 +402,7 @@ class LGConnectionState extends ChangeNotifier {
       final remotePath = '$remoteDir/$remoteFileName';
       for (var attempt = 0; attempt < 3; attempt++) {
         if (_client == null || _client?.isClosed == true) await reconnect();
-        if (!_isConnected || _client == null) return;
+        if (!_isConnected || _client == null) return false;
         try {
           final sftp = await _client!.sftp();
           final file = await sftp.open(
@@ -379,9 +414,12 @@ class LGConnectionState extends ChangeNotifier {
           await file.writeBytes(bytes);
           await file.close();
           await _executeRaw(
-            "echo '$sudoPassword' | sudo -S chmod 644 $remotePath",
+            "echo '$sudoPassword' | sudo -S chmod 644 '$remotePath'",
           );
-          return;
+          debugPrint(
+            'LGService: uploaded ${bytes.length} bytes -> $remotePath',
+          );
+          return true;
         } catch (e) {
           debugPrint(
             'LGService SFTP Error uploading bytes to $remotePath '
@@ -392,6 +430,7 @@ class LGConnectionState extends ChangeNotifier {
           }
         }
       }
+      return false;
     });
   }
 }

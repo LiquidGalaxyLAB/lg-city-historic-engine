@@ -39,6 +39,12 @@ class ChromiumService {
     final title = poi.getName(lang);
 
     if (!await _uploadImageAsset(assetPath, imageFileName)) {
+      debugPrint('ChromiumService: image upload failed for ${poi.name}');
+      return false;
+    }
+
+    if (!await _verifyRemoteFile('/var/www/html/$imageFileName')) {
+      debugPrint('ChromiumService: remote image missing for ${poi.name}');
       return false;
     }
 
@@ -46,20 +52,28 @@ class ChromiumService {
       imageFileName: imageFileName,
       title: title,
     )) {
+      debugPrint('ChromiumService: HTML upload failed for ${poi.name}');
       return false;
     }
 
-    await _killChromiumOnAllScreens();
+    await _stopChromiumProcesses();
     if (generation != _showGeneration) return false;
 
     final opened =
         await openChromiumOnAllScreens('http://lg1:81/$_htmlFileName');
-    if (!opened) return false;
+    if (!opened) {
+      debugPrint('ChromiumService: could not open Chromium for ${poi.name}');
+      return false;
+    }
+
+    debugPrint(
+      'ChromiumService: showing ${poi.name} for ${duration.inSeconds}s',
+    );
 
     await Future.delayed(duration);
     if (generation != _showGeneration) return true;
 
-    await closeChromiumOnAllScreens();
+    await closeChromiumOnAllScreens(cancelPending: false);
     return true;
   }
 
@@ -70,35 +84,64 @@ class ChromiumService {
   Future<bool> openChromiumOnAllScreens(String url) async {
     if (!_conn.isConnected) return false;
 
-    final password = _conn.password;
-    final user = _conn.username;
+    final password = _shellQuote(_conn.password ?? '');
+    final user = _shellQuote(_conn.username ?? 'lg');
     final screens = _conn.screens;
+    var openedAny = false;
 
     try {
       for (var i = 1; i <= screens; i++) {
-        final fullUrl = '$url?screen=$i&total=$screens';
-        final hostname = i == 1 ? 'localhost' : 'lg$i';
-        final command =
+        final baseUrl =
+            i == 1 ? url.replaceFirst('http://lg1:81', 'http://localhost:81') : url;
+        final fullUrl = '$baseUrl?screen=$i&total=$screens';
+        final quotedUrl = _shellQuote(fullUrl);
+
+        if (i == 1) {
+          final launch = 'chromium-browser --kiosk --no-first-run --disable-infobars '
+              '$quotedUrl || google-chrome --kiosk --no-first-run --disable-infobars '
+              '$quotedUrl';
+          await _conn.execute(
+            'DISPLAY=:0 nohup sh -c ${_shellQuote(launch)} > /dev/null 2>&1 &',
+          );
+          await Future.delayed(const Duration(milliseconds: 1200));
+          await _conn.execute(
+            "DISPLAY=:0 wmctrl -a Chromium 2>/dev/null || "
+            "DISPLAY=:0 wmctrl -a 'Google Chrome' 2>/dev/null || true",
+          );
+        } else {
+          final hostname = 'lg$i';
+          await _conn.execute(
             'sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@$hostname '
             '"DISPLAY=:0 chromium-browser --kiosk --no-first-run --disable-infobars '
-            "'$fullUrl' > /dev/null 2>&1 &\"";
+            '$quotedUrl > /dev/null 2>&1 & '
+            'sleep 1; '
+            'DISPLAY=:0 google-chrome --kiosk --no-first-run --disable-infobars '
+            '$quotedUrl > /dev/null 2>&1 & '
+            'sleep 1; '
+            'DISPLAY=:0 wmctrl -a Chromium 2>/dev/null || '
+            "DISPLAY=:0 wmctrl -a 'Google Chrome' 2>/dev/null || true\"",
+          );
+        }
 
-        await _conn.execute(command);
-        debugPrint('ChromiumService: opened on lg$i');
-        await Future.delayed(const Duration(milliseconds: 500));
+        debugPrint('ChromiumService: opened on lg$i -> $fullUrl');
+        openedAny = true;
+        await Future.delayed(const Duration(milliseconds: 400));
       }
-      return true;
+      return openedAny;
     } catch (e) {
       debugPrint('ChromiumService: error opening Chromium: $e');
       return false;
     }
   }
 
-  Future<bool> closeChromiumOnAllScreens() async {
+  Future<bool> closeChromiumOnAllScreens({bool cancelPending = true}) async {
     if (!_conn.isConnected) return false;
 
-    cancelPendingShow();
-    await _killChromiumOnAllScreens();
+    if (cancelPending) {
+      cancelPendingShow();
+    }
+    await _stopChromiumProcesses();
+    await _refocusGoogleEarthOnAllScreens();
 
     try {
       await _conn.execute(
@@ -112,41 +155,77 @@ class ChromiumService {
     }
   }
 
-  Future<void> _killChromiumOnAllScreens() async {
-    final password = _conn.password;
-    final user = _conn.username;
+  /// Stops Chromium/Chrome without stealing focus from the next launch.
+  Future<void> _stopChromiumProcesses() async {
+    final password = _shellQuote(_conn.password ?? '');
+    final user = _shellQuote(_conn.username ?? 'lg');
     final screens = _conn.screens;
+    const killCmd =
+        'pkill -f chromium-browser || true; '
+        'pkill -f chromium || true; '
+        'pkill -f google-chrome || true; '
+        'pkill -f chrome || true';
 
     for (var i = 1; i <= screens; i++) {
-      final hostname = i == 1 ? 'localhost' : 'lg$i';
-      final command =
+      if (i == 1) {
+        await _conn.execute(killCmd);
+      } else {
+        final hostname = 'lg$i';
+        await _conn.execute(
           'sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@$hostname '
-          '"pkill -f chromium-browser || true; '
-          'pkill -f chromium || true; '
-          'pkill -f chrome || true; '
-          'sleep 2; '
-          'DISPLAY=:0 wmctrl -a \'Google Earth\' || true; '
-          'DISPLAY=:0 xdotool search --name \'Google Earth\' windowactivate || true; '
-          'DISPLAY=:0 xdotool key F11 || true"';
-
-      await _conn.execute(command);
-      await Future.delayed(const Duration(milliseconds: 700));
+          '"$killCmd"',
+        );
+      }
+      await Future.delayed(const Duration(milliseconds: 250));
     }
   }
 
+  Future<void> _refocusGoogleEarthOnAllScreens() async {
+    final password = _shellQuote(_conn.password ?? '');
+    final user = _shellQuote(_conn.username ?? 'lg');
+    final screens = _conn.screens;
+    const focusCmd =
+        'sleep 1; '
+        'DISPLAY=:0 wmctrl -a \'Google Earth\' || true; '
+        'DISPLAY=:0 xdotool search --name \'Google Earth\' windowactivate || true; '
+        'DISPLAY=:0 xdotool key F11 || true';
+
+    for (var i = 1; i <= screens; i++) {
+      if (i == 1) {
+        await _conn.execute(focusCmd);
+      } else {
+        final hostname = 'lg$i';
+        await _conn.execute(
+          'sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@$hostname '
+          '"$focusCmd"',
+        );
+      }
+      await Future.delayed(const Duration(milliseconds: 350));
+    }
+  }
   Future<bool> _uploadImageAsset(String assetPath, String fileName) async {
     try {
       final byteData = await rootBundle.load(assetPath);
-      await _conn.uploadImageBytes(
+      return _conn.uploadImageBytes(
         byteData.buffer.asUint8List(),
         fileName,
         remoteDir: '/var/www/html',
       );
-      return true;
     } catch (e) {
       debugPrint('ChromiumService: image upload failed: $e');
       return false;
     }
+  }
+
+  Future<bool> _verifyRemoteFile(String remotePath) async {
+    final sizeStr = await _conn.execute("wc -c < '$remotePath'");
+    final size = int.tryParse(sizeStr?.trim() ?? '') ?? 0;
+    if (size <= 0) {
+      debugPrint('ChromiumService: remote file empty or missing: $remotePath');
+      return false;
+    }
+    debugPrint('ChromiumService: verified $remotePath ($size bytes)');
+    return true;
   }
 
   Future<bool> _uploadHtml({
@@ -250,12 +329,19 @@ img.onload = () => {
         await _conn.writeRemoteFile('/var/www/html/$_htmlFileName', html);
     if (!ok) {
       debugPrint('ChromiumService: HTML upload failed');
+      return false;
     }
-    return ok;
+
+    await _conn.execute("chmod 644 '/var/www/html/$_htmlFileName'");
+    return true;
   }
 
   String _remoteImageFileName(String assetPath) {
     final rawName = assetPath.split('/').last;
     return rawName.replaceAll(RegExp(r'[^\w.\-]'), '_');
+  }
+
+  String _shellQuote(String value) {
+    return "'${value.replaceAll("'", "'\\''")}'";
   }
 }
