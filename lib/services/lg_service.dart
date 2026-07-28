@@ -182,6 +182,10 @@ class LGService {
   }
 
   Future<bool> _launchChromiumIfAvailable(POI poi, int generation) async {
+    if (!ChromiumImageCatalog.launchesChromium(poi)) {
+      debugPrint('LGService: chromium skipped for historical event (${poi.name})');
+      return false;
+    }
     if (generation != _presentGeneration) return false;
 
     final chromiumAsset = await ChromiumImageCatalog.resolve(poi);
