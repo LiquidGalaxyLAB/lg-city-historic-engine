@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../widgets/section_hero_header.dart';
 import '../widgets/themed_poi_card.dart';
-import '../widgets/app_top_bar.dart';
 import '../widgets/m_superior.dart';
 import '../main.dart';
 import '../models/poi_model.dart';
@@ -20,18 +20,25 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
+  static const String _seuVellaLocation = '41.6169°N, 0.6257°E';
+  static const double _seuVellaLat = 41.616878;
+  static const double _seuVellaLng = 0.625705;
+  static const double _seuVellaRange = 4157;
+  static const double _seuVellaHeading = 1.0;
+  static const double _seuVellaTilt = 41.0;
+
   final Map<String, List<POI>> _data = {
     'Antiquity': [
       POI(
         name: 'Revolt of Indibilis and Mandonius',
-        location: '41.6191° N, 0.6232° E',
+        location: '41.6152°N, 0.6274°E',
         image:
             'assets/images_historical_events/Revolta d\'Indíbil i Mandoni.jpg',
-        lat: 41.6191230,
-        lng: 0.6232056,
-        range: 1480.59,
-        heading: -25.26,
-        tilt: 65.45,
+        lat: 41.615162,
+        lng: 0.627375,
+        range: 44,
+        heading: -33.0,
+        tilt: 65.0,
         era: 'Ancient Age',
         startDate: '206 BC',
         endDate: '205 BC',
@@ -46,13 +53,13 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
       ),
       POI(
         name: 'Battle of Ilerda, 49 BC',
-        location: '41.6191° N, 0.6232° E',
+        location: _seuVellaLocation,
         image: 'assets/images_historical_events/Batalla de Ilerda 49 aC.png',
-        lat: 41.6191230,
-        lng: 0.6232056,
-        range: 1480.59,
-        heading: -25.26,
-        tilt: 65.45,
+        lat: _seuVellaLat,
+        lng: _seuVellaLng,
+        range: _seuVellaRange,
+        heading: _seuVellaHeading,
+        tilt: _seuVellaTilt,
         era: 'Ancient Age',
         startDate: '49 BC',
         endDate: '49 BC',
@@ -65,13 +72,13 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
     'Early Middle Ages': [
       POI(
         name: 'Muslim Invasion',
-        location: '41.6180° N, 0.6258° E',
-        image: 'assets/images_historical_events/Invasio musulmana.jpg',
-        lat: 41.6180451,
-        lng: 0.6258326,
-        range: 361.12,
-        heading: 12.41,
-        tilt: 0.0,
+        location: '41.6179°N, 0.6269°E',
+        image: 'assets/images_historical_events/invasio_musulmana.jpg',
+        lat: 41.617850,
+        lng: 0.626860,
+        range: 495,
+        heading: -50.0,
+        tilt: 54.0,
         era: 'Middle Ages',
         startDate: '716',
         endDate: '719',
@@ -86,13 +93,13 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
       ),
       POI(
         name: 'Siege of Lleida (800)',
-        location: '41.6191° N, 0.6232° E',
+        location: _seuVellaLocation,
         image: 'assets/images_historical_events/Setge de lleida (800).png',
-        lat: 41.6191230,
-        lng: 0.6232056,
-        range: 1480.59,
-        heading: -25.26,
-        tilt: 65.45,
+        lat: _seuVellaLat,
+        lng: _seuVellaLng,
+        range: _seuVellaRange,
+        heading: _seuVellaHeading,
+        tilt: _seuVellaTilt,
         era: 'Middle Ages',
         startDate: '800',
         endDate: '800',
@@ -107,13 +114,13 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
       ),
       POI(
         name: 'Siege of Lleida (884)',
-        location: '41.6191° N, 0.6232° E',
+        location: '41.6179°N, 0.6269°E',
         image: 'assets/images_historical_events/Setge de lleida (884).png',
-        lat: 41.6191230,
-        lng: 0.6232056,
-        range: 1480.59,
-        heading: -25.26,
-        tilt: 65.45,
+        lat: 41.617850,
+        lng: 0.626860,
+        range: 474,
+        heading: -45.0,
+        tilt: 53.0,
         era: 'Middle Ages',
         startDate: '884',
         endDate: '884',
@@ -130,13 +137,13 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
     'Reconquest / High Middle Ages': [
       POI(
         name: 'Christian Reconquest, 1149',
-        location: '41.6090° N, 0.6103° E',
-        image: 'assets/images_historical_events/Reonquista Cristiana1149.jpg',
-        lat: 41.6089691,
-        lng: 0.6103237,
-        range: 1159.27,
-        heading: -53.72,
-        tilt: 56.84,
+        location: '41.6179°N, 0.6269°E',
+        image: 'assets/images_historical_events/reconquista_cristiana_1149.jpg',
+        lat: 41.617850,
+        lng: 0.626860,
+        range: 474,
+        heading: -45.0,
+        tilt: 53.0,
         era: 'Middle Ages',
         startDate: '1149',
         endDate: '1149',
@@ -151,14 +158,14 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
       ),
       POI(
         name: 'Union of the Kingdom of Aragon and the County of Barcelona',
-        location: '41.6168° N, 0.6255° E',
+        location: _seuVellaLocation,
         image:
             'assets/images_historical_events/Unio del regne de Arago i comtat de barcelona.jpg',
-        lat: 41.6167910,
-        lng: 0.6254991,
-        range: 1480.59,
-        heading: -25.26,
-        tilt: 65.45,
+        lat: _seuVellaLat,
+        lng: _seuVellaLng,
+        range: _seuVellaRange,
+        heading: _seuVellaHeading,
+        tilt: _seuVellaTilt,
         era: 'Middle Ages',
         startDate: '1150',
         endDate: '1150',
@@ -175,14 +182,13 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
     'Middle Ages / Late Middle Ages': [
       POI(
         name: 'Oath of Allegiance to James I',
-        location: '41.6180° N, 0.6258° E',
-        image:
-            'assets/images_historical_events/jura de fidelitat a Jaume I.jpg',
-        lat: 41.6180451,
-        lng: 0.6258326,
-        range: 361.12,
-        heading: 12.41,
-        tilt: 0.0,
+        location: _seuVellaLocation,
+        image: 'assets/images_historical_events/jura_fidelitat_jaume1.jpg',
+        lat: _seuVellaLat,
+        lng: _seuVellaLng,
+        range: _seuVellaRange,
+        heading: _seuVellaHeading,
+        tilt: _seuVellaTilt,
         era: 'Middle Ages',
         startDate: '1214',
         endDate: '1214',
@@ -197,14 +203,14 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
       ),
       POI(
         name: 'First University of the Kingdom of Aragon',
-        location: '41.6147° N, 0.6199° E',
+        location: '41.6148°N, 0.6195°E',
         image:
             'assets/images_historical_events/Primera universitat del regne d\'arago.jpg',
-        lat: 41.6146803,
-        lng: 0.6198760,
-        range: 270.14,
-        heading: -70.55,
-        tilt: 47.35,
+        lat: 41.614814,
+        lng: 0.619480,
+        range: 189,
+        heading: -70.0,
+        tilt: 54.0,
         era: 'Middle Ages',
         startDate: '1300',
         endDate: '1300',
@@ -219,13 +225,13 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
       ),
       POI(
         name: 'Siege of Lleida (1413)',
-        location: '41.6191° N, 0.6232° E',
+        location: _seuVellaLocation,
         image: 'assets/images_historical_events/Setge de lleida (1413).jpg',
-        lat: 41.6191230,
-        lng: 0.6232056,
-        range: 1480.59,
-        heading: -25.26,
-        tilt: 65.45,
+        lat: _seuVellaLat,
+        lng: _seuVellaLng,
+        range: _seuVellaRange,
+        heading: _seuVellaHeading,
+        tilt: _seuVellaTilt,
         era: 'Middle Ages',
         startDate: '1413',
         endDate: '1414',
@@ -242,14 +248,14 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
     'Modern Age': [
       POI(
         name: 'The Battle of Lleida (1642)',
-        location: '41.6100° N, 0.6367° E',
+        location: _seuVellaLocation,
         image:
             'assets/images_historical_events/La batalla de Lleida (1642).jpg',
-        lat: 41.6100091,
-        lng: 0.6367412,
-        range: 2017.02,
-        heading: -53.71,
-        tilt: 56.85,
+        lat: _seuVellaLat,
+        lng: _seuVellaLng,
+        range: _seuVellaRange,
+        heading: _seuVellaHeading,
+        tilt: _seuVellaTilt,
         era: 'Modern Age',
         startDate: '1642',
         endDate: '1642',
@@ -264,13 +270,13 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
       ),
       POI(
         name: 'Siege of Lleida (1644)',
-        location: '41.6149° N, 0.6204° E',
+        location: _seuVellaLocation,
         image: 'assets/images_historical_events/Setge de lleida (1644).png',
-        lat: 41.6149206,
-        lng: 0.6204228,
-        range: 1229.41,
-        heading: -52.03,
-        tilt: 60.58,
+        lat: _seuVellaLat,
+        lng: _seuVellaLng,
+        range: _seuVellaRange,
+        heading: _seuVellaHeading,
+        tilt: _seuVellaTilt,
         era: 'Modern Age',
         startDate: '1644',
         endDate: '1644',
@@ -285,13 +291,13 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
       ),
       POI(
         name: 'Siege of Lleida (1646)',
-        location: '41.6191° N, 0.6232° E',
+        location: _seuVellaLocation,
         image: 'assets/images_historical_events/Setge de lleida (1646).jpg',
-        lat: 41.6191230,
-        lng: 0.6232056,
-        range: 1480.59,
-        heading: -25.26,
-        tilt: 65.45,
+        lat: _seuVellaLat,
+        lng: _seuVellaLng,
+        range: _seuVellaRange,
+        heading: _seuVellaHeading,
+        tilt: _seuVellaTilt,
         era: 'Modern Age',
         startDate: '1646',
         endDate: '1646',
@@ -306,13 +312,13 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
       ),
       POI(
         name: 'Siege of Lleida (1647)',
-        location: '41.6191° N, 0.6232° E',
+        location: _seuVellaLocation,
         image: 'assets/images_historical_events/Setge de lleida (1647).png',
-        lat: 41.6191230,
-        lng: 0.6232056,
-        range: 1480.59,
-        heading: -25.26,
-        tilt: 65.45,
+        lat: _seuVellaLat,
+        lng: _seuVellaLng,
+        range: _seuVellaRange,
+        heading: _seuVellaHeading,
+        tilt: _seuVellaTilt,
         era: 'Modern Age',
         startDate: '1647',
         endDate: '1647',
@@ -327,13 +333,13 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
       ),
       POI(
         name: 'Siege of Lleida (1707)',
-        location: '41.6191° N, 0.6232° E',
+        location: '41.6185°N, 0.6266°E',
         image: 'assets/images_historical_events/Setge de lleida (1707)png.png',
-        lat: 41.6191230,
-        lng: 0.6232056,
-        range: 1480.59,
-        heading: -25.26,
-        tilt: 65.45,
+        lat: 41.618467,
+        lng: 0.626575,
+        range: 346,
+        heading: -113.0,
+        tilt: 60.0,
         era: 'Modern Age',
         startDate: '1707',
         endDate: '1707',
@@ -350,13 +356,13 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
     'Contemporary Age': [
       POI(
         name: 'Siege of Lleida (1810)',
-        location: '41.6191° N, 0.6232° E',
+        location: _seuVellaLocation,
         image: 'assets/images_historical_events/Setge de lleida (1810).png',
-        lat: 41.6191230,
-        lng: 0.6232056,
-        range: 1480.59,
-        heading: -25.26,
-        tilt: 65.45,
+        lat: _seuVellaLat,
+        lng: _seuVellaLng,
+        range: _seuVellaRange,
+        heading: _seuVellaHeading,
+        tilt: _seuVellaTilt,
         era: 'Contemporary Age',
         startDate: '1810',
         endDate: '1810',
@@ -371,13 +377,13 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
       ),
       POI(
         name: 'Battle of Lleida (1938)',
-        location: '41.6191° N, 0.6232° E',
+        location: _seuVellaLocation,
         image: 'assets/images_historical_events/Batalla de Lleida (1938).jpeg',
-        lat: 41.6191230,
-        lng: 0.6232056,
-        range: 1480.59,
-        heading: -25.26,
-        tilt: 65.45,
+        lat: _seuVellaLat,
+        lng: _seuVellaLng,
+        range: _seuVellaRange,
+        heading: _seuVellaHeading,
+        tilt: _seuVellaTilt,
         era: 'Contemporary Age',
         startDate: '1938',
         endDate: '1938',
@@ -421,157 +427,44 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
           ),
           body: Column(
             children: [
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    height: 250,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/denoche.jpg'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+              SectionHeroHeader(
+                imageAsset: 'assets/images/denoche.jpg',
+                menuTitle: T.s('events'),
+                title: T.s('events').toUpperCase(),
+                subtitle: T.s('events_subtitle'),
+                filterBar: _buildFilterBar(),
+                onMenuTap: () =>
+                    FloatingMenu.show(context, currentTitle: T.s('events')),
+                badge: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 6,
                   ),
-                  Container(
-                    height: 250,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.black.withOpacity(0.55),
-                          Colors.transparent,
-                          Colors.black.withOpacity(0.45),
-                        ],
-                      ),
-                    ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.18),
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(color: Colors.white24),
                   ),
-                  SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.history_edu_outlined,
+                        color: Colors.white,
+                        size: 16,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () => FloatingMenu.show(
-                              context,
-                              currentTitle: T.s('events'),
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.15),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.menu,
-                                color: Colors.white,
-                                size: 26,
-                              ),
-                            ),
-                          ),
-                          const AppTopBar(
-                            onDarkBackground: true,
-                            wifiOnly: true,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 16,
-                    top: 90,
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.15),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.arrow_back_ios_new,
+                      const SizedBox(width: 8),
+                      Text(
+                        '${pois.length} ${T.s('events_available')}',
+                        style: const TextStyle(
                           color: Colors.white,
-                          size: 22,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  Positioned(
-                    left: 20,
-                    bottom: 70,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          T.s('events').toUpperCase(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.5,
-                            fontFamily: 'serif',
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          T.s('events_subtitle'),
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w300,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    left: 20,
-                    bottom: 35,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.18),
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: Colors.white24),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.history_edu_outlined,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '${pois.length} ${T.s('events_available')}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: -28,
-                    left: 16,
-                    right: 16,
-                    child: _buildFilterBar(),
-                  ),
-                ],
+                ),
               ),
               const SizedBox(height: 45),
               Expanded(

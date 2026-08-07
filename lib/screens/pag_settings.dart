@@ -38,25 +38,12 @@ class _SettingsPageState extends State<SettingsPage> {
                         horizontal: 16,
                         vertical: 12,
                       ),
-                      child: AppTopBar(currentTitle: T.s('settings')),
-                    ),
-
-                    // ── BACK + TITLE ──
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () => Navigator.pop(context),
-                            child: Icon(
-                              Icons.arrow_back,
-                              size: 28,
-                              color: isDark ? Colors.white : Colors.black87,
-                            ),
-                          ),
-                        ],
+                      child: AppTopBar(
+                        showBack: true,
+                        currentTitle: T.s('settings'),
                       ),
                     ),
+
                     const SizedBox(height: 6),
                     Text(
                       T.s('settings'),

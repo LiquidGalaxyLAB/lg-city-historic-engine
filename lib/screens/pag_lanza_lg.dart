@@ -7,7 +7,9 @@ import '../services/lg_service.dart';
 import '../services/narration_service.dart';
 import '../services/poi_localization.dart';
 import '../screens/pag_conectar.dart';
+import '../navigation/app_navigation.dart';
 import '../widgets/m_superior.dart';
+import '../widgets/section_back_button.dart';
 
 class LaunchLGPage extends StatefulWidget {
   final POI poi;
@@ -85,12 +87,13 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
     }
   }
 
-  Future<void> _leavePage() async {
+  void _leavePage() {
     _lgService.stopOrbit();
-    await _lgService.closeChromium();
-    if (mounted) {
-      Navigator.pop(context);
+    if (_narration.isSpeaking) {
+      _narration.stop();
     }
+    AppNavigation.popOrHome(context);
+    _lgService.closeChromiumQuick();
   }
 
   @override
@@ -175,13 +178,10 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 16),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        size: 30,
-                      ),
+                    padding: const EdgeInsets.only(left: 8),
+                    child: SectionBackButton(
+                      icon: Icons.arrow_back,
+                      iconSize: 30,
                       onPressed: _leavePage,
                     ),
                   ),
@@ -252,6 +252,21 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
                             child: Divider(
                               color: Theme.of(context).dividerColor,
                               thickness: 1.5,
+                            ),
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+                            child: Text(
+                              T.s('launch_lg_select_hint'),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                              ),
                             ),
                           ),
 

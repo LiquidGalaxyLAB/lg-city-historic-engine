@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../widgets/section_hero_header.dart';
 import '../widgets/themed_poi_card.dart';
-import '../widgets/app_top_bar.dart';
 import '../widgets/m_superior.dart';
 import '../main.dart';
 import '../models/poi_model.dart';
@@ -25,7 +25,7 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
       POI(
         name: 'Seu Vella Cathedral',
         location: '41.6175°N, 0.6269°E',
-        image: 'assets/images_churches_cathedrals/img.png',
+        image: 'assets/images_points_of_interest/La_Seu.jpg',
         lat: 41.617475,
         lng: 0.626900,
         range: 404,
@@ -72,7 +72,7 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
       POI(
         name: 'Old Church of San Martí',
         location: '41.6177°N, 0.6220°E',
-        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        image: 'assets/images_churches_cathedrals/Iglesia antigua de Sant Martí.jpg',
         lat: 41.617669,
         lng: 0.622039,
         range: 78,
@@ -87,7 +87,7 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
       POI(
         name: 'Church of San Juan',
         location: '41.6164°N, 0.6277°E',
-        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        image: 'assets/images_churches_cathedrals/Iglesia de San Juan.jpg',
         lat: 41.616403,
         lng: 0.627722,
         range: 72,
@@ -102,7 +102,7 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
       POI(
         name: 'Chapel of Sant Jaume',
         location: '41.6135°N, 0.6246°E',
-        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        image: 'assets/images_churches_cathedrals/Capella de Sant Jaume.jpg',
         lat: 41.613458,
         lng: 0.624600,
         range: 63,
@@ -117,7 +117,7 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
       POI(
         name: 'Chapel of la Sang',
         location: '41.6119°N, 0.6212°E',
-        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        image: 'assets/images_churches_cathedrals/Capella_sang.png',
         lat: 41.611911,
         lng: 0.621158,
         range: 75,
@@ -132,7 +132,7 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
       POI(
         name: 'Church of Sant Pere',
         location: '41.6143°N, 0.6261°E',
-        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        image: 'assets/images_churches_cathedrals/Sant_pere.jpg',
         lat: 41.614269,
         lng: 0.626103,
         range: 49,
@@ -147,7 +147,7 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
       POI(
         name: 'Hermitage of Granyena',
         location: '41.6419°N, 0.6621°E',
-        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        image: 'assets/images_churches_cathedrals/Ermita de Granyena.jpg',
         lat: 41.641917,
         lng: 0.662147,
         range: 60,
@@ -162,7 +162,7 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
       POI(
         name: 'Convent del Roser',
         location: '41.6144°N, 0.6240°E',
-        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        image: 'assets/images_churches_cathedrals/Convent del Roser.jpg',
         lat: 41.614419,
         lng: 0.623989,
         range: 151,
@@ -177,7 +177,7 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
       POI(
         name: 'Academia Mariana',
         location: '41.6109°N, 0.6190°E',
-        image: 'assets/images_churches_cathedrals/catedral.jpg',
+        image: 'assets/images_churches_cathedrals/academia_mariana.jpg',
         lat: 41.610928,
         lng: 0.619022,
         range: 73,
@@ -220,107 +220,14 @@ class _CathedralsChurchesPageState extends State<CathedralsChurchesPage> {
           ),
           body: Column(
             children: [
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    height: 250,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                            'assets/images_churches_cathedrals/catedral.jpg'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 250,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.black.withValues(alpha: 0.5),
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.4),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () => FloatingMenu.show(context,
-                                currentTitle: T.s('cathedrals')),
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.15),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(Icons.menu,
-                                  color: Colors.white, size: 26),
-                            ),
-                          ),
-                          const AppTopBar(
-                              onDarkBackground: true, wifiOnly: true),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 16,
-                    top: 90,
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.15),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(Icons.arrow_back_ios_new,
-                            color: Colors.white, size: 22),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 20,
-                    bottom: 70,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          T.s('cathedrals').toUpperCase(),
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 1.5,
-                              fontFamily: 'serif'),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(T.s('cathedrals_subtitle'),
-                            style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w300,
-                                letterSpacing: 0.5)),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                      bottom: -28,
-                      left: 16,
-                      right: 16,
-                      child: _buildFilterBar()),
-                ],
+              SectionHeroHeader(
+                imageAsset: 'assets/images_churches_cathedrals/catedral.jpg',
+                menuTitle: T.s('cathedrals'),
+                title: T.s('cathedrals').toUpperCase(),
+                subtitle: T.s('cathedrals_subtitle'),
+                filterBar: _buildFilterBar(),
+                onMenuTap: () =>
+                    FloatingMenu.show(context, currentTitle: T.s('cathedrals')),
               ),
               const SizedBox(height: 45),
               Expanded(

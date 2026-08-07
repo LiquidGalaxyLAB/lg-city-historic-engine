@@ -49,6 +49,7 @@ class _ConnectPageState extends State<ConnectPage> {
 
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
     setState(() {
       _userController.text = prefs.getString('lg_user') ?? 'lg';
       _passController.text = prefs.getString('lg_pass') ?? 'lg';
@@ -88,6 +89,7 @@ class _ConnectPageState extends State<ConnectPage> {
 
     if (success) {
       await _saveSettings();
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(T.s('connect_success')),
@@ -119,21 +121,9 @@ class _ConnectPageState extends State<ConnectPage> {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: AppTopBar(currentTitle: T.s('connect')),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: Icon(
-                          Icons.arrow_back,
-                          size: 28,
-                          color: isDark ? Colors.white : Colors.black87,
-                        ),
-                      ),
-                    ],
+                  child: AppTopBar(
+                    showBack: true,
+                    currentTitle: T.s('connect'),
                   ),
                 ),
                 const SizedBox(height: 6),

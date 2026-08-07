@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../widgets/section_hero_header.dart';
 import '../widgets/themed_poi_card.dart';
-import '../widgets/app_top_bar.dart';
 import '../widgets/m_superior.dart';
 import '../main.dart';
 import '../models/poi_model.dart';
@@ -259,10 +259,10 @@ class _POILocationsPageState extends State<POILocationsPage> {
       ),
       POI(
         name: 'La Cuirassa',
-        location: '41.6143°N, 0.6251°E',
+        location: '41.6141°N, 0.6251°E',
         image: 'assets/images_points_of_interest/La Cuirassa.jpg',
-        lat: 41.614267,
-        lng: 0.625061,
+        lat: 41.614150,
+        lng: 0.625100,
         range: 151,
         heading: 2.0,
         tilt: 61.0,
@@ -274,10 +274,10 @@ class _POILocationsPageState extends State<POILocationsPage> {
       ),
       POI(
         name: 'Tanneries',
-        location: '41.6173°N, 0.6296°E',
+        location: '41.6173°N, 0.6295°E',
         image: 'assets/images_points_of_interest/Tanneries.jpg',
-        lat: 41.617285,
-        lng: 0.629640,
+        lat: 41.617327,
+        lng: 0.629504,
         range: 55,
         heading: -54.0,
         tilt: 39.0,
@@ -396,140 +396,39 @@ class _POILocationsPageState extends State<POILocationsPage> {
           ),
           body: Column(
             children: [
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    height: 250,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                            'assets/images_points_of_interest/La_Seu.jpg'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+              SectionHeroHeader(
+                imageAsset: 'assets/images_points_of_interest/La_Seu.jpg',
+                menuTitle: T.s('poi'),
+                title: T.s('poi').toUpperCase(),
+                subtitle: T.s('poi_subtitle'),
+                filterBar: _buildFilterBar(),
+                onMenuTap: () =>
+                    FloatingMenu.show(context, currentTitle: T.s('poi')),
+                badge: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.18),
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(color: Colors.white24),
                   ),
-                  Container(
-                    height: 250,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.black.withOpacity(0.55),
-                          Colors.transparent,
-                          Colors.black.withOpacity(0.45),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () => FloatingMenu.show(context,
-                                currentTitle: T.s('poi')),
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.15),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(Icons.menu,
-                                  color: Colors.white, size: 26),
-                            ),
-                          ),
-                          const AppTopBar(
-                              onDarkBackground: true, wifiOnly: true),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 16,
-                    top: 90,
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.2),
-                          shape: BoxShape.circle,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.location_on_outlined,
+                          color: Colors.white, size: 16),
+                      const SizedBox(width: 8),
+                      Text(
+                        '${pois.length} ${T.s('available')}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
                         ),
-                        child: const Icon(Icons.arrow_back_ios_new,
-                            color: Colors.white, size: 22),
                       ),
-                    ),
+                    ],
                   ),
-                  Positioned(
-                    left: 20,
-                    bottom: 70,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          T.s('poi').toUpperCase(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 26,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.8,
-                            fontFamily: 'serif',
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          T.s('poi_subtitle'),
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w300,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    left: 20,
-                    bottom: 35,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.18),
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: Colors.white24),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.location_on_outlined,
-                              color: Colors.white, size: 16),
-                          const SizedBox(width: 8),
-                          Text(
-                            '${pois.length} ${T.s('available')}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                      bottom: -28,
-                      left: 16,
-                      right: 16,
-                      child: _buildFilterBar()),
-                ],
+                ),
               ),
               const SizedBox(height: 45),
               Expanded(

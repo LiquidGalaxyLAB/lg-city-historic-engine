@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../models/connection_state.dart';
-import '../screens/pag_conectar.dart';
+import '../navigation/app_navigation.dart';
 import 'm_superior.dart';
+import 'section_back_button.dart';
 
 /// Reusable top bar for all pages.
 /// [onDarkBackground]: true = over a dark image (shows only the white wifi icon)
 /// [wifiOnly]: true = shows only the wifi icon (no menu button), useful when the menu is managed separately
+/// [showBack]: shows a back button before the menu
 class AppTopBar extends StatefulWidget {
   final bool onDarkBackground;
   final bool wifiOnly;
+  final bool showBack;
   final String? currentTitle;
+  final VoidCallback? onBack;
 
   const AppTopBar({
     super.key,
     this.onDarkBackground = false,
     this.wifiOnly = false,
+    this.showBack = false,
     this.currentTitle,
+    this.onBack,
   });
 
   @override
@@ -77,29 +83,42 @@ class _AppTopBarState extends State<AppTopBar> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        GestureDetector(
-          onTap: () =>
-              FloatingMenu.show(context, currentTitle: widget.currentTitle),
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(
-                    alpha: AppTheme.shadowAlpha(context),
-                  ),
-                  blurRadius: 6,
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (widget.showBack)
+              SectionBackButton(
+                icon: Icons.arrow_back,
+                iconSize: 28,
+                onPressed: widget.onBack,
+              ),
+            GestureDetector(
+              onTap: () => FloatingMenu.show(
+                context,
+                currentTitle: widget.currentTitle,
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(
+                        alpha: AppTheme.shadowAlpha(context),
+                      ),
+                      blurRadius: 6,
+                    ),
+                  ],
                 ),
-              ],
+                child: Icon(
+                  Icons.menu,
+                  size: 28,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
             ),
-            child: Icon(
-              Icons.menu,
-              size: 28,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-          ),
+          ],
         ),
         _WifiIcon(
           connected: connected,
@@ -111,10 +130,7 @@ class _AppTopBarState extends State<AppTopBar> {
   }
 
   void _openConnectPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const ConnectPage()),
-    );
+    AppNavigation.openConnect(context);
   }
 }
 

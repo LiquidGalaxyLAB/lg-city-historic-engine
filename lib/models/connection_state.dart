@@ -215,31 +215,102 @@ class LGConnectionState extends ChangeNotifier {
   Future<bool> notifySlaveKmlChanged(int slaveNo) =>
       notifySoloKmlChanged(slaveNo);
 
-  /// Refresca la capa del globo registrada en `kmls.txt` (visible en todas las pantallas).
-  Future<bool> notifyPoiHighlightOnAllScreens() async {
-    const kmlPath = PoiHighlightCircle.kmlPath;
-    const listPath = '/var/www/html/kmls.txt';
-    const url = PoiHighlightCircle.kmlUrl;
+  /// Paths de listas KML que debe refrescar cada pantalla del rig.
+  List<String> _poiHighlightListPaths() {
+    return [
+      '/var/www/html/kmls.txt',
+      for (var i = 1; i <= _screens; i++) '/var/www/html/kmls_$i.txt',
+    ];
+  }
 
-    final ensureListed = '''
-if [ ! -f '$listPath' ]; then
-  echo '$url' > '$listPath'
-elif ! grep -qF '$url' '$listPath'; then
-  echo '$url' >> '$listPath'
-fi
-touch '$listPath'
-touch '$kmlPath'
+  String _shellQuote(String value) => "'${value.replaceAll("'", "'\\''")}'";
+
+  String _poiHighlightListUpdateScript(String url) {
+    final lists = _poiHighlightListPaths().map(_shellQuote).join(' ');
+    final quotedUrl = _shellQuote(url);
+    final kmlPath = _shellQuote(PoiHighlightCircle.kmlPath);
+
+    return '''
+update_poi_highlight_list() {
+  local list="\$1"
+  local url=$quotedUrl
+  if [ -f "\$list" ]; then
+    grep -v 'poi_highlight.kml' "\$list" > "\$list.new" || true
+    mv "\$list.new" "\$list"
+  else
+    : > "\$list"
+  fi
+  echo "\$url" >> "\$list"
+  touch "\$list"
+}
+for list in $lists; do
+  update_poi_highlight_list "\$list"
+done
+touch $kmlPath
 ''';
+  }
+
+  String _poiHighlightListRemoveScript() {
+    final lists = _poiHighlightListPaths().map(_shellQuote).join(' ');
+    final kmlPath = _shellQuote(PoiHighlightCircle.kmlPath);
+
+    return '''
+for list in $lists; do
+  if [ -f "\$list" ]; then
+    grep -v 'poi_highlight.kml' "\$list" > "\$list.new" || true
+    mv "\$list.new" "\$list"
+    touch "\$list"
+  fi
+done
+touch $kmlPath
+''';
+  }
+
+  /// Refresca el contorno POI en el globo compartido y en cada pantalla del rig.
+  ///
+  /// Registra la URL en `kmls.txt` (master.kml) y en cada `kmls_N.txt`
+  /// (master_1 / slave_N) para que LG1–LG5 reciban el NetworkLink.
+  Future<bool> notifyPoiHighlightOnAllScreens({int? cacheVersion}) async {
+    final version =
+        cacheVersion ?? DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    final url = '${PoiHighlightCircle.kmlUrl}?v=$version';
+    final script = _poiHighlightListUpdateScript(url);
 
     for (var attempt = 0; attempt < 3; attempt++) {
-      final touchKml = await execute(ensureListed);
-      if (touchKml != null) {
-        debugPrint('LGService: notify OK -> $kmlPath (listed in kmls.txt)');
+      final ok = await execute(script);
+      if (ok != null) {
+        for (var screen = 1; screen <= _screens; screen++) {
+          await notifySoloKmlChanged(screen);
+        }
+        debugPrint(
+          'LGService: notify OK -> $url (kmls.txt + kmls_1..$_screens.txt)',
+        );
         return true;
       }
       debugPrint(
-        'LGService: notify FAILED for $kmlPath (attempt ${attempt + 1}/3)',
+        'LGService: notify FAILED for poi_highlight (attempt ${attempt + 1}/3)',
       );
+      await _resetClient();
+      await Future.delayed(const Duration(milliseconds: 400));
+    }
+    return false;
+  }
+
+  /// Quita el contorno POI de todas las listas KML del rig.
+  Future<bool> removePoiHighlightFromAllScreens() async {
+    final script = _poiHighlightListRemoveScript();
+
+    for (var attempt = 0; attempt < 3; attempt++) {
+      final ok = await execute(script);
+      if (ok != null) {
+        for (var screen = 1; screen <= _screens; screen++) {
+          await notifySoloKmlChanged(screen);
+        }
+        debugPrint(
+          'LGService: removed poi_highlight from kmls.txt + kmls_1..$_screens.txt',
+        );
+        return true;
+      }
       await _resetClient();
       await Future.delayed(const Duration(milliseconds: 400));
     }

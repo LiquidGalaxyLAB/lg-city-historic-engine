@@ -50,15 +50,30 @@ class ChromiumImageCatalog {
     'Academia Mariana': '$_base/Mariana Academy.png',
   };
 
-  /// Historical events are out of scope for chromium until dedicated assets exist.
-  static bool launchesChromium(POI poi) =>
-      !poi.image.contains('images_historical_events');
+  /// Eventos históricos usan la imagen de la tarjeta en Chromium (sin contorno ni placemark).
+  static bool isHistoricalEvent(POI poi) =>
+      poi.image.contains('images_historical_events');
+
+  static bool launchesChromium(POI poi) {
+    if (isHistoricalEvent(poi)) {
+      return poi.image.trim().isNotEmpty;
+    }
+    return true;
+  }
 
   /// Returns the chromium asset path for [poi], or null if none is bundled yet.
   static Future<String?> resolve(POI poi) async {
-    if (!launchesChromium(poi)) {
-      debugPrint('ChromiumImageCatalog: skipped historical event ${poi.name}');
-      return null;
+    if (isHistoricalEvent(poi)) {
+      final path = poi.image.trim();
+      if (path.isEmpty) return null;
+      try {
+        await rootBundle.load(path);
+        debugPrint('ChromiumImageCatalog: historical event ${poi.name} -> $path');
+        return path;
+      } catch (_) {
+        debugPrint('ChromiumImageCatalog: missing historical asset $path');
+        return null;
+      }
     }
 
     final canonical = _canonicalNameFor(poi);

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
 import 'pag_inicio_categ.dart';
 
 class SplashPage extends StatefulWidget {
@@ -35,7 +34,7 @@ class _SplashPageState extends State<SplashPage> {
           child: Image.asset(
             'assets/images/KMLs/logos.png',
             fit: BoxFit.contain,
-            width: MediaQuery.of(context).size.width * 0.7,
+            width: MediaQuery.of(context).size.width * 1.109,
             // If the image fails to load, show a loading indicator instead of nothing
             errorBuilder: (context, error, stackTrace) {
               return const CircularProgressIndicator(

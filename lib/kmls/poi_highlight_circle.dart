@@ -69,18 +69,40 @@ ${markup(poi)}
     final outline = _outlineRing(poi);
     final topRing = _coordinatesString(outline, wallHeight);
     final groundRing = _coordinatesString(outline, 0);
+    final verticalWalls = _verticalWallsMarkup(poi, outline, wallHeight);
 
     return '''    <Style id="poi_top_ring">
       <LineStyle>
         <color>$lineColor</color>
         <width>$_topLineWidth</width>
       </LineStyle>
+      <PolyStyle>
+        <color>00000000</color>
+        <fill>0</fill>
+        <outline>0</outline>
+      </PolyStyle>
     </Style>
     <Style id="poi_ground_ring">
       <LineStyle>
         <color>$groundColor</color>
         <width>$_groundLineWidth</width>
       </LineStyle>
+      <PolyStyle>
+        <color>00000000</color>
+        <fill>0</fill>
+        <outline>0</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poi_wall_line">
+      <LineStyle>
+        <color>$lineColor</color>
+        <width>4</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>00000000</color>
+        <fill>0</fill>
+        <outline>0</outline>
+      </PolyStyle>
     </Style>
     <Placemark id="poi_ground_ring">
       <name>$safeName ground outline</name>
@@ -97,12 +119,41 @@ ${markup(poi)}
       <visibility>1</visibility>
       <styleUrl>#poi_top_ring</styleUrl>
       <LineString>
-        <extrude>1</extrude>
         <tessellate>1</tessellate>
         <altitudeMode>relativeToGround</altitudeMode>
         <coordinates>$topRing</coordinates>
       </LineString>
-    </Placemark>''';
+    </Placemark>
+$verticalWalls''';
+  }
+
+  static String _verticalWallsMarkup(
+    POI poi,
+    List<({double lat, double lng})> outline,
+    double wallHeight,
+  ) {
+    if (outline.length < 2) return '';
+
+    final safeName = escapeXml(poi.name);
+    final height = wallHeight.toStringAsFixed(1);
+    final buffer = StringBuffer();
+    final vertexCount = outline.length - 1;
+
+    for (var i = 0; i < vertexCount; i++) {
+      final point = outline[i];
+      buffer.writeln('''    <Placemark id="poi_wall_$i">
+      <name>$safeName wall $i</name>
+      <visibility>1</visibility>
+      <styleUrl>#poi_wall_line</styleUrl>
+      <LineString>
+        <tessellate>1</tessellate>
+        <altitudeMode>relativeToGround</altitudeMode>
+        <coordinates>${point.lng},${point.lat},0 ${point.lng},${point.lat},$height</coordinates>
+      </LineString>
+    </Placemark>''');
+    }
+
+    return buffer.toString().trimRight();
   }
 
   static String blank() {

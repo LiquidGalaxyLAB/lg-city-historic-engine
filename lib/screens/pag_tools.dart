@@ -31,22 +31,7 @@ class _ToolsPageState extends State<ToolsPage> {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: AppTopBar(currentTitle: T.s('tools')),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: Icon(
-                          Icons.arrow_back,
-                          size: 28,
-                          color: isDark ? Colors.white : Colors.black87,
-                        ),
-                      ),
-                    ],
-                  ),
+                  child: AppTopBar(showBack: true, currentTitle: T.s('tools')),
                 ),
                 const SizedBox(height: 5),
                 Text(

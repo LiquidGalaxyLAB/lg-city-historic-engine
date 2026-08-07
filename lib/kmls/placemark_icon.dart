@@ -135,6 +135,11 @@ $body
 </kml>''';
   }
 
+  static double altitudeForPoi(POI poi) {
+    final range = poi.range ?? 200.0;
+    return (range * 0.12).clamp(30.0, 100.0);
+  }
+
   static String placemarkMarkup({
     required POI poi,
     required double lat,
@@ -144,10 +149,16 @@ $body
     final iconUrl =
         useNetworkIcon ? networkIconUrlFor(poi) : iconUrlFor(poi);
     final safeName = escapeXml(poi.name);
+    final lineColor = kmlAbgrHexForPoi(poi, alpha: 210);
+    final altitude = altitudeForPoi(poi).toStringAsFixed(1);
     return '''    <Placemark id="poi_center_marker">
       <name>$safeName</name>
       <visibility>1</visibility>
       <Style>
+        <LineStyle>
+          <color>$lineColor</color>
+          <width>3</width>
+        </LineStyle>
         <IconStyle>
           <scale>$_iconScale</scale>
           <Icon>
@@ -160,7 +171,9 @@ $body
         </LabelStyle>
       </Style>
       <Point>
-        <coordinates>$lng,$lat,0</coordinates>
+        <extrude>1</extrude>
+        <altitudeMode>relativeToGround</altitudeMode>
+        <coordinates>$lng,$lat,$altitude</coordinates>
       </Point>
     </Placemark>''';
   }

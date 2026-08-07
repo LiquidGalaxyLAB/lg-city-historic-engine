@@ -73,8 +73,23 @@ class ChromiumService {
     await Future.delayed(duration);
     if (generation != _showGeneration) return true;
 
-    await closeChromiumOnAllScreens(cancelPending: false);
+    await closeChromiumQuick();
     return true;
+  }
+
+  /// Cierra Chromium rápido para mostrar el balloon sin esperar refocus en 5 pantallas.
+  Future<bool> closeChromiumQuick() async {
+    if (!_conn.isConnected) return false;
+
+    await _stopChromiumProcesses(fast: true);
+
+    try {
+      await _conn.execute("echo '' > /tmp/query.txt");
+      return true;
+    } catch (e) {
+      debugPrint('ChromiumService: error cleaning query.txt: $e');
+      return false;
+    }
   }
 
   void cancelPendingShow() {
@@ -156,7 +171,7 @@ class ChromiumService {
   }
 
   /// Stops Chromium/Chrome without stealing focus from the next launch.
-  Future<void> _stopChromiumProcesses() async {
+  Future<void> _stopChromiumProcesses({bool fast = false}) async {
     final password = _shellQuote(_conn.password ?? '');
     final user = _shellQuote(_conn.username ?? 'lg');
     final screens = _conn.screens;
@@ -165,6 +180,23 @@ class ChromiumService {
         'pkill -f chromium || true; '
         'pkill -f google-chrome || true; '
         'pkill -f chrome || true';
+    final betweenScreens = fast
+        ? Duration.zero
+        : const Duration(milliseconds: 250);
+
+    if (fast && screens > 1) {
+      final remoteKills = StringBuffer();
+      for (var i = 2; i <= screens; i++) {
+        remoteKills.write(
+          'sshpass -p $password ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 '
+          '$user@lg$i "$killCmd" & ',
+        );
+      }
+      remoteKills.write('wait');
+      await _conn.execute(killCmd);
+      await _conn.execute(remoteKills.toString());
+      return;
+    }
 
     for (var i = 1; i <= screens; i++) {
       if (i == 1) {
@@ -176,7 +208,9 @@ class ChromiumService {
           '"$killCmd"',
         );
       }
-      await Future.delayed(const Duration(milliseconds: 250));
+      if (!fast) {
+        await Future.delayed(betweenScreens);
+      }
     }
   }
 

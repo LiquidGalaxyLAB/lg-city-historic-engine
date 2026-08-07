@@ -23,38 +23,34 @@ class CategoriesHomePage extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 22,
-                  ),
-                  child: AppTopBar(currentTitle: T.s('home')),
-                ),
-
-                // ── NEW LOGO  ──
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                  child: Image.asset('assets/images/logo.png', height: 118),
-                ),
-
-                const SizedBox(height: 6),
-
-                // ── STATUS LINE ──
-                Text(
-                  T.s('db_status'),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.3,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  padding: const EdgeInsets.fromLTRB(18, 8, 18, 0),
+                  child: Column(
+                    children: [
+                      AppTopBar(currentTitle: T.s('home')),
+                      const SizedBox(height: 4),
+                      Image.asset('assets/images/logo.png', height: 142),
+                      const SizedBox(height: 4),
+                      Text(
+                        T.s('db_status'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.3,
+                          color:
+                              Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 10),
 
                 // ── CATEGORY CARDS ──
                 Expanded(
                   child: ListView(
+                    physics: const NeverScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(horizontal: 18),
                     children: [
                       _CategoryCard(
@@ -71,7 +67,7 @@ class CategoriesHomePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
                       _CategoryCard(
                         color: const Color(0xFFEEF3FA),
                         iconBgColor: const Color(0xFFDCE8F5),
@@ -86,7 +82,7 @@ class CategoriesHomePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
                       _CategoryCard(
                         color: const Color(0xFFEEF8F3),
                         iconBgColor: const Color(0xFFD4EDE3),
@@ -100,7 +96,7 @@ class CategoriesHomePage extends StatelessWidget {
                               builder: (_) => const MuseumsPage()),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
                       _CategoryCard(
                         color: const Color(0xFFF3EEF8),
                         iconBgColor: const Color(0xFFE3D8F0),
@@ -115,7 +111,7 @@ class CategoriesHomePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 16),
                       GestureDetector(
                         onTap: () => Navigator.push(
                           context,
@@ -144,7 +140,7 @@ class CategoriesHomePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 12),
                     ],
                   ),
                 ),
@@ -178,7 +174,7 @@ class _CategoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: AppTheme.categoryCardBackground(context, color),
           borderRadius: BorderRadius.circular(16),
@@ -211,7 +207,7 @@ class _CategoryCard extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 19,
+                      fontSize: 21,
                       fontWeight: FontWeight.w700,
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
@@ -220,7 +216,7 @@ class _CategoryCard extends StatelessWidget {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 16 ,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       height: 1.4,
                     ),

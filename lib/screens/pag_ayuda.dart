@@ -20,22 +20,7 @@ class HelpPage extends StatelessWidget {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: AppTopBar(currentTitle: T.s('help')),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: Icon(
-                          Icons.arrow_back,
-                          size: 28,
-                          color: onSurface,
-                        ),
-                      ),
-                    ],
-                  ),
+                  child: AppTopBar(showBack: true, currentTitle: T.s('help')),
                 ),
                 const SizedBox(height: 6),
                 Text(

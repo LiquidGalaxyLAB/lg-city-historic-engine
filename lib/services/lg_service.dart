@@ -19,6 +19,8 @@ class LGService {
   final LGConnectionState _conn = LGConnectionState();
   final ChromiumService _chromium = ChromiumService();
   static bool _isOrbiting = false;
+  static const Duration _chromiumPreFlyDuration = Duration(seconds: 3);
+
   static int _presentGeneration = 0;
   static Future<void> _presentQueue = Future.value();
   static POI? _lastPresentedPoi;
@@ -46,6 +48,7 @@ class LGService {
   /// Fondo beige de la app (balloon).
   static const String _appBackground = '#F5F1E9';
   static const String _appText = '#1C1C1E';
+  static const String _balloonFooter = 'GSoC/2026 - Yasmina Ramadan Sevdanova';
 
   /// The "Solo KML" filename each machine's sync_nlc_N.php serves.
   /// Machine 1 (the master) is the ONE exception: it's named `master_1.kml`,
@@ -143,6 +146,14 @@ class LGService {
     if (generation != _presentGeneration) return false;
     await Future.delayed(const Duration(milliseconds: 700));
 
+    if (ChromiumImageCatalog.launchesChromium(poi)) {
+      final chromiumOk = await _launchChromiumIfAvailable(poi, generation);
+      if (!chromiumOk) {
+        debugPrint('LGService: chromium pre-fly skipped or failed (${poi.name})');
+      }
+      if (generation != _presentGeneration) return false;
+    }
+
     if (!await flyToPOI(poi)) {
       debugPrint('LGService: flyToPOI failed (${poi.name})');
       return false;
@@ -150,26 +161,38 @@ class LGService {
     if (generation != _presentGeneration) return false;
     await Future.delayed(_flySettleDelay(poi));
 
-    final highlightOk = await sendPoiHighlightCircle(poi);
-    if (!highlightOk) {
-      debugPrint('LGService: highlight failed (${poi.name})');
-    }
-    if (generation != _presentGeneration) return false;
+    final isHistorical = ChromiumImageCatalog.isHistoricalEvent(poi);
 
-    final placemarkOk = await sendCenterPlacemark(poi, includeHighlight: true);
-    if (generation != _presentGeneration) return false;
-    if (!placemarkOk) {
-      debugPrint('LGService: placemark failed (${poi.name})');
-      return false;
+    if (isHistorical) {
+      await clearPoiHighlightCircle();
+      if (generation != _presentGeneration) return false;
+      await clearCenterPlacemark();
+      if (generation != _presentGeneration) return false;
+      await clearHighlightFromSoloScreens();
+      if (generation != _presentGeneration) return false;
+    } else {
+      final highlightOk = await sendPoiHighlightCircle(poi);
+      if (!highlightOk) {
+        debugPrint('LGService: highlight failed (${poi.name})');
+      }
+      if (generation != _presentGeneration) return false;
+
+      final placemarkOk = await sendCenterPlacemark(poi, includeHighlight: true);
+      if (generation != _presentGeneration) return false;
+      if (!placemarkOk) {
+        debugPrint('LGService: placemark failed (${poi.name})');
+        return false;
+      }
+
+      final soloHighlightOk = await sendHighlightToSoloScreens(poi);
+      if (!soloHighlightOk) {
+        debugPrint('LGService: solo highlight failed (${poi.name})');
+      }
+      if (generation != _presentGeneration) return false;
     }
 
-    final chromiumOk = await _launchChromiumIfAvailable(poi, generation);
-    if (!chromiumOk) {
-      debugPrint('LGService: chromium skipped or failed (${poi.name})');
-    }
-    if (generation != _presentGeneration) return false;
-
-    await Future.delayed(const Duration(milliseconds: 400));
+    final balloonPrep = _prepareBalloonUpload(poi);
+    await balloonPrep;
 
     final balloonOk = await sendBalloon(poi);
     if (!balloonOk) {
@@ -183,7 +206,7 @@ class LGService {
 
   Future<bool> _launchChromiumIfAvailable(POI poi, int generation) async {
     if (!ChromiumImageCatalog.launchesChromium(poi)) {
-      debugPrint('LGService: chromium skipped for historical event (${poi.name})');
+      debugPrint('LGService: chromium skipped (${poi.name})');
       return false;
     }
     if (generation != _presentGeneration) return false;
@@ -195,12 +218,32 @@ class LGService {
     }
     if (generation != _presentGeneration) return false;
 
-    debugPrint('LGService: launching chromium (${poi.name}) -> $chromiumAsset');
-    return _chromium.showPoiImageTimed(poi);
+    debugPrint('LGService: launching chromium pre-fly (${poi.name}) -> $chromiumAsset');
+    return _chromium.showPoiImageTimed(
+      poi,
+      duration: _chromiumPreFlyDuration,
+    );
   }
 
   /// Cierra Chromium en todas las pantallas y vuelve a Google Earth.
   Future<void> closeChromium() => _chromium.closeChromiumOnAllScreens();
+
+  /// Cierre rápido sin refocus en todas las pantallas (p. ej. al pulsar atrás).
+  Future<void> closeChromiumQuick() => _chromium.closeChromiumQuick();
+
+  Future<void> _prepareBalloonUpload(POI poi) async {
+    if (!_conn.isConnected || poi.image.isEmpty) return;
+
+    try {
+      final rawName = poi.image.split('/').last;
+      final safeNameFile =
+          'balloon_${Object.hash(poi.name, poi.image).abs()}_$rawName'
+              .replaceAll(RegExp(r'[^\w.\-]'), '_');
+      await _conn.uploadImageAsset(poi.image, safeNameFile);
+    } catch (e) {
+      debugPrint('LGService: balloon prep upload failed: $e');
+    }
+  }
 
   Duration _flySettleDelay(POI poi) {
     final prev = _lastPresentedPoi;
@@ -248,6 +291,7 @@ class LGService {
 
     await clearBalloon();
     await clearCenterPlacemark();
+    await clearHighlightFromSoloScreens();
     await clearPoiHighlightCircle();
   }
 
@@ -258,7 +302,7 @@ class LGService {
       PoiHighlightCircle.kmlPath,
       PoiHighlightCircle.blank(),
     );
-    await _conn.notifyMainKmlChanged();
+    await _conn.removePoiHighlightFromAllScreens();
 
     await _conn.writeSoloKml(1, PanoramaOverlayManager.blankMaster());
     await _conn.notifySoloKmlChanged(1);
@@ -373,10 +417,83 @@ fi
   int _leftMostScreen(int screens) => (screens ~/ 2) + 2;
   int _rightMostScreen(int screens) => (screens ~/ 2) + 1;
 
-  /// Muestra un pin en la pantalla central (LG1) en las coordenadas del POI.
+  String _soloDocumentId(int screenNo) =>
+      screenNo == _centerScreen ? 'master_1' : 'slave_$screenNo';
+
+  /// Escribe el contorno 3D en el KML solo de LG2–LG5 (LG1 y balloon van aparte).
+  Future<bool> sendHighlightToSoloScreens(POI poi) async {
+    if (!_conn.isConnected) return false;
+
+    final markup = PoiHighlightCircle.markup(poi);
+    final screens = _conn.screens;
+    final balloonScreen = _rightMostScreen(screens);
+    final logoScreen = _leftMostScreen(screens);
+    var allOk = true;
+
+    for (var screen = 1; screen <= screens; screen++) {
+      if (screen == _centerScreen || screen == balloonScreen) continue;
+
+      final body = screen == logoScreen
+          ? '$markup\n${LogoOverlayManager.generate(wrapDocument: false)}'
+          : markup;
+
+      final kml = PlacemarkIconManager.kmlDocument(
+        documentId: _soloDocumentId(screen),
+        body: body,
+      );
+
+      final written = await _conn.writeSoloKml(screen, kml);
+      if (!written) {
+        debugPrint('LGService: highlight FAILED write ${_soloKmlFilename(screen)}');
+        allOk = false;
+        continue;
+      }
+
+      final notified = await _conn.notifySoloKmlChanged(screen);
+      if (!notified) {
+        debugPrint(
+          'LGService: highlight FAILED notify ${_soloKmlFilename(screen)}',
+        );
+        allOk = false;
+        continue;
+      }
+
+      debugPrint(
+        'LGService: highlight OK -> ${_soloKmlFilename(screen)} (${poi.name})',
+      );
+    }
+
+    return allOk;
+  }
+
+  Future<void> clearHighlightFromSoloScreens() async {
+    if (!_conn.isConnected) return;
+
+    final screens = _conn.screens;
+    final balloonScreen = _rightMostScreen(screens);
+    final logoScreen = _leftMostScreen(screens);
+
+    for (var screen = 2; screen <= screens; screen++) {
+      if (screen == balloonScreen) continue;
+
+      if (screen == logoScreen) {
+        await showLogos();
+        continue;
+      }
+
+      await _conn.writeSoloKml(
+        screen,
+        PanoramaOverlayManager.blankSlave(screen),
+      );
+      await _conn.notifySoloKmlChanged(screen);
+    }
+  }
+
+  /// Muestra un pin 3D en la pantalla central (LG1) en las coordenadas del POI.
+  /// Si [includeHighlight] es true, incluye también el contorno 3D como respaldo.
   Future<bool> sendCenterPlacemark(
     POI poi, {
-    bool includeHighlight = true,
+    bool includeHighlight = false,
   }) async {
     if (!_conn.isConnected) {
       debugPrint('LGService: sendCenterPlacemark skipped — not connected');
@@ -424,13 +541,15 @@ fi
     }
 
     final color = PlacemarkIconManager.colorForPoi(poi);
+    final altitude = PlacemarkIconManager.altitudeForPoi(poi);
     debugPrint(
-      'LGService: sendCenterPlacemark OK -> master_1.kml (${poi.name}, rgb(${color.r},${color.g},${color.b}))',
+      'LGService: sendCenterPlacemark OK -> master_1.kml (${poi.name}, '
+      '3D ${altitude.toStringAsFixed(0)}m, rgb(${color.r},${color.g},${color.b}))',
     );
     return true;
   }
 
-  /// Contorno 3D en la capa global del globo (`kmls.txt`).
+  /// Contorno 3D registrado en kmls.txt + kmls_1..N.txt (visible en LG1–LG5).
   Future<bool> sendPoiHighlightCircle(POI poi) async {
     if (!_conn.isConnected) {
       debugPrint('LGService: sendPoiHighlightCircle skipped — not connected');
@@ -438,15 +557,18 @@ fi
     }
 
     final kml = PoiHighlightCircle.generateDocument(poi);
+    final cacheVersion = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     final ok = await _conn.writeRemoteFile(PoiHighlightCircle.kmlPath, kml);
     if (!ok) {
       debugPrint('LGService: sendPoiHighlightCircle FAILED write poi_highlight.kml');
       return false;
     }
 
-    final notified = await _conn.notifyPoiHighlightOnAllScreens();
+    final notified = await _conn.notifyPoiHighlightOnAllScreens(
+      cacheVersion: cacheVersion,
+    );
     if (!notified) {
-      debugPrint('LGService: sendPoiHighlightCircle FAILED notify kmls.txt');
+      debugPrint('LGService: sendPoiHighlightCircle FAILED notify kmls lists');
       return false;
     }
 
@@ -461,13 +583,14 @@ fi
     return true;
   }
 
+  /// Limpia la capa global del globo si quedó registrada en `kmls.txt`.
   Future<void> clearPoiHighlightCircle() async {
     if (!_conn.isConnected) return;
     await _conn.writeRemoteFile(
       PoiHighlightCircle.kmlPath,
       PoiHighlightCircle.blank(),
     );
-    await _conn.notifyMainKmlChanged();
+    await _conn.removePoiHighlightFromAllScreens();
   }
 
   /// Quita el pin de la pantalla central.
@@ -539,15 +662,43 @@ fi
 
     final String imageHtml = imageBlock ?? '';
 
+    final String footerLine =
+        '<p style="font-size:20px;line-height:1.4;color:#6B5B45;margin:28px 0 0 0;'
+        'padding-top:14px;border-top:1px solid #6B5B45;text-align:center;font-weight:600;">'
+        '${escapeHtml(_balloonFooter)}</p>';
+
     // Document id="slave_N" es obligatorio en Liquid Galaxy para que GE recargue la capa solo.
+    final highlightMarkup = ChromiumImageCatalog.isHistoricalEvent(poi)
+        ? ''
+        : PoiHighlightCircle.markup(poi);
     final String kml = '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
   <Document id="slave_$slaveNo">
+    <Style id="poi_balloon_style">
+      <BalloonStyle>
+        <bgColor>ffE9F1F5</bgColor>
+        <text><![CDATA[\$[description]]]></text>
+      </BalloonStyle>
+    </Style>
+$highlightMarkup
     <Placemark id="poi_balloon">
+      <styleUrl>#poi_balloon_style</styleUrl>
       <name>$safeName</name>
       <gx:balloonVisibility>1</gx:balloonVisibility>
       <description><![CDATA[
         <html>
+        <head>
+        <meta charset="UTF-8">
+        <style type="text/css">
+          font[color="red"], font[color="#ff0000"], font[color="#FF0000"],
+          a[href*="maps.google"], a[href*="earth.google"], a[href*="dir/"] {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            overflow: hidden !important;
+          }
+        </style>
+        </head>
         <body style="margin:0;padding:0;background-color:$_appBackground;font-family:Georgia,serif;color:$_appText;width:100%;height:100%;overflow-y:auto;">
           $imageHtml
           <div style="padding:36px 40px 40px 40px;">
@@ -557,6 +708,7 @@ fi
             $eraLine
             $dateLine
             $descLine
+            $footerLine
           </div>
         </body>
         </html>
