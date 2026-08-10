@@ -37,7 +37,7 @@ class ChromiumImageCatalog {
         '$_base/Museum of Modern and Contemporary Art of Lleida.png',
     'Diocesan Museum': '$_base/Diocesan Museum.png',
     'Water Museum': '$_base/Water Museum.png',
-    'Automotive Museum': '$_base/Automobile Museum.png',
+    'Automobile Museum': '$_base/Automobile Museum.png',
     'Seu Vella Cathedral': '$_base/La Seu Vella.png',
     'New Cathedral': '$_base/New Cathedral of Lleida.png',
     'Church of Sant Llorenç': '$_base/Church of Saint Lawrence.png',

@@ -168,8 +168,8 @@ const Map<String, Map<String, String>> poiNameCatalog = {
     'ca': 'Museu de l\'Aigua',
     'tr': 'Su Müzesi',
   },
-  'Automotive Museum': {
-    'en': 'Automotive Museum',
+  'Automobile Museum': {
+    'en': 'Automobile Museum',
     'es': 'Museo del Automóvil',
     'ca': 'Museu de l\'Automoció',
     'tr': 'Otomotiv Müzesi',

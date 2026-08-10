@@ -174,6 +174,8 @@ class _AboutInfoList extends StatelessWidget {
 
       (label: T.s('about_support_label'), value: T.s('about_support_value')),
 
+      (label: T.s('about_logo_designer_label'), value: T.s('about_logo_designer_value')),
+
       (label: T.s('about_history_label'), value: T.s('about_history_value')),
 
       (

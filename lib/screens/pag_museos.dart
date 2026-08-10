@@ -73,9 +73,9 @@ class _MuseumsPageState extends State<MuseumsPage> {
             'The Water Museum is made up of different spaces distributed throughout the city and the agricultural area of Lleida. Its central site is the “La Canadiense Camp,” followed by the Water Plan Reservoir, the Ice Wells, the Sant Anastasi Mill Mill, the monumental fountains, and the Piñana and Seròs canals. Lleida was founded on the banks of the Ebro River and has developed an extensive network of canals and irrigation channels.',
       ),
     ],
-    'Automotive': [
+    'Automobile Museum': [
       POI(
-        name: 'Automotive Museum',
+        name: 'Automobile Museum',
         location: '41.6133°N, 0.6328°E',
         image: 'assets/images_museums/Museu de l’Automoció.jpg',
         lat: 41.613319,
@@ -87,7 +87,7 @@ class _MuseumsPageState extends State<MuseumsPage> {
         startDate: '2002',
         endDate: '2002',
         description:
-            'The Automotive Museum of Lleida is a municipal museum dedicated to the world of automotive engineering in general, with a specialization in vintage vehicles. Inaugurated in September 2002, the project is linked to the Foundation for Industrial Archaeological Heritage. The museum is structured into five main sections: automobiles, motorcycles, the workshop, engines, and miniatures.',
+            'The Automobile Museum of Lleida is a municipal museum dedicated to the world of automotive engineering in general, with a specialization in vintage vehicles. Inaugurated in September 2002, the project is linked to the Foundation for Industrial Archaeological Heritage. The museum is structured into five main sections: automobiles, motorcycles, the workshop, engines, and miniatures.',
       ),
     ],
   };
@@ -201,63 +201,12 @@ class _MuseumsPageState extends State<MuseumsPage> {
         _searchController.clear();
         setState(() => _searchQuery = '');
       },
-      categoryMenu: _buildCategoryDropdown(),
-    );
-  }
-
-  Widget _buildCategoryDropdown() {
-    return PopupMenuButton<String>(
-      onSelected: (String value) {
-        setState(() {
-          _selectedCategory = value;
-        });
-      },
-      offset: const Offset(0, 60),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 12,
-      itemBuilder: (context) {
-        List<String> categories = ['All', ..._data.keys];
-        return categories
-            .map(
-              (cat) => PopupMenuItem<String>(
-                value: cat,
-                child: Text(
-                  cat == 'All' ? T.s('show_all') : T.category(cat),
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: _selectedCategory == cat
-                        ? FontWeight.w700
-                        : FontWeight.w500,
-                    color: context.appOnSurface,
-                  ),
-                ),
-              ),
-            )
-            .toList();
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: AppTheme.chipBackground(context),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              T.s('categories'),
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 13,
-                color: context.appOnSurface,
-                letterSpacing: 0.5,
-              ),
-            ),
-            const SizedBox(width: 4),
-            Icon(Icons.keyboard_arrow_down_rounded,
-                color: context.appOnSurface, size: 18),
-          ],
-        ),
+      categoryMenu: CategoryFilterDropdown(
+        selectedCategory: _selectedCategory,
+        categories: ['All', ..._data.keys],
+        onSelected: (value) => setState(() => _selectedCategory = value),
+        labelForCategory: (cat) =>
+            cat == 'All' ? T.s('show_all') : T.category(cat),
       ),
     );
   }

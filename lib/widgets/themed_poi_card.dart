@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
 import '../theme/app_theme.dart';
 
 /// Tarjeta de listado de POI / museos / eventos con colores según el tema.
@@ -129,6 +130,83 @@ class ThemedPoiCard extends StatelessWidget {
   }
 }
 
+/// Desplegable de categorías con área táctil amplia.
+class CategoryFilterDropdown extends StatelessWidget {
+  const CategoryFilterDropdown({
+    super.key,
+    required this.selectedCategory,
+    required this.categories,
+    required this.onSelected,
+    required this.labelForCategory,
+  });
+
+  final String selectedCategory;
+  final List<String> categories;
+  final ValueChanged<String> onSelected;
+  final String Function(String category) labelForCategory;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<String>(
+      onSelected: onSelected,
+      offset: const Offset(0, 68),
+      padding: EdgeInsets.zero,
+      splashRadius: 28,
+      tooltip: '',
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 12,
+      itemBuilder: (context) => categories
+          .map(
+            (cat) => PopupMenuItem<String>(
+              value: cat,
+              height: 52,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                labelForCategory(cat),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: selectedCategory == cat
+                      ? FontWeight.w800
+                      : FontWeight.w500,
+                  color: context.appOnSurface,
+                ),
+              ),
+            ),
+          )
+          .toList(),
+      child: Container(
+        height: 48,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: AppTheme.chipBackground(context),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              T.s('categories'),
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: 15,
+                color: context.appOnSurface,
+                letterSpacing: 0.5,
+              ),
+            ),
+            const SizedBox(width: 6),
+            Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: context.appOnSurface,
+              size: 22,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// Barra de búsqueda y filtro para listados.
 class ThemedListFilterBar extends StatelessWidget {
   const ThemedListFilterBar({
@@ -151,7 +229,7 @@ class ThemedListFilterBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 56,
+      height: 68,
       decoration: BoxDecoration(
         color: context.appSurface,
         borderRadius: BorderRadius.circular(16),
@@ -166,38 +244,42 @@ class ThemedListFilterBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const SizedBox(width: 18),
+          const SizedBox(width: 16),
           Icon(Icons.search_rounded,
-              color: context.appOnSurfaceVariant, size: 22),
-          const SizedBox(width: 10),
+              color: context.appOnSurfaceVariant, size: 24),
+          const SizedBox(width: 12),
           Expanded(
             child: TextField(
               controller: searchController,
               onChanged: onSearchChanged,
-              style: TextStyle(fontSize: 16, color: context.appOnSurface),
+              style: TextStyle(fontSize: 17, color: context.appOnSurface),
               decoration: InputDecoration(
                 hintText: searchHint,
                 hintStyle: TextStyle(
                   color: context.appOnSurfaceVariant,
-                  fontSize: 16,
+                  fontSize: 17,
                   fontWeight: FontWeight.w400,
                   letterSpacing: -0.2,
                 ),
                 border: InputBorder.none,
                 isDense: true,
-                contentPadding: EdgeInsets.zero,
+                contentPadding: const EdgeInsets.symmetric(vertical: 16),
               ),
             ),
           ),
           if (searchQuery.isNotEmpty)
-            GestureDetector(
-              onTap: onClearSearch,
-              child: Icon(Icons.close_rounded,
-                  color: context.appOnSurfaceVariant, size: 20),
+            IconButton(
+              onPressed: onClearSearch,
+              icon: Icon(Icons.close_rounded,
+                  color: context.appOnSurfaceVariant, size: 22),
+              iconSize: 22,
+              padding: const EdgeInsets.all(12),
+              constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+              splashRadius: 24,
             ),
-          const SizedBox(width: 10),
-          categoryMenu,
-          const SizedBox(width: 8),
+          const SizedBox(width: 4),
+          SizedBox(height: 48, child: categoryMenu),
+          const SizedBox(width: 12),
         ],
       ),
     );

@@ -768,7 +768,7 @@ Future<void> insertData(Database db) async {
     'description_es':
         'El Museo de la Automoción de Lérida es un museo municipal de Lérida dedicado al mundo de la automoción en general y especializado en vehículos antiguos. Inaugurado en septiembre de 2002, el proyecto va ligado a la Fundación para el Patrimonio Arqueológico Industrial. El museo está estructurado en cinco grandes ámbitos: Los automóviles, las motocicletas, el taller, los motores y las miniaturas.',
     'description_en':
-        'The Lleida Automotive Museum is a municipal museum in Lleida dedicated to the world of motoring in general, with a special focus on vintage vehicles. Inaugurated in September 2002, the project is linked to the Foundation for Industrial Archaeological Heritage. The museum is organized into five main areas: Automobiles, Motorcycles, The workshop, Engines, and Miniatures.',
+        'The Lleida Automobile Museum is a municipal museum in Lleida dedicated to the world of motoring in general, with a special focus on vintage vehicles. Inaugurated in September 2002, the project is linked to the Foundation for Industrial Archaeological Heritage. The museum is organized into five main areas: Automobiles, Motorcycles, The workshop, Engines, and Miniatures.',
   });
 
   // ══════════════════════════════════════════════

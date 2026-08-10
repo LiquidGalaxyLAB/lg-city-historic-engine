@@ -518,66 +518,12 @@ class _HistoricalEventsPageState extends State<HistoricalEventsPage> {
         _searchController.clear();
         setState(() => _searchQuery = '');
       },
-      categoryMenu: _buildCategoryDropdown(),
-    );
-  }
-
-  Widget _buildCategoryDropdown() {
-    return PopupMenuButton<String>(
-      onSelected: (String value) {
-        setState(() {
-          _selectedCategory = value;
-        });
-      },
-      offset: const Offset(0, 60),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 12,
-      itemBuilder: (context) {
-        List<String> categories = ['All', ..._data.keys];
-        return categories
-            .map(
-              (cat) => PopupMenuItem<String>(
-                value: cat,
-                child: Text(
-                  cat == 'All' ? T.s('show_all') : T.category(cat),
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: _selectedCategory == cat
-                        ? FontWeight.w800
-                        : FontWeight.w500,
-                    color: context.appOnSurface,
-                  ),
-                ),
-              ),
-            )
-            .toList();
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: AppTheme.chipBackground(context),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              T.s('categories'),
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 13,
-                color: context.appOnSurface,
-                letterSpacing: 0.5,
-              ),
-            ),
-            const SizedBox(width: 4),
-            Icon(
-              Icons.keyboard_arrow_down_rounded,
-              color: context.appOnSurface,
-              size: 18,
-            ),
-          ],
-        ),
+      categoryMenu: CategoryFilterDropdown(
+        selectedCategory: _selectedCategory,
+        categories: ['All', ..._data.keys],
+        onSelected: (value) => setState(() => _selectedCategory = value),
+        labelForCategory: (cat) =>
+            cat == 'All' ? T.s('show_all') : T.category(cat),
       ),
     );
   }

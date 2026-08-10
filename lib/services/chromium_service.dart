@@ -12,8 +12,10 @@ class ChromiumService {
 
   static const String _htmlFileName = 'poi_view.html';
   static const Duration _defaultDisplayDuration = Duration(seconds: 3);
+  static const Duration _lg1FocusDelay = Duration(milliseconds: 350);
 
   int _showGeneration = 0;
+  final Set<String> _uploadedRemoteImages = {};
 
   /// Shows the POI chromium image for [duration], then closes Chromium.
   /// Returns false when the POI has no chromium asset or SSH is unavailable.
@@ -38,25 +40,17 @@ class ChromiumService {
     final lang = languageNotifier.value;
     final title = poi.getName(lang);
 
-    if (!await _uploadImageAsset(assetPath, imageFileName)) {
-      debugPrint('ChromiumService: image upload failed for ${poi.name}');
+    final uploadResults = await Future.wait<bool>([
+      _uploadImageAsset(assetPath, imageFileName),
+      _uploadHtml(imageFileName: imageFileName, title: title),
+    ]);
+    if (!uploadResults.every((ok) => ok)) {
+      debugPrint('ChromiumService: upload failed for ${poi.name}');
       return false;
     }
+    if (generation != _showGeneration) return false;
 
-    if (!await _verifyRemoteFile('/var/www/html/$imageFileName')) {
-      debugPrint('ChromiumService: remote image missing for ${poi.name}');
-      return false;
-    }
-
-    if (!await _uploadHtml(
-      imageFileName: imageFileName,
-      title: title,
-    )) {
-      debugPrint('ChromiumService: HTML upload failed for ${poi.name}');
-      return false;
-    }
-
-    await _stopChromiumProcesses();
+    await _stopChromiumProcesses(fast: true);
     if (generation != _showGeneration) return false;
 
     final opened =
@@ -102,47 +96,45 @@ class ChromiumService {
     final password = _shellQuote(_conn.password ?? '');
     final user = _shellQuote(_conn.username ?? 'lg');
     final screens = _conn.screens;
-    var openedAny = false;
 
     try {
-      for (var i = 1; i <= screens; i++) {
-        final baseUrl =
-            i == 1 ? url.replaceFirst('http://lg1:81', 'http://localhost:81') : url;
-        final fullUrl = '$baseUrl?screen=$i&total=$screens';
-        final quotedUrl = _shellQuote(fullUrl);
+      final baseUrl =
+          url.replaceFirst('http://lg1:81', 'http://localhost:81');
+      final fullUrl1 = '$baseUrl?screen=1&total=$screens';
+      final quotedUrl1 = _shellQuote(fullUrl1);
+      final launch1 = 'chromium-browser --kiosk --no-first-run --disable-infobars '
+          '$quotedUrl1 || google-chrome --kiosk --no-first-run --disable-infobars '
+          '$quotedUrl1';
+      await _conn.execute(
+        'DISPLAY=:0 nohup sh -c ${_shellQuote(launch1)} > /dev/null 2>&1 &',
+      );
 
-        if (i == 1) {
-          final launch = 'chromium-browser --kiosk --no-first-run --disable-infobars '
+      if (screens > 1) {
+        final remoteLaunches = StringBuffer();
+        for (var i = 2; i <= screens; i++) {
+          final fullUrl = '$url?screen=$i&total=$screens';
+          final quotedUrl = _shellQuote(fullUrl);
+          final remoteLaunch = 'chromium-browser --kiosk --no-first-run --disable-infobars '
               '$quotedUrl || google-chrome --kiosk --no-first-run --disable-infobars '
               '$quotedUrl';
-          await _conn.execute(
-            'DISPLAY=:0 nohup sh -c ${_shellQuote(launch)} > /dev/null 2>&1 &',
-          );
-          await Future.delayed(const Duration(milliseconds: 1200));
-          await _conn.execute(
-            "DISPLAY=:0 wmctrl -a Chromium 2>/dev/null || "
-            "DISPLAY=:0 wmctrl -a 'Google Chrome' 2>/dev/null || true",
-          );
-        } else {
-          final hostname = 'lg$i';
-          await _conn.execute(
-            'sshpass -p $password ssh -o StrictHostKeyChecking=no -t $user@$hostname '
-            '"DISPLAY=:0 chromium-browser --kiosk --no-first-run --disable-infobars '
-            '$quotedUrl > /dev/null 2>&1 & '
-            'sleep 1; '
-            'DISPLAY=:0 google-chrome --kiosk --no-first-run --disable-infobars '
-            '$quotedUrl > /dev/null 2>&1 & '
-            'sleep 1; '
-            'DISPLAY=:0 wmctrl -a Chromium 2>/dev/null || '
-            "DISPLAY=:0 wmctrl -a 'Google Chrome' 2>/dev/null || true\"",
+          remoteLaunches.write(
+            'sshpass -p $password ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 '
+            '$user@lg$i '
+            '"DISPLAY=:0 nohup sh -c ${_shellQuote(remoteLaunch)} > /dev/null 2>&1 &" & ',
           );
         }
-
-        debugPrint('ChromiumService: opened on lg$i -> $fullUrl');
-        openedAny = true;
-        await Future.delayed(const Duration(milliseconds: 400));
+        remoteLaunches.write('wait');
+        await _conn.execute(remoteLaunches.toString());
       }
-      return openedAny;
+
+      await Future.delayed(_lg1FocusDelay);
+      await _conn.execute(
+        "DISPLAY=:0 wmctrl -a Chromium 2>/dev/null || "
+        "DISPLAY=:0 wmctrl -a 'Google Chrome' 2>/dev/null || true",
+      );
+
+      debugPrint('ChromiumService: opened on all $screens screens');
+      return true;
     } catch (e) {
       debugPrint('ChromiumService: error opening Chromium: $e');
       return false;
@@ -238,28 +230,26 @@ class ChromiumService {
     }
   }
   Future<bool> _uploadImageAsset(String assetPath, String fileName) async {
+    if (_uploadedRemoteImages.contains(fileName)) {
+      debugPrint('ChromiumService: reusing cached image $fileName');
+      return true;
+    }
+
     try {
       final byteData = await rootBundle.load(assetPath);
-      return _conn.uploadImageBytes(
+      final ok = await _conn.uploadImageBytes(
         byteData.buffer.asUint8List(),
         fileName,
         remoteDir: '/var/www/html',
       );
+      if (ok) {
+        _uploadedRemoteImages.add(fileName);
+      }
+      return ok;
     } catch (e) {
       debugPrint('ChromiumService: image upload failed: $e');
       return false;
     }
-  }
-
-  Future<bool> _verifyRemoteFile(String remotePath) async {
-    final sizeStr = await _conn.execute("wc -c < '$remotePath'");
-    final size = int.tryParse(sizeStr?.trim() ?? '') ?? 0;
-    if (size <= 0) {
-      debugPrint('ChromiumService: remote file empty or missing: $remotePath');
-      return false;
-    }
-    debugPrint('ChromiumService: verified $remotePath ($size bytes)');
-    return true;
   }
 
   Future<bool> _uploadHtml({

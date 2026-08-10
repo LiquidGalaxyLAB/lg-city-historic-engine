@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart' show debugPrint;
+import 'package:flutter/services.dart' show rootBundle;
 import '../main.dart';
 import '../models/connection_state.dart';
 import '../models/poi_model.dart';
@@ -48,7 +49,7 @@ class LGService {
   /// Fondo beige de la app (balloon).
   static const String _appBackground = '#F5F1E9';
   static const String _appText = '#1C1C1E';
-  static const String _balloonFooter = 'GSoC/2026 - Yasmina Ramadan Sevdanova';
+  static const String _balloonImageMaxHeight = '320px';
 
   /// The "Solo KML" filename each machine's sync_nlc_N.php serves.
   /// Machine 1 (the master) is the ONE exception: it's named `master_1.kml`,
@@ -144,9 +145,12 @@ class LGService {
       return false;
     }
     if (generation != _presentGeneration) return false;
-    await Future.delayed(const Duration(milliseconds: 700));
+    final showChromiumFirst = ChromiumImageCatalog.launchesChromium(poi);
+    await Future.delayed(
+      Duration(milliseconds: showChromiumFirst ? 250 : 700),
+    );
 
-    if (ChromiumImageCatalog.launchesChromium(poi)) {
+    if (showChromiumFirst) {
       final chromiumOk = await _launchChromiumIfAvailable(poi, generation);
       if (!chromiumOk) {
         debugPrint('LGService: chromium pre-fly skipped or failed (${poi.name})');
@@ -235,14 +239,49 @@ class LGService {
     if (!_conn.isConnected || poi.image.isEmpty) return;
 
     try {
-      final rawName = poi.image.split('/').last;
-      final safeNameFile =
-          'balloon_${Object.hash(poi.name, poi.image).abs()}_$rawName'
-              .replaceAll(RegExp(r'[^\w.\-]'), '_');
-      await _conn.uploadImageAsset(poi.image, safeNameFile);
+      await _conn.uploadImageAsset(poi.image, _balloonImageFileName(poi));
     } catch (e) {
       debugPrint('LGService: balloon prep upload failed: $e');
     }
+  }
+
+  String _balloonImageFileName(POI poi) {
+    final rawName = poi.image.split('/').last;
+    return 'balloon_${Object.hash(poi.name, poi.image).abs()}_$rawName'
+        .replaceAll(RegExp(r'[^\w.\-]'), '_');
+  }
+
+  Future<double?> _balloonImageAspectRatio(String assetPath) async {
+    try {
+      final byteData = await rootBundle.load(assetPath);
+      final codec =
+          await ui.instantiateImageCodec(byteData.buffer.asUint8List());
+      final frame = await codec.getNextFrame();
+      final width = frame.image.width;
+      final height = frame.image.height;
+      frame.image.dispose();
+      if (width <= 0 || height <= 0) return null;
+      return width / height;
+    } catch (e) {
+      debugPrint('LGService: balloon aspect ratio failed for $assetPath: $e');
+      return null;
+    }
+  }
+
+  String _balloonImageHtml({
+    required String imageUrl,
+    required String alt,
+    double? aspectRatio,
+  }) {
+    final ratioStyle = aspectRatio != null
+        ? 'aspect-ratio:${aspectRatio.toStringAsFixed(5)};'
+        : '';
+
+    return '''
+<div style="width:100%;max-height:$_balloonImageMaxHeight;background-color:$_appBackground;overflow:hidden;line-height:0;text-align:center;">
+  <img src="$imageUrl" alt="$alt"
+       style="display:inline-block;max-width:100%;max-height:$_balloonImageMaxHeight;width:auto;height:auto;object-fit:contain;object-position:center;$ratioStyle" />
+</div>''';
   }
 
   Duration _flySettleDelay(POI poi) {
@@ -632,14 +671,14 @@ fi
     String? imageBlock;
     if (poi.image.isNotEmpty) {
       try {
-        final rawName = poi.image.split('/').last;
-        final safeNameFile =
-            'balloon_${Object.hash(poi.name, poi.image).abs()}_$rawName'
-                .replaceAll(RegExp(r'[^\w.\-]'), '_');
+        final safeNameFile = _balloonImageFileName(poi);
         await _conn.uploadImageAsset(poi.image, safeNameFile);
-        imageBlock =
-            '<img src="http://lg1:81/logos/$safeNameFile" alt="$safeName" '
-            'style="width:100%;max-height:320px;object-fit:cover;display:block;" />';
+        final aspectRatio = await _balloonImageAspectRatio(poi.image);
+        imageBlock = _balloonImageHtml(
+          imageUrl: 'http://lg1:81/logos/$safeNameFile',
+          alt: safeName,
+          aspectRatio: aspectRatio,
+        );
       } catch (e) {
         debugPrint('LGService: balloon image upload failed: $e');
       }
@@ -661,11 +700,6 @@ fi
         : '';
 
     final String imageHtml = imageBlock ?? '';
-
-    final String footerLine =
-        '<p style="font-size:20px;line-height:1.4;color:#6B5B45;margin:28px 0 0 0;'
-        'padding-top:14px;border-top:1px solid #6B5B45;text-align:center;font-weight:600;">'
-        '${escapeHtml(_balloonFooter)}</p>';
 
     // Document id="slave_N" es obligatorio en Liquid Galaxy para que GE recargue la capa solo.
     final highlightMarkup = ChromiumImageCatalog.isHistoricalEvent(poi)
@@ -708,7 +742,6 @@ $highlightMarkup
             $eraLine
             $dateLine
             $descLine
-            $footerLine
           </div>
         </body>
         </html>
