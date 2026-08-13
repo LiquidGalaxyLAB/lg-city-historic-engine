@@ -1,8 +1,16 @@
 # City Historic Engine for Liquid Galaxy 
 
-Index
+## Index: 
+1. Name Of The Project
+2. Project Description
+3. Frintend Devlopment
+4. Integration With LG
+5. Personal Information 
 
-## Getting Started
+## City Historic Engine 
+City Historic Engine is an application designed to provide historical and cultural information about different cities. 
+The main objective of the project is to make relevant information about the heritage, history, and historical events of different cities more accessible, 
+using the visualization and interaction capabilities of Liquid Galaxy.
 
 This project is a starting point for a Flutter application.
 
