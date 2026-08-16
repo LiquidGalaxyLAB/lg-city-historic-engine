@@ -159,7 +159,7 @@ To install or refresh a rig, see the [Liquid Galaxy LAB setup guide](https://git
 | Mentor | Claudia Diosan |
 | Organization administrator | Andreu Ibáñez |
 | Support | Lleida Liquid Galaxy LAB |
-| Logo designer | Pula Torne |
+| Logo designer | Paula Torne |
 | History information | Alex Moix |
 | Coordinates | David López Solá & Adrià Ballesteros Oro |
 
