@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'pag_inicio_categ.dart';
 
+/// First screen: partner logos, then opens the category home.
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 

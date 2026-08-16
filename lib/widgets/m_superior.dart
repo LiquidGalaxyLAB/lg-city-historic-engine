@@ -9,6 +9,7 @@ import '../screens/pag_tools.dart';
 import '../screens/pag_inicio_categ.dart';
 import '../screens/pag_settings.dart';
 
+/// Side menu: Home, Connect, Tools, Settings, Help, About.
 class FloatingMenu extends StatelessWidget {
   final String? currentTitle;
   const FloatingMenu({super.key, this.currentTitle});

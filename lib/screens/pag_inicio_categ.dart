@@ -8,7 +8,8 @@ import '../theme/app_theme.dart';
 import '../widgets/app_top_bar.dart';
 import '../main.dart';
 
-//Es la pagina cuando
+/// Home after splash. Four heritage categories plus a shortcut to Connect.
+/// Labels come from [T.s] so the page follows the selected language.
 class CategoriesHomePage extends StatelessWidget {
   const CategoriesHomePage({super.key});
 

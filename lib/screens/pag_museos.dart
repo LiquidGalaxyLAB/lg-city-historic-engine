@@ -8,6 +8,7 @@ import '../models/poi_model.dart';
 import '../services/poi_localization.dart';
 import 'pag_lanza_lg.dart';
 
+/// Museums catalog. Same list pattern as [POILocationsPage].
 class MuseumsPage extends StatefulWidget {
   const MuseumsPage({super.key});
 

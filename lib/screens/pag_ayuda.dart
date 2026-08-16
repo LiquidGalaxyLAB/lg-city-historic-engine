@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import '../widgets/app_top_bar.dart';
 
+/// In-app help: navigation, sending to Liquid Galaxy, and settings.
 class HelpPage extends StatelessWidget {
   const HelpPage({super.key});
 

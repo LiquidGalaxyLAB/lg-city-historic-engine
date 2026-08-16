@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'app_top_bar.dart';
 import 'section_back_button.dart';
 
-/// Cabecera de secciones con imagen: controles siempre encima y clicables.
+/// Category header: hero image, title, filters, and menu — always tappable.
 class SectionHeroHeader extends StatelessWidget {
   const SectionHeroHeader({
     super.key,

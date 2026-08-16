@@ -7,6 +7,11 @@ import 'package:flutter/services.dart';
 import '../kmls/logos_kml.dart';
 import '../kmls/poi_highlight_circle.dart';
 
+/// Singleton SSH client for the Liquid Galaxy master (lg1).
+///
+/// Every screen and [LGService] share this instance, so Connect / Tools / send
+/// POI all talk to the same session. Commands are queued in [runExclusive]
+/// so two writes cannot collide on the rig.
 class LGConnectionState extends ChangeNotifier {
   static final LGConnectionState _instance = LGConnectionState._internal();
   factory LGConnectionState() => _instance;
@@ -22,7 +27,7 @@ class LGConnectionState extends ChangeNotifier {
   SSHClient? _client;
   Future<void> _opQueue = Future.value();
 
-  /// Serializa operaciones SSH/SFTP para evitar condiciones de carrera en el rig.
+  /// Runs SSH/SFTP one at a time to avoid race conditions on the rig.
   Future<T> runExclusive<T>(Future<T> Function() action) async {
     final previous = _opQueue;
     final gate = Completer<void>();
@@ -42,6 +47,8 @@ class LGConnectionState extends ChangeNotifier {
   String? get sudoPassword => _sudoPassword ?? _password;
   int get screens => _screens;
 
+  /// Opens SSH to lg1, prepares /var/www/html, uploads logos, shows them on
+  /// the leftmost screen.
   Future<bool> connect({
     required String ip,
     required String user,
@@ -81,7 +88,7 @@ class LGConnectionState extends ChangeNotifier {
       await execute("echo '$sudo' | sudo -S chmod -R 777 /var/www/html");
 
       await uploadAssets();
-      // Send the logo to the left screen (LG4)
+      // Partner logos on the leftmost screen (LG4 on a 5-screen rig).
       await sendLogoKML(LogoOverlayManager.generate());
 
       return true;
@@ -167,7 +174,7 @@ class LGConnectionState extends ChangeNotifier {
     _client = null;
   }
 
-  /// Comprueba que SSH responde antes de enviar un POI.
+  /// Ping SSH with `echo lg_ok` before sending a POI.
   Future<bool> ensureReady() async {
     if (_client == null || _client?.isClosed == true) {
       await reconnect();
@@ -187,8 +194,8 @@ class LGConnectionState extends ChangeNotifier {
     return runExclusive(() => _executeRaw(command));
   }
 
-  /// Avisa al sync_nlc del rig de que cambió el KML solo de [machineNo].
-  /// LG1 (centro) usa master_1.kml; el resto slave_N.kml.
+  /// Tells the rig's sync_nlc that this machine's solo KML changed.
+  /// LG1 (center) uses master_1.kml; the others use slave_N.kml.
   Future<bool> notifySoloKmlChanged(int machineNo) async {
     final kmlPath = _soloKmlPath(machineNo);
     final listPath = '/var/www/html/kmls_$machineNo.txt';
@@ -215,7 +222,7 @@ class LGConnectionState extends ChangeNotifier {
   Future<bool> notifySlaveKmlChanged(int slaveNo) =>
       notifySoloKmlChanged(slaveNo);
 
-  /// Paths de listas KML que debe refrescar cada pantalla del rig.
+  /// KML list files each screen must refresh.
   List<String> _poiHighlightListPaths() {
     return [
       '/var/www/html/kmls.txt',
@@ -266,10 +273,8 @@ touch $kmlPath
 ''';
   }
 
-  /// Refresca el contorno POI en el globo compartido y en cada pantalla del rig.
-  ///
-  /// Registra la URL en `kmls.txt` (master.kml) y en cada `kmls_N.txt`
-  /// (master_1 / slave_N) para que LG1–LG5 reciban el NetworkLink.
+  /// Registers the outline URL in kmls.txt and each kmls_N.txt so every
+  /// screen (LG1–LG5) receives the NetworkLink.
   Future<bool> notifyPoiHighlightOnAllScreens({int? cacheVersion}) async {
     final version =
         cacheVersion ?? DateTime.now().millisecondsSinceEpoch ~/ 1000;
@@ -296,7 +301,7 @@ touch $kmlPath
     return false;
   }
 
-  /// Quita el contorno POI de todas las listas KML del rig.
+  /// Removes the POI outline from every KML list on the rig.
   Future<bool> removePoiHighlightFromAllScreens() async {
     final script = _poiHighlightListRemoveScript();
 
@@ -327,10 +332,10 @@ touch $kmlPath
     await notifySlaveKmlChanged(slaveNo);
   }
 
-  /// Pantalla izquierda del rig según número de pantallas (lg-server formula).
+  /// Leftmost screen index (lg-server formula).
   int _leftMostScreen(int screens) => (screens ~/ 2) + 2;
 
-  /// Pantalla derecha del rig según número de pantallas (lg-server formula).
+  /// Rightmost screen index (lg-server formula).
   int _rightMostScreen(int screens) => (screens ~/ 2) + 1;
 
   String _ensureDocumentId(String kml, String documentId) {
@@ -348,20 +353,18 @@ touch $kmlPath
       ? 'http://lg1:81/kml/master_1.kml'
       : 'http://lg1:81/kml/slave_$machineNo.kml';
 
-  /// Escribe el KML solo de una máquina (1 = centro/master, resto = slave).
+  /// Writes the solo KML for one machine (1 = center/master, others = slave).
   Future<bool> writeSoloKml(int machineNo, String content) async {
     return writeRemoteFile(_soloKmlPath(machineNo), content);
   }
 
-  /// Escribe un KML en la pantalla esclava [slaveNo] (p. ej. 3 = LG3 balloon).
+  /// Writes a KML to slave [slaveNo] (e.g. 3 = LG3 balloon).
   Future<bool> writeSlaveKml(int slaveNo, String content) async {
     return writeSoloKml(slaveNo, content);
   }
 
-  /// Writes [content] to [path] on the remote rig.
-  ///
-  /// Prefiere SFTP (fiable para KML grandes). Si falla, prueba heredoc y
-  /// base64 como respaldo.
+  /// Writes [content] to [path] on the rig.
+  /// Prefers SFTP (reliable for large KML). Falls back to heredoc, then base64.
   Future<bool> writeRemoteFile(
     String path,
     String content, {

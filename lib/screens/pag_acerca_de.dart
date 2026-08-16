@@ -4,8 +4,7 @@ import '../main.dart';
 
 import '../widgets/app_top_bar.dart';
 
-
-
+/// Credits: author, mentor, LAB, and contributors.
 class AboutPage extends StatelessWidget {
 
   const AboutPage({super.key});

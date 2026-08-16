@@ -11,6 +11,8 @@ import '../navigation/app_navigation.dart';
 import '../widgets/m_superior.dart';
 import '../widgets/section_back_button.dart';
 
+/// Detail screen for one place. If the rig is already connected, it sends
+/// the POI immediately. Orbit and narration are toggled from this page.
 class LaunchLGPage extends StatefulWidget {
   final POI poi;
 
@@ -42,6 +44,7 @@ class _LaunchLGPageState extends State<LaunchLGPage> {
       },
     );
     _conn.addListener(_onConnectionChanged);
+    // Send to Liquid Galaxy as soon as this page opens (no-op if offline).
     _initLG();
   }
 

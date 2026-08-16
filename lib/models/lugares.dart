@@ -1,3 +1,4 @@
+/// SQLite row for a Lleida place (used to enrich POI translations).
 class Place {
   final int? id;
   final String category; // 'locations', 'cathedrals', 'museums', 'events'

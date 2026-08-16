@@ -1,4 +1,4 @@
-/// Nombres localizados de cada POI, indexados por el nombre en inglés del código.
+/// Localized POI names (en / es / ca / tr), keyed by the English name in code.
 const Map<String, Map<String, String>> poiNameCatalog = {
   'Science Park': {
     'en': 'Science Park',

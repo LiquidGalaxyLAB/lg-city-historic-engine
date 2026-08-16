@@ -5,7 +5,11 @@ import '../models/lugares.dart';
 import '../models/poi_model.dart';
 import 'database_helper.dart';
 
-/// Enriquece POIs con nombres y descripciones localizados.
+/// Adds translated names and descriptions to a [POI] before it is shown or sent.
+///
+/// Sources, in order: the POI itself, [poiNameCatalog], then the nearest
+/// SQLite [Place] (matched by GPS, max 0.8 km). The app still works if the
+/// database is missing.
 class PoiLocalization {
   PoiLocalization._();
   static final PoiLocalization instance = PoiLocalization._();
@@ -20,7 +24,7 @@ class PoiLocalization {
     try {
       _places.addAll(await DatabaseHelper.instance.getAllPlaces());
     } catch (_) {
-      // La app puede funcionar solo con el catálogo estático.
+      // Catalog-only mode: lists still work without SQLite.
     }
     _ready = true;
   }

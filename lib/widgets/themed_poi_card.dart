@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import '../theme/app_theme.dart';
 
-/// Tarjeta de listado de POI / museos / eventos con colores según el tema.
+/// List card used by all four category screens (image, title, send action).
 class ThemedPoiCard extends StatelessWidget {
   const ThemedPoiCard({
     super.key,
@@ -130,7 +130,7 @@ class ThemedPoiCard extends StatelessWidget {
   }
 }
 
-/// Desplegable de categorías con área táctil amplia.
+/// Category dropdown with a large tap target.
 class CategoryFilterDropdown extends StatelessWidget {
   const CategoryFilterDropdown({
     super.key,
@@ -207,7 +207,7 @@ class CategoryFilterDropdown extends StatelessWidget {
   }
 }
 
-/// Barra de búsqueda y filtro para listados.
+/// Search + filter bar used by the four category lists.
 class ThemedListFilterBar extends StatelessWidget {
   const ThemedListFilterBar({
     super.key,

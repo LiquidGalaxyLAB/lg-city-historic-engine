@@ -1,7 +1,7 @@
 import '../main.dart';
 import '../models/poi_model.dart';
 
-/// Texto hablado = mismo contenido que el balloon del Liquid Galaxy.
+/// Spoken text = the same content as the Liquid Galaxy balloon.
 class BalloonNarration {
   static String scriptFor(POI poi, {String? langCode}) {
     final lang = langCode ?? languageNotifier.value;

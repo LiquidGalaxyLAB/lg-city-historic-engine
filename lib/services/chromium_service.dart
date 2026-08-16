@@ -71,7 +71,7 @@ class ChromiumService {
     return true;
   }
 
-  /// Cierra Chromium rápido para mostrar el balloon sin esperar refocus en 5 pantallas.
+  /// Fast Chromium close so the balloon can appear without waiting on 5 screens.
   Future<bool> closeChromiumQuick() async {
     if (!_conn.isConnected) return false;
 

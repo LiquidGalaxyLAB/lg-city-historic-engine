@@ -1,3 +1,4 @@
+/// ScreenOverlay KML for partner logos on the leftmost Liquid Galaxy display.
 class LogoOverlayManager {
   static String screenOverlayImage(
     String imageUrl,

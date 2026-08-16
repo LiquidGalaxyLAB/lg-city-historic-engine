@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../navigation/app_navigation.dart';
 
-/// Botón atrás con área táctil amplia y fallback a inicio si no hay ruta previa.
+/// Back button; goes home if there is no previous route.
 class SectionBackButton extends StatelessWidget {
   const SectionBackButton({
     super.key,

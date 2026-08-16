@@ -8,6 +8,7 @@ import '../models/poi_model.dart';
 import '../services/poi_localization.dart';
 import 'pag_lanza_lg.dart';
 
+/// Cathedrals and churches. Same list pattern as [POILocationsPage].
 class CathedralsChurchesPage extends StatefulWidget {
   const CathedralsChurchesPage({super.key});
 

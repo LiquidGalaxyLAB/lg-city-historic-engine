@@ -3,6 +3,8 @@ import 'package:path/path.dart';
 import '../models/lugares.dart';
 import '../data/datos_lleida.dart';
 
+/// Local SQLite copy of Lleida places (ca / es / en descriptions).
+/// Used by [PoiLocalization], not as the list shown on screen.
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
   static Database? _db;

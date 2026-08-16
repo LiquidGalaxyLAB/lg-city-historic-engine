@@ -13,7 +13,7 @@ class _PoiColor {
   final int b;
 }
 
-/// Genera iconos de placemark (forma de pin) con color distinto por sitio.
+/// Colored pin icons for Google Earth placemarks (one color per site).
 class PlacemarkIconManager {
   static const _assetPath = 'assets/images/KMLs/placemark_base.png';
   static const _iconScale = 2.2;

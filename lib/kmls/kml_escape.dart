@@ -1,4 +1,4 @@
-/// Escapa texto para nodos XML en KML.
+/// XML / HTML escaping for KML and balloon markup.
 String escapeXml(String value) {
   return value
       .replaceAll('&', '&amp;')

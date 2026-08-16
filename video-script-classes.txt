@@ -1,0 +1,151 @@
+CITY HISTORIC ENGINE — 5-MINUTE VIDEO SCRIPT
+IMPORTANT CLASSES ONLY
+Read this out loud. Text in [BRACKETS] is what to show on screen, not to say.
+
+
+==================================================
+0:00 – 0:25   OPENING
+==================================================
+[Show lib/ folder]
+
+In this video I will explain the main classes of City Historic Engine.
+The app is Flutter. The important logic is a few classes:
+the place model, the SSH connection, the Liquid Galaxy service,
+the launch screen, localization, and Chromium.
+
+
+==================================================
+0:25 – 1:10   CLASS: POI
+==================================================
+[Open lib/models/poi_model.dart — class POI]
+
+POI is the central data class.
+One object is one place or one historical event.
+
+It stores the name, the image, the story,
+and the Google Earth camera: latitude, longitude, range, heading, and tilt.
+Those numbers are the LookAt. FlyTo and orbit use them on the rig.
+
+It also has era, start date, and end date for the balloon.
+getName and getDescription return the text in the current language,
+with a fallback if a translation is missing.
+matchesSearch is what the category lists use when the user types.
+
+Every screen and every Liquid Galaxy command works with this class.
+If you understand POI, you understand what the app sends to the wall.
+
+
+==================================================
+1:10 – 2:00   CLASS: LGConnectionState
+==================================================
+[Open lib/models/connection_state.dart — class LGConnectionState]
+
+LGConnectionState is the SSH client.
+It is a singleton: Connect, Tools, and LGService all share one session.
+
+connect opens SSH to lg1, the master machine.
+It creates the folders on the rig, uploads the partner logos,
+and shows them on the leftmost screen.
+
+runExclusive queues commands. One SSH write at a time,
+so two screens cannot collide on the rig.
+
+execute runs a remote command.
+writeRemoteFile sends a KML, preferably with SFTP.
+notifySoloKmlChanged tells Google Earth to reload one screen:
+master_1.kml in the center, slave_N.kml on the others.
+
+This class does not decide what a place looks like.
+It only talks to the machine.
+
+
+==================================================
+2:00 – 3:35   CLASS: LGService   (main part)
+==================================================
+[Open lib/services/lg_service.dart — class LGService]
+
+LGService is the most important class.
+This is what actually presents a place on Liquid Galaxy.
+
+presentPoi is the public method. The launch screen calls it.
+Requests are queued, so if the user taps two places,
+the first one finishes before the second starts.
+
+_presentPoiOnce is the pipeline. Five steps:
+
+One. Hide the previous balloon.
+
+Two. If there is a wide image, ChromiumService shows it
+on the three central screens for a few seconds.
+
+Three. flyToPOI writes the LookAt to query.txt.
+Google Earth flies to that place.
+
+Four. For buildings, sendPoiHighlightCircle draws the OSM outline
+and sendCenterPlacemark puts a colored pin.
+For historical events, those layers are cleared.
+The story stays in the balloon, not as a fake building.
+
+Five. sendBalloon writes the HTML balloon to the rightmost screen:
+name, era, dates, and description, in the current language.
+
+Other methods: startOrbitPOI rotates heading every half second.
+stopOrbit ends it.
+clearKMLs, relaunch, reboot, and showLogos are used from Tools.
+
+LGService uses LGConnectionState for SSH.
+It does not build the UI. It only drives the rig.
+
+
+==================================================
+3:35 – 4:15   CLASS: LaunchLGPage
+==================================================
+[Open lib/screens/pag_lanza_lg.dart — class LaunchLGPage]
+
+LaunchLGPage is the screen for one place.
+When it opens, it enriches the POI with PoiLocalization,
+then calls presentPoi if we are connected.
+
+The user can toggle orbit and narration from here.
+NarrationService speaks the same text as the balloon,
+using BalloonNarration.scriptFor.
+
+If the language changes while this page is open,
+the balloon is sent again in the new language.
+When the user leaves, orbit stops and Chromium closes.
+
+
+==================================================
+4:15 – 4:45   CLASS: PoiLocalization
+==================================================
+[Open lib/services/poi_localization.dart — class PoiLocalization]
+
+PoiLocalization adds translations to a POI before it is shown or sent.
+
+It looks at the POI itself, then the name catalog,
+then the nearest place in SQLite, matched by GPS.
+The lists on screen still come from the category pages.
+This class only fills names and descriptions in Catalan, Spanish, and English.
+
+If the database is missing, the app still works.
+
+
+==================================================
+4:45 – 5:00   CHROMIUM, T, CLOSE
+==================================================
+[Open lib/services/chromium_service.dart — class name only, then stop]
+
+ChromiumService opens a kiosk image across the center screens.
+T, in translations.dart, is the UI string class: four languages.
+
+So the important classes are:
+POI for the data,
+LGConnectionState for SSH,
+LGService for the rig,
+LaunchLGPage for the user,
+and PoiLocalization for the languages.
+
+That is the core of City Historic Engine.
+
+Thank you.
+]

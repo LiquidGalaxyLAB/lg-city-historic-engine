@@ -4,6 +4,7 @@ import '../widgets/app_top_bar.dart';
 import '../services/lg_service.dart';
 import '../main.dart';
 
+/// Rig management: relaunch, reboot, shutdown, clean KMLs, show/hide logos.
 class ToolsPage extends StatefulWidget {
   const ToolsPage({super.key});
 

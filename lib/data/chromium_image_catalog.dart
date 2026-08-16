@@ -50,7 +50,7 @@ class ChromiumImageCatalog {
     'Academia Mariana': '$_base/Mariana Academy.png',
   };
 
-  /// Eventos históricos usan la imagen de la tarjeta en Chromium (sin contorno ni placemark).
+  /// Historical events use the card image in Chromium (no outline or placemark).
   static bool isHistoricalEvent(POI poi) =>
       poi.image.contains('images_historical_events');
 

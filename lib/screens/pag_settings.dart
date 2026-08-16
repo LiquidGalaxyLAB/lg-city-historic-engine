@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/app_top_bar.dart';
 import '../main.dart';
 
+/// Theme (light/dark) and language (en / es / ca / tr).
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 

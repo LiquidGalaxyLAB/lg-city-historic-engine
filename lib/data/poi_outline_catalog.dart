@@ -5,11 +5,10 @@ import 'package:flutter/foundation.dart' show debugPrint;
 import '../models/poi_model.dart';
 import '../data/poi_name_catalog.dart';
 
-/// Per-site ground outlines (lng, lat vertices) that wrap the real footprint.
+/// Ground outlines (lng, lat vertices) from OpenStreetMap, keyed by POI name.
 class PoiOutlineCatalog {
   PoiOutlineCatalog._();
 
-  /// Si el contorno está lejos del POI, se ignora y se usa el rectángulo orientado.
   static const double _maxCentroidDistanceM = 250;
 
   static const Map<String, List<List<double>>> _byCanonicalName = {

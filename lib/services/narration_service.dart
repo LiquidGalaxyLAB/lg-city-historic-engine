@@ -4,6 +4,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'balloon_narration.dart';
 import '../models/poi_model.dart';
 
+/// Device text-to-speech for the balloon script ([BalloonNarration.scriptFor]).
 class NarrationService {
   final FlutterTts _tts = FlutterTts();
   bool _isSpeaking = false;

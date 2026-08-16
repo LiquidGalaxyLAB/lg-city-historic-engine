@@ -8,6 +8,8 @@ import '../models/poi_model.dart';
 import '../services/poi_localization.dart';
 import 'pag_lanza_lg.dart';
 
+/// Historical events. Same list pattern as [POILocationsPage]; events skip
+/// the building outline on the globe and keep the story in the balloon.
 class HistoricalEventsPage extends StatefulWidget {
   const HistoricalEventsPage({super.key});
 

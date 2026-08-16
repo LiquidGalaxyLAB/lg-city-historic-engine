@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
+/// Seeds `lleida.db` the first time the app opens (ca / es / en texts).
 Future<void> insertData(Database db) async {
   final batch = db.batch();
 

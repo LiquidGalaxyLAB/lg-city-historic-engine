@@ -16,6 +16,13 @@ import 'chromium_service.dart';
 import '../data/chromium_image_catalog.dart';
 import 'image_slicer.dart';
 
+
+
+/// Sends places to the Liquid Galaxy: FlyTo, outlines, balloons, Chromium
+/// panoramas, orbit, and rig tools (relaunch / reboot / clean KMLs).
+///
+/// Uses [LGConnectionState] for SSH. Call [presentPoi] from the launch screen;
+/// it queues requests so two taps cannot overlap on the rig.
 class LGService {
   final LGConnectionState _conn = LGConnectionState();
   final ChromiumService _chromium = ChromiumService();
@@ -46,7 +53,7 @@ class LGService {
   /// as a fraction of one screen's height. 0 = touching the very bottom.
   static const double _panoramaBottomMargin = 0.06;
 
-  /// Fondo beige de la app (balloon).
+  /// App beige / text used in the HTML balloon.
   static const String _appBackground = '#F5F1E9';
   static const String _appText = '#1C1C1E';
   static const String _balloonImageMaxHeight = '320px';
@@ -62,7 +69,7 @@ class LGService {
     await _conn.execute("cat <<'EOF' > /var/www/html/kmls.kml\n$kml\nEOF");
   }
 
-  /// Moves the camera without deleting the logo or other KMLs.
+  /// Moves Google Earth to the POI LookAt without clearing other KMLs.
   Future<bool> flyToPOI(POI poi) async {
     final lat = poi.lat ?? 41.6147;
     final lng = poi.lng ?? 0.6268;
@@ -77,6 +84,7 @@ class LGService {
     return result != null;
   }
 
+  /// Rotates heading by 10° every 500ms until [stopOrbit] is called.
   Future<void> startOrbitPOI(POI poi) async {
     _isOrbiting = true;
     double heading = poi.heading ?? 0;
@@ -99,7 +107,7 @@ class LGService {
     _isOrbiting = false;
   }
 
-  /// Cambia al POI en el rig sobrescribiendo el anterior (sin limpiar antes).
+  /// Full send pipeline for one POI. Queued: a new call waits for the previous.
   Future<void> presentPoi(POI poi) async {
     final previous = _presentQueue;
     final gate = Completer<void>();
@@ -140,6 +148,7 @@ class LGService {
 
     debugPrint('LGService: presentPoi start (${poi.name}, gen=$generation)');
 
+    // 1) Hide the previous balloon so screens do not stack stories.
     if (!await _hideBalloon()) {
       debugPrint('LGService: hideBalloon failed (${poi.name})');
       return false;
@@ -150,6 +159,7 @@ class LGService {
       Duration(milliseconds: showChromiumFirst ? 250 : 700),
     );
 
+    // 2) Optional wide image on the three center screens (Chromium kiosk).
     if (showChromiumFirst) {
       final chromiumOk = await _launchChromiumIfAvailable(poi, generation);
       if (!chromiumOk) {
@@ -158,6 +168,7 @@ class LGService {
       if (generation != _presentGeneration) return false;
     }
 
+    // 3) Fly the camera to this place.
     if (!await flyToPOI(poi)) {
       debugPrint('LGService: flyToPOI failed (${poi.name})');
       return false;
@@ -167,6 +178,7 @@ class LGService {
 
     final isHistorical = ChromiumImageCatalog.isHistoricalEvent(poi);
 
+    // 4) Buildings: OSM outline + pin. Events: clear those layers (story in balloon).
     if (isHistorical) {
       await clearPoiHighlightCircle();
       if (generation != _presentGeneration) return false;
@@ -195,6 +207,7 @@ class LGService {
       if (generation != _presentGeneration) return false;
     }
 
+    // 5) Balloon with localized name, era, dates, and description.
     final balloonPrep = _prepareBalloonUpload(poi);
     await balloonPrep;
 
@@ -229,10 +242,10 @@ class LGService {
     );
   }
 
-  /// Cierra Chromium en todas las pantallas y vuelve a Google Earth.
+  /// Closes Chromium on every screen and returns focus to Google Earth.
   Future<void> closeChromium() => _chromium.closeChromiumOnAllScreens();
 
-  /// Cierre rápido sin refocus en todas las pantallas (p. ej. al pulsar atrás).
+  /// Faster Chromium close (used when leaving the launch page).
   Future<void> closeChromiumQuick() => _chromium.closeChromiumQuick();
 
   Future<void> _prepareBalloonUpload(POI poi) async {
@@ -303,7 +316,7 @@ class LGService {
     return const Duration(milliseconds: 1800);
   }
 
-  /// Cierra el balloon abierto antes de volar a otro sitio.
+  /// Hides the open balloon before flying to another place.
   Future<bool> _hideBalloon() async {
     if (!_conn.isConnected) return false;
 
@@ -322,7 +335,7 @@ class LGService {
     return _conn.notifySlaveKmlChanged(slaveNo);
   }
 
-  /// Limpieza completa (Tools / desconexión). No usar al cambiar de sitio.
+  /// Full cleanup (Tools / disconnect). Do not call this when switching places.
   Future<void> clearPoiPresentation() async {
     _presentGeneration++;
     stopOrbit();
@@ -334,6 +347,7 @@ class LGService {
     await clearPoiHighlightCircle();
   }
 
+  /// Writes empty KML on every machine so Google Earth drops previous layers.
   Future<void> clearKMLs() async {
     _requireConnection();
 
@@ -363,7 +377,7 @@ class LGService {
     debugPrint('LGService: clearKMLs OK ($screens screens)');
   }
 
-  /// Quita el panel de logos de la pantalla izquierda del rig.
+  /// Removes the logo overlay from the leftmost screen.
   Future<void> clearLogos() async {
     _requireConnection();
     final slaveNo = _leftMostScreen(_conn.screens);
@@ -378,7 +392,7 @@ class LGService {
     debugPrint('LGService: clearLogos OK -> slave_$slaveNo.kml');
   }
 
-  /// Muestra el panel de logos en la pantalla izquierda (p. ej. LG4).
+  /// Shows the partner logo overlay on the leftmost screen (e.g. LG4).
   Future<void> showLogos() async {
     _requireConnection();
     await _conn.uploadAssets();
@@ -392,6 +406,7 @@ class LGService {
     }
   }
 
+  /// Restarts Google Earth / Liquid Galaxy on every machine in the rig.
   Future<void> relaunch() async {
     final password = _conn.password;
     final sudo = _conn.sudoPassword;
@@ -452,7 +467,7 @@ fi
   /// LG1 (master) es siempre la pantalla central del rig.
   static const int _centerScreen = 1;
 
-  /// Índice de pantalla del rig para logo (izquierda) y balloon (derecha).
+  /// Screen indexes for logos (left) and balloon (right).
   int _leftMostScreen(int screens) => (screens ~/ 2) + 2;
   int _rightMostScreen(int screens) => (screens ~/ 2) + 1;
 
@@ -529,7 +544,7 @@ fi
   }
 
   /// Muestra un pin 3D en la pantalla central (LG1) en las coordenadas del POI.
-  /// Si [includeHighlight] es true, incluye también el contorno 3D como respaldo.
+  /// When [includeHighlight] is true, also embed the 3D outline as backup.
   Future<bool> sendCenterPlacemark(
     POI poi, {
     bool includeHighlight = false,
@@ -588,7 +603,7 @@ fi
     return true;
   }
 
-  /// Contorno 3D registrado en kmls.txt + kmls_1..N.txt (visible en LG1–LG5).
+  /// 3D footprint registered in kmls.txt + kmls_1..N.txt (visible on all screens).
   Future<bool> sendPoiHighlightCircle(POI poi) async {
     if (!_conn.isConnected) {
       debugPrint('LGService: sendPoiHighlightCircle skipped — not connected');
@@ -622,7 +637,7 @@ fi
     return true;
   }
 
-  /// Limpia la capa global del globo si quedó registrada en `kmls.txt`.
+  /// Clears the shared globe layer if it is still listed in kmls.txt.
   Future<void> clearPoiHighlightCircle() async {
     if (!_conn.isConnected) return;
     await _conn.writeRemoteFile(
@@ -632,7 +647,7 @@ fi
     await _conn.removePoiHighlightFromAllScreens();
   }
 
-  /// Quita el pin de la pantalla central.
+  /// Removes the pin from the center screen.
   Future<void> clearCenterPlacemark() async {
     const machineNo = _centerScreen;
     const String blank = '''<?xml version="1.0" encoding="UTF-8"?>
@@ -643,7 +658,7 @@ fi
     await _conn.notifySoloKmlChanged(machineNo);
   }
 
-  /// Sends the balloon to the right-most screen of the rig.
+  /// Writes the HTML balloon KML to the rightmost screen (LG3 on a 5-screen rig).
   Future<bool> sendBalloon(POI poi) async {
     final screens = _conn.screens;
     final slaveNo = _rightMostScreen(screens);
@@ -701,7 +716,7 @@ fi
 
     final String imageHtml = imageBlock ?? '';
 
-    // Document id="slave_N" es obligatorio en Liquid Galaxy para que GE recargue la capa solo.
+    // Document id="slave_N" is required so Google Earth reloads only that layer.
     final highlightMarkup = ChromiumImageCatalog.isHistoricalEvent(poi)
         ? ''
         : PoiHighlightCircle.markup(poi);

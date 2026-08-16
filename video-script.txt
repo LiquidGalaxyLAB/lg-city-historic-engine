@@ -1,0 +1,182 @@
+CITY HISTORIC ENGINE — 7-MINUTE VIDEO SCRIPT
+Read this out loud. Text in [BRACKETS] is what to show on screen, not to say.
+
+
+==================================================
+0:00 – 0:50   WHAT THE PROJECT IS
+==================================================
+[Show the app home screen, or the README title]
+
+Hello. My name is Yasmina Ramadan, and this is City Historic Engine,
+a Flutter application for the Liquid Galaxy Project,
+developed at the Lleida Liquid Galaxy LAB.
+
+The app helps people explore the history and heritage of a city
+on a Liquid Galaxy rig — that is Google Earth on several screens at once.
+The city implemented today is Lleida, in Catalonia.
+
+You can browse four categories: points of interest,
+cathedrals and churches, museums, and historical events.
+You can search, filter, open a place, and send it to the rig.
+The camera flies there, a balloon tells the story,
+and you can orbit and listen to the same text with speech.
+
+The app also works without the rig, as a catalog on the phone.
+Connecting to Liquid Galaxy is optional, and that is when it becomes immersive.
+
+Languages are English, Spanish, Catalan, and Turkish.
+There is a light theme and a dark theme.
+
+
+==================================================
+0:50 – 1:30   HOW THE APP STARTS
+==================================================
+[Open lib/main.dart]
+
+The project lives in lib.
+Screens are the UI, services talk to Liquid Galaxy,
+kmls builds the Google Earth files, and data holds catalogs.
+
+main.dart is the entry point.
+It restores the saved language, loads localized place texts,
+and starts the app. It does not connect to the rig yet.
+That happens later, from the Connect screen.
+
+[Open lib/screens/pag_splash.dart, then pag_inicio_categ.dart]
+
+After a short splash with the partner logos,
+the home page shows the four categories
+and a button to connect to Liquid Galaxy.
+All labels come from the translation file, so the UI follows the language.
+
+
+==================================================
+1:30 – 2:30   DATA: ONE PLACE IN THE APP
+==================================================
+[Open lib/models/poi_model.dart]
+
+Every site is a POI object.
+It has the name, the image, the story,
+and the camera values for Google Earth:
+latitude, longitude, range, heading, and tilt.
+Those values are what FlyTo and orbit use on the rig.
+
+getName and getDescription return the text in the current language,
+with a fallback if a translation is missing.
+
+[Open lib/screens/pag_ubi_interes.dart — the _data map]
+
+The Points of Interest screen keeps the catalog in a map,
+grouped by subcategory: science, sports, heritage, and so on.
+The same list pattern is used for cathedrals, museums, and historical events.
+You search, you filter, you tap a card,
+and that opens the launch page for that place.
+
+[Optional: show pag_cat.ig.dart or pag_museos.dart for one second]
+
+A local database is used only to enrich names and descriptions
+in Catalan, Spanish, and English.
+The lists you see on screen come from these category pages.
+
+
+==================================================
+2:30 – 3:30   CONNECTING TO LIQUID GALAXY
+==================================================
+[Open lib/screens/pag_conectar.dart]
+
+To use the rig, the user opens Connect
+and enters the SSH details of the master machine, lg1:
+user, password, IP, port, admin password, and the number of screens.
+Those values are saved for the next time.
+
+[Open lib/models/connection_state.dart — class LGConnectionState]
+
+LGConnectionState is a singleton SSH client.
+Every screen — Connect, Tools, and send POI — shares the same session.
+Commands are queued one by one, so two writes cannot collide on the rig.
+
+When connect succeeds, the app prepares the web folder on lg1,
+uploads the partner logos, and shows them on the leftmost screen.
+
+
+==================================================
+3:30 – 5:40   SENDING A PLACE TO THE RIG  (main part)
+==================================================
+[Open lib/screens/pag_lanza_lg.dart]
+
+When you open a place, LaunchLGPage appears.
+If we are already connected, it sends the place immediately.
+From here the user can start orbit or narration.
+
+[Open lib/services/lg_service.dart — presentPoi and _presentPoiOnce]
+
+LGService is the heart of the project.
+presentPoi queues requests, so if you tap two places quickly,
+the rig finishes the first one before starting the second.
+
+_presentPoiOnce is the pipeline. Five steps:
+
+One. Hide the previous balloon, so stories do not stack on the screens.
+
+Two. If this place has a wide image, Chromium opens in kiosk mode
+on the three central screens and shows that image for a few seconds.
+The image is sliced so each screen shows a different part of the same photo.
+
+Three. FlyTo. We write a LookAt command to query.txt on the rig,
+and Google Earth flies to that latitude, longitude, range, heading, and tilt.
+
+Four. For buildings, we draw an OpenStreetMap ground outline
+and a colored pin, so you see the real footprint of the monument.
+For historical events, we clear those layers,
+because the story belongs in the balloon, not as a fake building.
+
+Five. The balloon. It goes to the rightmost screen.
+It shows the localized name, the era, the dates, and the description —
+the same text the phone can narrate with text-to-speech.
+
+KML files follow the Liquid Galaxy convention:
+master_1.kml on the center machine, slave_N.kml on the others.
+After writing a file, we notify the rig so Google Earth reloads only that screen.
+
+[Briefly show lib/kmls/poi_highlight_circle.dart or logos_kml.dart]
+
+The kmls folder only builds XML. It does not talk to SSH.
+That separation keeps the UI, the connection, and the Earth files independent.
+
+
+==================================================
+5:40 – 6:20   ORBIT, VOICE, AND TOOLS
+==================================================
+[Stay on pag_lanza_lg.dart — orbit / narration buttons]
+
+Orbit changes the heading by ten degrees every half second,
+so the camera turns around the site until the user stops it.
+
+Narration uses the same script as the balloon,
+so what you hear is what you read on the wall.
+
+[Open lib/screens/pag_tools.dart]
+
+Tools is for the lab: relaunch Liquid Galaxy, reboot, shutdown,
+clean KMLs, and show or hide logos.
+These actions need an active SSH connection and the admin password.
+
+
+==================================================
+6:20 – 7:00   LANGUAGES, CREDITS, CLOSE
+==================================================
+[Open lib/i18n/translations.dart, then the About screen or README credits]
+
+The interface is translated in four languages.
+If the user changes language while a place is on the rig,
+the balloon is sent again in the new language.
+
+This project was built with support from Claudia Diosan,
+Andreu Ibáñez, and the Lleida Liquid Galaxy LAB,
+with history, coordinates, and logo contributions from the team listed in About.
+
+City Historic Engine is a catalog in your hand,
+and a full historical view on Liquid Galaxy when you connect.
+
+Thank you.
+]

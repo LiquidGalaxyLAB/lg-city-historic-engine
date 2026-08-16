@@ -1,5 +1,7 @@
 import '../app_state.dart';
 
+/// UI strings for English, Spanish, Catalan, and Turkish.
+/// [T.s] is used in widgets; [T.category] / [T.era] map catalog keys.
 class T {
   static const _categoryKeys = {
     'SCIENCE / TECHNOLOGY': 'cat_science_tech',

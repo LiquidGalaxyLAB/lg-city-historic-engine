@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../screens/pag_conectar.dart' deferred as connect;
 
-/// Navegación segura para volver atrás o ir al inicio si no hay ruta previa.
+/// Small navigation helpers used from the launch / connect screens.
 class AppNavigation {
   AppNavigation._();
 

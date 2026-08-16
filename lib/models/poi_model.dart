@@ -1,6 +1,11 @@
 import '../app_state.dart';
 import '../i18n/translations.dart';
 
+/// One place or historical event shown in the app and sent to Liquid Galaxy.
+///
+/// [lat], [lng], [range], [tilt], [heading] are the Google Earth LookAt used
+/// by FlyTo / orbit. [description] is English; [descriptions] / [names] hold
+/// extra languages after [PoiLocalization.enrich].
 class POI {
   final String name;
   final String location;
@@ -76,6 +81,7 @@ class POI {
     );
   }
 
+  /// Display name for [langCode], with fallback (es↔ca, then English).
   String getName([String? langCode]) {
     final lang = langCode ?? languageNotifier.value;
     if (names != null) {
@@ -101,6 +107,7 @@ class POI {
     return name;
   }
 
+  /// Story text for balloons, cards, and TTS. Same fallback rules as [getName].
   String getDescription([String? langCode]) {
     final lang = langCode ?? languageNotifier.value;
     if (descriptions != null) {

@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const _languageKey = 'app_language';
 
+/// Global UI state. Screens listen to these notifiers instead of a large
+/// state-management package. Language codes: en, es, ca, tr.
 final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 final ValueNotifier<String> languageNotifier = ValueNotifier('en');
 

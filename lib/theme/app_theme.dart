@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Colores y [ThemeData] compartidos por toda la app.
+/// Shared light/dark [ThemeData] and helpers for category-card colors.
 class AppTheme {
   AppTheme._();
 
@@ -90,7 +90,7 @@ class AppTheme {
     );
   }
 
-  /// Fondo de las tarjetas de categoría en Home (un poco más oscuro que el resto).
+  /// Home category-card background (slightly darker than the page).
   static Color categoryCardBackground(BuildContext context, Color lightTint) {
     if (Theme.of(context).brightness == Brightness.light) return lightTint;
     return Color.alphaBlend(

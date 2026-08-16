@@ -6,8 +6,11 @@ import '../widgets/m_superior.dart';
 import '../main.dart';
 import '../models/poi_model.dart';
 import '../services/poi_localization.dart';
-import 'pag_lanza_lg.dart';
+import '../screens/pag_lanza_lg.dart';
 
+/// Points of Interest list. The same search / filter / card pattern is used
+/// in cathedrals, museums, and historical events. [_data] is the catalog
+/// shown in the UI; tapping a card opens [LaunchLGPage].
 class POILocationsPage extends StatefulWidget {
   const POILocationsPage({super.key});
 
@@ -20,6 +23,7 @@ class _POILocationsPageState extends State<POILocationsPage> {
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
+  // Places grouped by subcategory. Coordinates are LookAt values for the rig.
   final Map<String, List<POI>> _data = {
     'SCIENCE / TECHNOLOGY': [
       POI(
@@ -379,6 +383,7 @@ class _POILocationsPageState extends State<POILocationsPage> {
     return ValueListenableBuilder<String>(
       valueListenable: languageNotifier,
       builder: (context, lang, _) {
+        // Enrich names/descriptions, then apply the selected filter + search.
         final List<POI> allPois = (_selectedCategory == 'All'
                 ? _data.values.expand((x) => x)
                 : (_data[_selectedCategory] ?? []))

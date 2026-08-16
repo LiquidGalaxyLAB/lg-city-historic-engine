@@ -4,6 +4,8 @@ import '../models/connection_state.dart';
 import '../widgets/app_top_bar.dart';
 import '../main.dart';
 
+/// SSH connection form for lg1 (user, password, IP, port, sudo, screen count).
+/// Credentials are stored with SharedPreferences for the next session.
 class ConnectPage extends StatefulWidget {
   const ConnectPage({super.key});
 
@@ -73,6 +75,7 @@ class _ConnectPageState extends State<ConnectPage> {
   Future<void> _connect() async {
     setState(() => _isLoading = true);
 
+    // Opens SSH to the master machine and uploads partner logos.
     bool success = await _conn.connect(
       ip: _ipController.text,
       user: _userController.text,
