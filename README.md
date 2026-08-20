@@ -164,3 +164,9 @@ To install or refresh a rig, see the [Liquid Galaxy LAB setup guide](https://git
 | Coordinates | David López Solá & Adrià Ballesteros Oro |
 
 More about the organization: [liquidgalaxy.eu](https://www.liquidgalaxy.eu)
+
+## License
+
+LG City Historic Engine is licensed under the [MIT License](https://opensource.org/license/MIT)
+
+
